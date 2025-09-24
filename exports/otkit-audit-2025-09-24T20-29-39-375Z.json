@@ -1,0 +1,98 @@
+{
+  "generatedAt": "2025-09-24T20:29:39.375Z",
+  "project": {
+    "name": "opnix",
+    "type": "Web Application",
+    "goal": "Opnix - Operational Toolkit"
+  },
+  "ticketStats": {
+    "total": 1,
+    "open": 1,
+    "closed": 0,
+    "statusCounts": {
+      "reported": 1,
+      "in_progress": 0,
+      "finished": 0
+    },
+    "priorityCounts": {
+      "high": 1,
+      "medium": 0,
+      "low": 0
+    },
+    "highPriorityOpen": 1,
+    "tagCounts": {
+      "BUG": 1,
+      "AUTH": 1,
+      "BACKEND": 1
+    }
+  },
+  "moduleSummary": {
+    "moduleCount": 7,
+    "dependencyCount": 3,
+    "externalDependencyCount": 2,
+    "totalLines": 4071
+  },
+  "techStack": {
+    "dependencies": [
+      "cors",
+      "express"
+    ],
+    "devDependencies": [
+      "nodemon"
+    ],
+    "frameworks": [
+      "express"
+    ],
+    "packageManager": null
+  },
+  "followUps": [
+    "Improve health of Backend API (currently 47%)",
+    "Increase automated test coverage for Backend API (currently 0%)",
+    "Backend API contains 5 TODO/FIXME markers that need attention",
+    "Increase automated test coverage for Agent Library (currently 0%)",
+    "Increase automated test coverage for Documentation (currently 0%)",
+    "Increase automated test coverage for Generated Exports (currently 0%)",
+    "Increase automated test coverage for Frontend Interface (currently 0%)",
+    "Increase automated test coverage for Automation Scripts (currently 0%)",
+    "Improve health of Services (currently 20%)",
+    "Increase automated test coverage for Services (currently 25%)",
+    "Services contains 28 TODO/FIXME markers that need attention",
+    "Resolve 1 open high-priority ticket"
+  ],
+  "unhealthyModules": [
+    {
+      "id": "backend",
+      "name": "Backend API",
+      "health": 47
+    },
+    {
+      "id": "services",
+      "name": "Services",
+      "health": 20
+    }
+  ],
+  "featuresNeedingCriteria": [],
+  "featureReview": [],
+  "exports": {
+    "specJson": {
+      "filename": "opnix-spec-2025-09-24T20-29-39-373Z.json",
+      "path": "/home/aaron/opnix/exports/opnix-spec-2025-09-24T20-29-39-373Z.json",
+      "format": "json"
+    },
+    "specKit": {
+      "filename": "opnix-spec-2025-09-24T20-29-39-374Z.spec.md",
+      "path": "/home/aaron/opnix/exports/opnix-spec-2025-09-24T20-29-39-374Z.spec.md",
+      "format": "github-spec-kit"
+    },
+    "docs": {
+      "filename": "opnix-docs-2025-09-24T20-29-39-374Z.md",
+      "path": "/home/aaron/opnix/exports/opnix-docs-2025-09-24T20-29-39-374Z.md",
+      "format": "markdown"
+    },
+    "canvas": {
+      "filename": "opnix-canvas-audit-2025-09-24T20-29-39-375Z.json",
+      "path": "/home/aaron/opnix/exports/opnix-canvas-audit-2025-09-24T20-29-39-375Z.json",
+      "format": "json"
+    }
+  }
+}

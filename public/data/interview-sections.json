@@ -1,0 +1,961 @@
+{
+  "baseOrder": [
+    "foundation",
+    "stakeholders",
+    "outcomes",
+    "scope-boundaries",
+    "constraints",
+    "architecture-baseline",
+    "runtime-decisions",
+    "data-domain",
+    "integrations",
+    "security-compliance",
+    "quality-strategy",
+    "operations-reliability",
+    "deployment-release",
+    "ai-recovery",
+    "documentation-enablement",
+    "risks-assumptions"
+  ],
+  "typeOrder": {
+    "Web Application": [
+      "web-experience",
+      "accessibility-seo",
+      "content-workflow"
+    ],
+    "API Service": [
+      "api-contracts",
+      "api-observability",
+      "api-governance"
+    ],
+    "Mobile App": [
+      "mobile-delivery",
+      "mobile-experience",
+      "device-support"
+    ],
+    "Desktop Software": [
+      "desktop-distribution",
+      "hardware-dependencies",
+      "desktop-support"
+    ],
+    "Library/Package": [
+      "package-distribution",
+      "versioning-governance",
+      "adoption-readiness"
+    ]
+  },
+  "frameworkSectionMap": {
+    "React": [
+      "frontend-state-management"
+    ],
+    "Next.js": [
+      "frontend-state-management",
+      "edge-rendering"
+    ],
+    "Vue": [
+      "frontend-state-management"
+    ],
+    "Angular": [
+      "frontend-architecture"
+    ],
+    "Svelte": [
+      "frontend-state-management"
+    ],
+    "SvelteKit": [
+      "frontend-state-management",
+      "edge-rendering"
+    ],
+    "Express": [
+      "api-governance"
+    ],
+    "FastAPI": [
+      "api-governance"
+    ],
+    "Django": [
+      "security-compliance"
+    ],
+    "None/Custom": []
+  },
+  "languageFrameworks": {
+    "JavaScript": [
+      "React",
+      "Vue",
+      "Next.js",
+      "Angular",
+      "Svelte",
+      "SvelteKit",
+      "Express",
+      "NestJS",
+      "None/Custom"
+    ],
+    "TypeScript": [
+      "React",
+      "Next.js",
+      "Angular",
+      "Remix",
+      "NestJS",
+      "None/Custom"
+    ],
+    "Python": [
+      "FastAPI",
+      "Django",
+      "Flask",
+      "None/Custom"
+    ],
+    "Java": [
+      "Spring Boot",
+      "Quarkus",
+      "Micronaut",
+      "None/Custom"
+    ],
+    "Go": [
+      "Echo",
+      "Fiber",
+      "Chi",
+      "None/Custom"
+    ],
+    "Rust": [
+      "Axum",
+      "Rocket",
+      "Actix",
+      "None/Custom"
+    ],
+    "Other": [
+      "None/Custom"
+    ]
+  },
+  "sections": {
+    "foundation": {
+      "title": "Foundation & Objectives",
+      "description": "Capture the core intent so subsequent technical decisions stay anchored to outcomes.",
+      "questions": [
+        {
+          "id": "project-name",
+          "prompt": "Provide the project codename or customer initiative name.",
+          "type": "text",
+          "placeholder": "e.g., Opnix Refresh, Phoenix Revamp",
+          "required": true
+        },
+        {
+          "id": "project-type",
+          "prompt": "Select the project or product type that best describes this workstream.",
+          "type": "select",
+          "options": [
+            "Web Application",
+            "API Service",
+            "Mobile App",
+            "Desktop Software",
+            "Library/Package"
+          ],
+          "placeholder": "Choose dominant delivery surface",
+          "required": true
+        },
+        {
+          "id": "project-purpose",
+          "prompt": "What problem does this initiative solve and for which users or customers?",
+          "type": "textarea",
+          "placeholder": "Describe the primary user, their pain point, and the desired transformation.",
+          "required": true
+        },
+        {
+          "id": "value-proposition",
+          "prompt": "What measurable value or advantage should this solution deliver once successful?",
+          "type": "textarea",
+          "placeholder": "e.g., Reduce onboarding time by 40%, increase retention, unlock a new market.",
+          "required": true
+        },
+        {
+          "id": "strategic-alignment",
+          "prompt": "How does this work align with current business strategy or OKRs?",
+          "type": "textarea",
+          "placeholder": "Reference initiatives, KPIs, or mandates this project supports.",
+          "required": true
+        }
+      ]
+    },
+    "stakeholders": {
+      "title": "Stakeholders & Governance",
+      "description": "Establish decision makers, communication cadence, and responsibility boundaries.",
+      "questions": [
+        {
+          "id": "executive-sponsor",
+          "prompt": "Who is the executive sponsor and what decisions remain with them?",
+          "type": "text",
+          "placeholder": "Name & role, plus escalation expectations.",
+          "required": true
+        },
+        {
+          "id": "product-owner",
+          "prompt": "Who owns backlog prioritisation and scope trade-offs?",
+          "type": "text",
+          "placeholder": "Name, role, availability, preferred contact channel.",
+          "required": true
+        },
+        {
+          "id": "technical-lead",
+          "prompt": "Who is accountable for technical direction and architecture sign-off?",
+          "type": "text",
+          "placeholder": "Include backups for leave or timezone coverage.",
+          "required": true
+        },
+        {
+          "id": "stakeholder-cadence",
+          "prompt": "What is the agreed stakeholder communication cadence?",
+          "type": "text",
+          "placeholder": "e.g., Weekly steering committee, daily stand-ups, async updates.",
+          "required": true
+        },
+        {
+          "id": "raci-clarity",
+          "prompt": "List any areas requiring explicit RACI clarification (Responsible, Accountable, Consulted, Informed).",
+          "type": "textarea",
+          "placeholder": "Identify processes with unclear ownership so we can resolve them early.",
+          "required": false
+        }
+      ]
+    },
+    "outcomes": {
+      "title": "Success Criteria",
+      "description": "Define what success looks like both quantitatively and qualitatively.",
+      "questions": [
+        {
+          "id": "primary-success-metrics",
+          "prompt": "What primary success metrics must move and by how much?",
+          "type": "textarea",
+          "placeholder": "e.g., Activation rate to 60%, NPS +10, MTTR < 30 minutes.",
+          "required": true
+        },
+        {
+          "id": "secondary-metrics",
+          "prompt": "What secondary metrics or guardrails must not regress?",
+          "type": "textarea",
+          "placeholder": "Document supporting metrics (churn, latency, support volume, etc.).",
+          "required": true
+        },
+        {
+          "id": "qualitative-indicators",
+          "prompt": "Describe qualitative indicators or anecdotes that would signal success or failure.",
+          "type": "textarea",
+          "placeholder": "User feedback themes, stakeholder sentiment, demo reactions.",
+          "required": false
+        }
+      ]
+    },
+    "scope-boundaries": {
+      "title": "Scope: In & Out",
+      "description": "Avoid scope creep by capturing explicit inclusions and exclusions.",
+      "questions": [
+        {
+          "id": "scope-inclusions",
+          "prompt": "List the key capabilities or deliverables explicitly in scope.",
+          "type": "textarea",
+          "placeholder": "Use bullet list for features, workflows, or technical outcomes.",
+          "required": true
+        },
+        {
+          "id": "scope-exclusions",
+          "prompt": "List the capabilities or areas explicitly out of scope for this iteration.",
+          "type": "textarea",
+          "placeholder": "Note any tempting additions that must wait.",
+          "required": true
+        },
+        {
+          "id": "done-definition",
+          "prompt": "Define \"done\" for this engagement (technical, product, and documentation completeness).",
+          "type": "textarea",
+          "placeholder": "Include acceptance gates like demos, sign-offs, or compliance checks.",
+          "required": true
+        }
+      ]
+    },
+    "constraints": {
+      "title": "Constraints & Non-Negotiables",
+      "description": "Capture immovable constraints so trade-offs are intentional.",
+      "questions": [
+        {
+          "id": "business-constraints",
+          "prompt": "Document business or contractual constraints (launch dates, SLAs, regulatory deadlines).",
+          "type": "textarea",
+          "placeholder": "List critical calendar commitments or contractual obligations.",
+          "required": true
+        },
+        {
+          "id": "technical-constraints",
+          "prompt": "What technical standards or legacy requirements must we honour?",
+          "type": "textarea",
+          "placeholder": "e.g., Must run on existing Kubernetes cluster, reuse auth provider, coding standards.",
+          "required": true
+        },
+        {
+          "id": "budget-constraints",
+          "prompt": "Outline budgetary or tooling constraints that affect solution design.",
+          "type": "textarea",
+          "placeholder": "Include licensing limits, cloud spend caps, approval processes.",
+          "required": false
+        }
+      ]
+    },
+    "architecture-baseline": {
+      "title": "Architecture Baseline",
+      "description": "Understand the current and target architecture to plan increments safely.",
+      "questions": [
+        {
+          "id": "current-architecture",
+          "prompt": "Summarise the current architecture or system topology we inherit.",
+          "type": "textarea",
+          "placeholder": "Diagram references, key services, deployment model, observed pain points.",
+          "required": true
+        },
+        {
+          "id": "target-architecture-vision",
+          "prompt": "Describe the target architecture vision or north-star state.",
+          "type": "textarea",
+          "placeholder": "Note guiding principles, desired patterns, or technology shifts.",
+          "required": true
+        },
+        {
+          "id": "tech-debt-hotspots",
+          "prompt": "List known technical debt hotspots that must be managed or paid down.",
+          "type": "textarea",
+          "placeholder": "Include brittle modules, missing tests, scaling bottlenecks.",
+          "required": false
+        }
+      ]
+    },
+    "runtime-decisions": {
+      "title": "Runtime & Framework Decisions",
+      "description": "Lock in primary languages, frameworks, and supporting libraries.",
+      "questions": [
+        {
+          "id": "primary-language",
+          "prompt": "Select the primary implementation language for this project.",
+          "type": "select",
+          "options": [
+            "JavaScript",
+            "TypeScript",
+            "Python",
+            "Java",
+            "Go",
+            "Rust",
+            "Other"
+          ],
+          "placeholder": "Choose dominant language",
+          "required": true
+        },
+        {
+          "id": "preferred-framework",
+          "prompt": "Preferred framework or stack for the UI/API layer?",
+          "type": "select",
+          "options": [
+            "None/Custom"
+          ],
+          "placeholder": "Will update based on language",
+          "required": true
+        },
+        {
+          "id": "supporting-libraries",
+          "prompt": "List critical supporting libraries, design systems, or SDKs we must integrate.",
+          "type": "textarea",
+          "placeholder": "e.g., Chakra UI, Tailwind, gRPC clients, analytics SDKs.",
+          "required": false
+        }
+      ]
+    },
+    "data-domain": {
+      "title": "Data & Domain",
+      "description": "Capture how data flows, its lifecycle, and governance expectations.",
+      "questions": [
+        {
+          "id": "core-entities",
+          "prompt": "Identify the core domain entities and relationships that matter most.",
+          "type": "textarea",
+          "placeholder": "Use nouns that appear in user stories (e.g., Account, Workspace, Invoice).",
+          "required": true
+        },
+        {
+          "id": "data-sources",
+          "prompt": "What upstream data sources or feeds do we consume?",
+          "type": "textarea",
+          "placeholder": "Internal services, external vendors, manual imports, IoT devices.",
+          "required": true
+        },
+        {
+          "id": "data-volume-velocity",
+          "prompt": "Describe expected data volume and velocity characteristics.",
+          "type": "textarea",
+          "placeholder": "Peak throughput, batch windows, retention requirements.",
+          "required": false
+        },
+        {
+          "id": "data-governance",
+          "prompt": "What data governance, lineage, or cataloguing practices must we follow?",
+          "type": "textarea",
+          "placeholder": "Refer to privacy policies, GDPR, SOC2 controls, or data residency rules.",
+          "required": false
+        }
+      ]
+    },
+    "integrations": {
+      "title": "Integrations",
+      "description": "Map inbound/outbound integrations to de-risk external dependencies early.",
+      "questions": [
+        {
+          "id": "integration-consumers",
+          "prompt": "Who consumes our outputs and through which interfaces?",
+          "type": "textarea",
+          "placeholder": "Other internal teams, partners, public clients, reporting pipelines.",
+          "required": true
+        },
+        {
+          "id": "integration-providers",
+          "prompt": "Which external systems or APIs do we rely on?",
+          "type": "textarea",
+          "placeholder": "List providers, auth mechanisms, rate limits, sandbox availability.",
+          "required": true
+        },
+        {
+          "id": "integration-failure-modes",
+          "prompt": "Document critical integration failure modes and required fallbacks.",
+          "type": "textarea",
+          "placeholder": "Timeout strategies, retries, circuit breakers, manual overrides.",
+          "required": true
+        }
+      ]
+    },
+    "security-compliance": {
+      "title": "Security & Compliance",
+      "description": "Ensure the solution adheres to required security posture from day one.",
+      "questions": [
+        {
+          "id": "compliance-standards",
+          "prompt": "List mandatory compliance or certification requirements (e.g., SOC2, HIPAA).",
+          "type": "textarea",
+          "placeholder": "Include evidence expectations, auditors, or control owners.",
+          "required": true
+        },
+        {
+          "id": "authentication-model",
+          "prompt": "How must users, services, and machines authenticate?",
+          "type": "textarea",
+          "placeholder": "SSO providers, MFA, service accounts, token expiry policies.",
+          "required": true
+        },
+        {
+          "id": "authorization-model",
+          "prompt": "Describe the authorisation scheme (roles, ABAC, tenant isolation).",
+          "type": "textarea",
+          "placeholder": "Role hierarchy, permission granularity, policy management tooling.",
+          "required": true
+        },
+        {
+          "id": "security-monitoring",
+          "prompt": "What security monitoring, alerting, and response processes must we integrate?",
+          "type": "textarea",
+          "placeholder": "SIEM integration, threat detection rules, incident response plans.",
+          "required": false
+        }
+      ]
+    },
+    "quality-strategy": {
+      "title": "Quality & Testing",
+      "description": "Define how we assure quality throughout delivery.",
+      "questions": [
+        {
+          "id": "testing-strategy",
+          "prompt": "Outline the testing pyramid (unit, integration, contract, e2e) and ownership.",
+          "type": "textarea",
+          "placeholder": "Mention tools, coverage targets, and gating criteria.",
+          "required": true
+        },
+        {
+          "id": "non-functional-tests",
+          "prompt": "List required non-functional tests (performance, load, accessibility, chaos).",
+          "type": "textarea",
+          "placeholder": "Include frequency and tooling expectations.",
+          "required": false
+        },
+        {
+          "id": "definition-of-ready",
+          "prompt": "What makes a feature story \"ready\" for implementation?",
+          "type": "textarea",
+          "placeholder": "Acceptance tests, data requirements, UX assets, analytics tagging.",
+          "required": true
+        }
+      ]
+    },
+    "operations-reliability": {
+      "title": "Operations & Reliability",
+      "description": "Plan for live operations, SLOs, and incident readiness.",
+      "questions": [
+        {
+          "id": "availability-targets",
+          "prompt": "What availability/SLO or error budget targets do we commit to?",
+          "type": "text",
+          "placeholder": "e.g., 99.9% monthly uptime, <1% error rate.",
+          "required": true
+        },
+        {
+          "id": "scaling-strategy",
+          "prompt": "How should the system scale (horizontal, vertical, auto-scaling rules)?",
+          "type": "textarea",
+          "placeholder": "Include expected peak events and traffic growth assumptions.",
+          "required": true
+        },
+        {
+          "id": "observability-tooling",
+          "prompt": "Which logging, metrics, tracing, and alerting tools are mandated?",
+          "type": "textarea",
+          "placeholder": "Grafana, Datadog, OpenTelemetry, PagerDuty runbooks, etc.",
+          "required": true
+        },
+        {
+          "id": "incident-response",
+          "prompt": "Outline on-call rotations, escalation paths, and incident response expectations.",
+          "type": "textarea",
+          "placeholder": "Include SLAs for P0/P1 incidents and communication templates.",
+          "required": true
+        }
+      ]
+    },
+    "deployment-release": {
+      "title": "Deployment & Release",
+      "description": "Control how changes move from idea to production safely.",
+      "questions": [
+        {
+          "id": "environment-promotion",
+          "prompt": "List environments and promotion strategy (dev, staging, prod, canary).",
+          "type": "textarea",
+          "placeholder": "Include data refresh rules, access controls, parity expectations.",
+          "required": true
+        },
+        {
+          "id": "release-cadence",
+          "prompt": "What is the expected release cadence and change management process?",
+          "type": "textarea",
+          "placeholder": "Continuous deployment, scheduled releases, freeze periods.",
+          "required": true
+        },
+        {
+          "id": "rollback-plan",
+          "prompt": "Describe rollback, feature flag, and kill-switch strategies.",
+          "type": "textarea",
+          "placeholder": "Automated rollback, database migration strategy, toggle ownership.",
+          "required": true
+        }
+      ]
+    },
+    "ai-recovery": {
+      "title": "AI Remediation & Safeguards",
+      "description": "Ensure the system can recover from or prevent AI-induced regressions.",
+      "questions": [
+        {
+          "id": "ai-regression-history",
+          "prompt": "Document known AI-assisted changes that introduced regressions or drift.",
+          "type": "textarea",
+          "placeholder": "Reference incidents, dates, and affected components.",
+          "required": false
+        },
+        {
+          "id": "ai-guardrails",
+          "prompt": "What guardrails must be in place for future AI-assisted changes?",
+          "type": "textarea",
+          "placeholder": "Review processes, mandatory tests, human-in-the-loop checkpoints.",
+          "required": true
+        },
+        {
+          "id": "manual-validation-points",
+          "prompt": "List critical scenarios that always require manual validation before release.",
+          "type": "textarea",
+          "placeholder": "e.g., Payments, compliance workflows, data migrations.",
+          "required": true
+        }
+      ]
+    },
+    "documentation-enablement": {
+      "title": "Documentation & Enablement",
+      "description": "Plan how knowledge will be captured and handed off.",
+      "questions": [
+        {
+          "id": "documentation-audience",
+          "prompt": "Who needs documentation (end users, support, engineers, auditors)?",
+          "type": "textarea",
+          "placeholder": "List audiences and expected artefacts (runbooks, FAQs, onboarding guides).",
+          "required": true
+        },
+        {
+          "id": "training-plan",
+          "prompt": "What training or enablement sessions are required?",
+          "type": "textarea",
+          "placeholder": "Workshops, internal demos, office hours, certification requirements.",
+          "required": true
+        },
+        {
+          "id": "knowledge-transfer",
+          "prompt": "Describe knowledge transfer expectations at engagement end.",
+          "type": "textarea",
+          "placeholder": "Code walkthroughs, paired sessions, documentation reviews.",
+          "required": true
+        }
+      ]
+    },
+    "risks-assumptions": {
+      "title": "Risks, Assumptions & Open Questions",
+      "description": "Make uncertainties explicit so action owners can be assigned.",
+      "questions": [
+        {
+          "id": "major-risks",
+          "prompt": "Enumerate the top risks that could derail scope, schedule, or quality.",
+          "type": "textarea",
+          "placeholder": "Include probability, impact, and mitigation ideas.",
+          "required": true
+        },
+        {
+          "id": "critical-assumptions",
+          "prompt": "List critical assumptions that must be validated early.",
+          "type": "textarea",
+          "placeholder": "Dependencies on other teams, vendor commitments, dataset availability.",
+          "required": true
+        },
+        {
+          "id": "open-questions",
+          "prompt": "Capture unanswered questions that need follow-up interviews or research.",
+          "type": "textarea",
+          "placeholder": "Assign owners and due dates when possible.",
+          "required": true
+        }
+      ]
+    },
+    "web-experience": {
+      "title": "Web Experience",
+      "description": "Design expectations specific to responsive web applications.",
+      "questions": [
+        {
+          "id": "design-system",
+          "prompt": "Which design system, style guide, or component library must we follow?",
+          "type": "text",
+          "placeholder": "e.g., Internal design system v3, Material UI, Tailwind tokens.",
+          "required": true
+        },
+        {
+          "id": "responsive-breakpoints",
+          "prompt": "List required responsive breakpoints and critical UX flows per device.",
+          "type": "textarea",
+          "placeholder": "Mobile-first strategy, tablet optimisations, kiosk mode needs.",
+          "required": true
+        },
+        {
+          "id": "performance-budget",
+          "prompt": "Define performance budgets (TTI, CLS, LCP, bundle size) for web delivery.",
+          "type": "textarea",
+          "placeholder": "Include measurement tooling (Lighthouse, WebPageTest).",
+          "required": true
+        }
+      ]
+    },
+    "accessibility-seo": {
+      "title": "Accessibility & Discoverability",
+      "description": "Ensure web properties meet accessibility and SEO standards.",
+      "questions": [
+        {
+          "id": "accessibility-standards",
+          "prompt": "Which accessibility standards and target level (e.g., WCAG AA) must we hit?",
+          "type": "text",
+          "placeholder": "Document audit cadence, tooling, and assistive technology coverage.",
+          "required": true
+        },
+        {
+          "id": "seo-requirements",
+          "prompt": "List SEO requirements (metadata, structured data, sitemap strategy).",
+          "type": "textarea",
+          "placeholder": "Include content governance, internationalisation, canonical rules.",
+          "required": false
+        }
+      ]
+    },
+    "content-workflow": {
+      "title": "Content Workflow",
+      "description": "Clarify how content is created, approved, and deployed.",
+      "questions": [
+        {
+          "id": "content-sources",
+          "prompt": "Where does content originate and who approves it?",
+          "type": "textarea",
+          "placeholder": "CMS integration, editorial calendar, localization requirements.",
+          "required": false
+        }
+      ]
+    },
+    "api-contracts": {
+      "title": "API Contracts",
+      "description": "Establish the API's external surface and governance expectations.",
+      "questions": [
+        {
+          "id": "api-consumers",
+          "prompt": "Identify your API consumers and their critical use cases.",
+          "type": "textarea",
+          "placeholder": "Internal services, partners, public developers.",
+          "required": true
+        },
+        {
+          "id": "api-versioning",
+          "prompt": "What versioning and deprecation policy must we follow?",
+          "type": "textarea",
+          "placeholder": "Semantic versioning, sunset timelines, change notifications.",
+          "required": true
+        },
+        {
+          "id": "api-slo",
+          "prompt": "Define latency, throughput, and availability expectations for the API.",
+          "type": "textarea",
+          "placeholder": "p95 latency < 200ms, 99.9% uptime, regional failover.",
+          "required": true
+        }
+      ]
+    },
+    "api-observability": {
+      "title": "API Observability",
+      "description": "Ensure APIs are monitored and traceable end-to-end.",
+      "questions": [
+        {
+          "id": "api-logging",
+          "prompt": "What request/response logging or auditing is required?",
+          "type": "textarea",
+          "placeholder": "PII scrubbing, correlation IDs, retention period.",
+          "required": true
+        },
+        {
+          "id": "api-alerts",
+          "prompt": "Define alert thresholds for error rates, saturation, or downstream failures.",
+          "type": "textarea",
+          "placeholder": "Pager thresholds, dashboards, anomaly detection.",
+          "required": false
+        }
+      ]
+    },
+    "api-governance": {
+      "title": "API Governance",
+      "description": "Clarify standards for schema design, documentation, and SDKs.",
+      "questions": [
+        {
+          "id": "schema-standards",
+          "prompt": "Which schema guidelines or linters must we adopt?",
+          "type": "text",
+          "placeholder": "OpenAPI style guide, GraphQL naming conventions.",
+          "required": true
+        },
+        {
+          "id": "developer-experience",
+          "prompt": "Outline developer experience expectations (docs, SDKs, quickstarts).",
+          "type": "textarea",
+          "placeholder": "Portal requirements, code samples, sandbox tokens.",
+          "required": true
+        }
+      ]
+    },
+    "mobile-delivery": {
+      "title": "Mobile Delivery",
+      "description": "Plan for store releases and mobile-specific constraints.",
+      "questions": [
+        {
+          "id": "mobile-platforms",
+          "prompt": "Which platforms are targeted (iOS, Android, others) and with what approach?",
+          "type": "textarea",
+          "placeholder": "Native, cross-platform, shared code percentages.",
+          "required": true
+        },
+        {
+          "id": "app-store-process",
+          "prompt": "Document release, review, and compliance requirements for app stores.",
+          "type": "textarea",
+          "placeholder": "Beta programs, TestFlight/Play Console workflows.",
+          "required": true
+        }
+      ]
+    },
+    "mobile-experience": {
+      "title": "Mobile Experience",
+      "description": "Capture expectations for mobile UX and offline behaviour.",
+      "questions": [
+        {
+          "id": "offline-capability",
+          "prompt": "How should the app behave offline or with degraded connectivity?",
+          "type": "textarea",
+          "placeholder": "Caching strategy, conflict resolution, sync windows.",
+          "required": true
+        },
+        {
+          "id": "mobile-native-features",
+          "prompt": "List native capabilities to integrate (push, camera, biometrics).",
+          "type": "textarea",
+          "placeholder": "Specify permission handling, fallback experiences.",
+          "required": false
+        }
+      ]
+    },
+    "device-support": {
+      "title": "Device & OS Support",
+      "description": "Define the supported device matrix.",
+      "questions": [
+        {
+          "id": "os-version-policy",
+          "prompt": "What minimum OS versions and devices must we support?",
+          "type": "textarea",
+          "placeholder": "Include sunset policy for older devices.",
+          "required": true
+        }
+      ]
+    },
+    "desktop-distribution": {
+      "title": "Desktop Distribution",
+      "description": "Plan installers, auto-update, and signing requirements.",
+      "questions": [
+        {
+          "id": "distribution-channels",
+          "prompt": "How will the desktop app be distributed (app stores, direct download, enterprise)?",
+          "type": "textarea",
+          "placeholder": "Include code signing, notarisation, MSI/PKG packaging requirements.",
+          "required": true
+        },
+        {
+          "id": "auto-update-strategy",
+          "prompt": "Describe the update strategy and rollback mechanism for desktop clients.",
+          "type": "textarea",
+          "placeholder": "Delta updates, silent installs, user prompts.",
+          "required": true
+        }
+      ]
+    },
+    "hardware-dependencies": {
+      "title": "Hardware & Peripheral Dependencies",
+      "description": "Capture hardware integrations or specialised device support.",
+      "questions": [
+        {
+          "id": "peripheral-support",
+          "prompt": "List required hardware integrations (scanners, printers, sensors) and drivers.",
+          "type": "textarea",
+          "placeholder": "Include vendor contacts, certification needs.",
+          "required": false
+        }
+      ]
+    },
+    "desktop-support": {
+      "title": "Support & IT Integration",
+      "description": "Clarify enterprise rollout considerations.",
+      "questions": [
+        {
+          "id": "it-policies",
+          "prompt": "Document corporate IT policies affecting deployment (GPOs, VDI, proxies).",
+          "type": "textarea",
+          "placeholder": "Mention packaging formats, security scans, whitelisting processes.",
+          "required": true
+        }
+      ]
+    },
+    "package-distribution": {
+      "title": "Package Distribution",
+      "description": "Set expectations for how libraries are published and consumed.",
+      "questions": [
+        {
+          "id": "distribution-registry",
+          "prompt": "Which registries or artifact repositories host releases?",
+          "type": "textarea",
+          "placeholder": "npm, PyPI, internal Artifactory, GitHub Packages.",
+          "required": true
+        },
+        {
+          "id": "installation-footprint",
+          "prompt": "Are there restrictions on bundle size, transitive dependencies, or install scripts?",
+          "type": "textarea",
+          "placeholder": "State policy for optional peer dependencies, native extensions.",
+          "required": false
+        }
+      ]
+    },
+    "versioning-governance": {
+      "title": "Versioning & Backward Compatibility",
+      "description": "Protect consumers with predictable versioning and changelog practices.",
+      "questions": [
+        {
+          "id": "semver-policy",
+          "prompt": "Describe your semantic versioning or release policy.",
+          "type": "textarea",
+          "placeholder": "How breaking changes are communicated, LTS branches, deprecation policy.",
+          "required": true
+        },
+        {
+          "id": "compatibility-test",
+          "prompt": "What automated compatibility tests must run before release?",
+          "type": "textarea",
+          "placeholder": "Consumer contract tests, fixture suites, sample apps.",
+          "required": true
+        }
+      ]
+    },
+    "adoption-readiness": {
+      "title": "Adoption & Support",
+      "description": "Enable downstream teams to adopt the package confidently.",
+      "questions": [
+        {
+          "id": "documentation-format",
+          "prompt": "Specify required documentation artefacts (reference, guides, examples).",
+          "type": "textarea",
+          "placeholder": "API reference, cookbook, migration guides, changelog detail.",
+          "required": true
+        },
+        {
+          "id": "support-model",
+          "prompt": "Define support expectations (SLAs, channels, issue tracker triage).",
+          "type": "textarea",
+          "placeholder": "Open-source vs internal support, response time commitments.",
+          "required": true
+        }
+      ]
+    },
+    "frontend-state-management": {
+      "title": "Frontend State & Composition",
+      "description": "Clarify how UI state, routing, and component composition should be handled.",
+      "questions": [
+        {
+          "id": "state-management-strategy",
+          "prompt": "What state management patterns or libraries must be used?",
+          "type": "textarea",
+          "placeholder": "Redux Toolkit, Zustand, Vuex, context isolation rules.",
+          "required": true
+        },
+        {
+          "id": "routing-standards",
+          "prompt": "Detail routing, code splitting, and data fetching patterns for the UI.",
+          "type": "textarea",
+          "placeholder": "SSR vs CSR, suspense boundaries, prefetching.",
+          "required": false
+        }
+      ]
+    },
+    "edge-rendering": {
+      "title": "Edge Rendering & Caching",
+      "description": "Capture policies for edge rendering platforms (e.g., Next.js, SvelteKit).",
+      "questions": [
+        {
+          "id": "edge-caching",
+          "prompt": "Define caching, ISR/SSG, and revalidation strategies.",
+          "type": "textarea",
+          "placeholder": "Cache lifetimes, surrogate keys, purge processes.",
+          "required": true
+        }
+      ]
+    },
+    "frontend-architecture": {
+      "title": "Angular Architecture Decisions",
+      "description": "Set module structure, dependency injection, and tooling standards for Angular projects.",
+      "questions": [
+        {
+          "id": "module-structure",
+          "prompt": "Describe Angular module boundaries, lazy loading, and shared component strategy.",
+          "type": "textarea",
+          "placeholder": "Feature modules, shell architecture, Nx workspace guidelines.",
+          "required": true
+        }
+      ]
+    }
+  }
+}
