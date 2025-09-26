@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-26T13:54:06.807Z",
+  "generatedAt": "2025-09-26T15:18:00.920Z",
   "modules": [
     {
       "id": "backend",
@@ -72,8 +72,8 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 26,
-      "lineCount": 2349,
+      "fileCount": 27,
+      "lineCount": 2460,
       "todoCount": 44,
       "coverage": 0,
       "health": 20,
@@ -108,9 +108,9 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 73,
-      "lineCount": 16076,
-      "todoCount": 180,
+      "fileCount": 77,
+      "lineCount": 17032,
+      "todoCount": 190,
       "coverage": 0,
       "health": 20,
       "frameworks": [],
@@ -126,8 +126,8 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 45,
-      "lineCount": 3715,
+      "fileCount": 46,
+      "lineCount": 3840,
       "todoCount": 7,
       "coverage": 0,
       "health": 40,
@@ -155,7 +155,7 @@
         "${specArchiveImport}"
       ],
       "fileCount": 5,
-      "lineCount": 2006,
+      "lineCount": 2013,
       "todoCount": 0,
       "coverage": 20,
       "health": 79,
@@ -310,6 +310,6 @@
     "moduleCount": 13,
     "dependencyCount": 5,
     "externalDependencyCount": 21,
-    "totalLines": 43270
+    "totalLines": 44469
   }
 }

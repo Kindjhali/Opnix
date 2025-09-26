@@ -5,10 +5,28 @@
       "ticketId": 1,
       "developer": "claude-tester",
       "startedAt": "2025-09-26T15:13:31.396Z",
-      "status": "in-progress",
+      "status": "completed",
+      "commits": [
+        {
+          "hash": "11bfa92b7c2906296551e9ea6b73f5b4b3e97901",
+          "message": "Fix: Example: Fix Authentication Bug\n\nFixed authentication validation to properly handle @ symbol in email addresses\n\nCloses ticket #1",
+          "timestamp": "2025-09-26T15:16:06.303Z"
+        }
+      ],
+      "summary": "Fixed authentication validation to properly handle @ symbol in email addresses",
+      "pauseReason": null,
+      "completedAt": "2025-09-26T15:16:06.070Z"
+    },
+    "workflow-2": {
+      "id": "workflow-2",
+      "ticketId": 2,
+      "developer": "claude-dev",
+      "startedAt": "2025-09-26T15:16:41.813Z",
+      "status": "paused",
       "commits": [],
       "summary": null,
-      "pauseReason": null
+      "pauseReason": "Need to review backend architecture before proceeding",
+      "pausedAt": "2025-09-26T15:16:50.716Z"
     }
   },
   "settings": {
@@ -24,5 +42,5 @@
     ],
     "gitIntegration": true
   },
-  "nextWorkflowId": 2
+  "nextWorkflowId": 3
 }

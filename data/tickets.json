@@ -5,7 +5,7 @@
       "title": "Example: Fix Authentication Bug",
       "description": "Users cannot login with @ symbol. Review auth validation logic and provide fix. Check /src/auth/validator.js line 45.",
       "priority": "high",
-      "status": "in-progress",
+      "status": "reported",
       "tags": [
         "BUG",
         "AUTH",
@@ -31,7 +31,8 @@
         "backend"
       ],
       "created": "2025-09-25T16:17:36.261Z",
-      "source": "audit-follow-up"
+      "source": "audit-follow-up",
+      "workflowId": "workflow-2"
     },
     {
       "id": 3,
