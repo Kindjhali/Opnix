@@ -1,0 +1,28 @@
+{
+  "workflows": {
+    "workflow-1": {
+      "id": "workflow-1",
+      "ticketId": 1,
+      "developer": "claude-tester",
+      "startedAt": "2025-09-26T15:13:31.396Z",
+      "status": "in-progress",
+      "commits": [],
+      "summary": null,
+      "pauseReason": null
+    }
+  },
+  "settings": {
+    "enforceStrictMode": true,
+    "requireSummaryMinLength": 10,
+    "autoCommit": false,
+    "ticketPrefix": "BUG-",
+    "allowedStatuses": [
+      "reported",
+      "in-progress",
+      "completed",
+      "paused"
+    ],
+    "gitIntegration": true
+  },
+  "nextWorkflowId": 2
+}

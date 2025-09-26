@@ -1,0 +1,100 @@
+{
+  "initialized": "2025-09-25T20:16:46.800Z",
+  "progressiveFlow": {
+    "detectedPatterns": [
+      "api-service",
+      "backend-heavy",
+      "web-application",
+      "frontend-heavy",
+      "documented-project",
+      "comprehensive-docs"
+    ],
+    "queuedArtifacts": [
+      "project-analysis",
+      "module-diagram",
+      "frontend-checklist",
+      "ui-component-map",
+      "api-documentation",
+      "endpoint-catalog",
+      "technical-specification",
+      "architecture-diagram"
+    ],
+    "projectSummary": {
+      "name": "Untitled Project",
+      "type": "Unknown",
+      "patterns": [
+        "api-service",
+        "backend-heavy",
+        "web-application",
+        "frontend-heavy",
+        "documented-project",
+        "comprehensive-docs"
+      ],
+      "moduleCount": 11,
+      "totalLines": 16007,
+      "frameworks": [
+        "express"
+      ]
+    },
+    "nextPhase": "detection",
+    "recommendedPath": [
+      "detection",
+      "foundation",
+      "technical",
+      "generation"
+    ]
+  },
+  "generatedArtifacts": [
+    {
+      "type": "project-analysis",
+      "files": [
+        "/home/aaron/opnix/exports/project-analysis-2025-09-25T20-16-46-784Z.json",
+        "/home/aaron/opnix/exports/project-analysis-2025-09-25T20-16-46-784Z.md"
+      ]
+    },
+    {
+      "type": "module-diagram",
+      "files": [
+        "/home/aaron/opnix/exports/module-diagram-2025-09-25T20-16-46-798Z.json"
+      ]
+    }
+  ],
+  "phase": "initial-analysis-complete",
+  "lastUpdated": "2025-09-25T20:28:34.905Z",
+  "lastResponse": {
+    "questionId": "pattern-confirmation",
+    "response": [
+      "web-application",
+      "api-service",
+      "frontend-heavy"
+    ],
+    "timestamp": "2025-09-25T20:28:34.905Z"
+  },
+  "sessionState": {
+    "responses": {
+      "project-name": "Opnix Project Intelligence System",
+      "pattern-confirmation": [
+        "web-application",
+        "api-service",
+        "frontend-heavy"
+      ]
+    },
+    "triggeredSections": [],
+    "detectedPatterns": [
+      "web-application",
+      "api-service",
+      "frontend-heavy"
+    ],
+    "artifactQueue": [
+      "project-analysis",
+      "module-diagram",
+      "frontend-checklist",
+      "ui-component-map",
+      "api-documentation",
+      "endpoint-catalog",
+      "technical-specification",
+      "architecture-diagram"
+    ],
+    "currentPhase": "foundation"
+  }
+}

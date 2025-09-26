@@ -1,6 +1,6 @@
 # Tickets Migration & Compatibility
 
-Opnix still honours the original `tickets.json` workflow so existing automation and archives continue to function.
+Opnix now stores live ticket data at `data/tickets.json`, but it still honours the original root-level `tickets.json` workflow so existing automation and archives continue to function.
 
 ## File expectations
 
@@ -28,8 +28,9 @@ Opnix still honours the original `tickets.json` workflow so existing automation 
 
 ## Migration checklist
 
-1. Drop legacy `tickets.json` into the repository root.
-2. Start (or restart) the server – `readData()` validates the structure, sets `nextId`, and normalises ticket tags.
+1. Drop legacy `tickets.json` into the repository root (or place it directly in `data/`).
+2. Start (or restart) the server – it migrates root-level files into `data/`, validates the structure, sets `nextId`, and normalises ticket tags. When a fresh `tickets.json` is dropped at the repo root the importer overwrites `data/tickets.json` and archives the legacy file under `data/legacy-imports/`.
+   - Dropping a file directly into `data/tickets.json` works too, even if it only contains an array of ticket objects or lacks `nextId`; Opnix wraps it in the modern shape and persists the recalculated sequence counter automatically.
 3. Confirm via `GET /api/tickets` that all records load without transformation surprises.
 4. Use the UI or `POST /api/tickets` to append new items; the file is written back with consistent formatting.
 

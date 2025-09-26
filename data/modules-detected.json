@@ -1,0 +1,315 @@
+{
+  "generatedAt": "2025-09-26T13:54:06.807Z",
+  "modules": [
+    {
+      "id": "backend",
+      "name": "Backend API",
+      "type": "backend",
+      "pathHints": [
+        "server.js"
+      ],
+      "dependencies": [
+        "services"
+      ],
+      "externalDependencies": [
+        "express",
+        "cors",
+        "glob"
+      ],
+      "fileCount": 1,
+      "lineCount": 4151,
+      "todoCount": 5,
+      "coverage": 0,
+      "health": 46,
+      "frameworks": [
+        "express"
+      ],
+      "source": "auto",
+      "manual": false
+    },
+    {
+      "id": "agents",
+      "name": "Agent Library",
+      "type": "knowledge",
+      "pathHints": [
+        "agents"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 0,
+      "lineCount": 0,
+      "todoCount": 0,
+      "coverage": 0,
+      "health": 75,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "cc-sessions",
+      "name": "Cc Sessions",
+      "type": "code",
+      "pathHints": [
+        "cc-sessions"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 11,
+      "lineCount": 2561,
+      "todoCount": 1,
+      "coverage": 0,
+      "health": 70,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "data",
+      "name": "Workspace Data",
+      "type": "storage",
+      "pathHints": [
+        "data"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 26,
+      "lineCount": 2349,
+      "todoCount": 44,
+      "coverage": 0,
+      "health": 20,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "docs",
+      "name": "Documentation",
+      "type": "documentation",
+      "pathHints": [
+        "docs"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 0,
+      "lineCount": 0,
+      "todoCount": 0,
+      "coverage": 0,
+      "health": 75,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "legacy-exports",
+      "name": "Legacy Exports",
+      "type": "artifacts",
+      "pathHints": [
+        "exports"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 73,
+      "lineCount": 16076,
+      "todoCount": 180,
+      "coverage": 0,
+      "health": 20,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "frontend",
+      "name": "Frontend Interface",
+      "type": "frontend",
+      "pathHints": [
+        "public"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 45,
+      "lineCount": 3715,
+      "todoCount": 7,
+      "coverage": 0,
+      "health": 40,
+      "frameworks": [
+        "vue"
+      ],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "scripts",
+      "name": "Automation Scripts",
+      "type": "automation",
+      "pathHints": [
+        "scripts"
+      ],
+      "dependencies": [
+        "services",
+        "backend"
+      ],
+      "externalDependencies": [
+        "@storybook",
+        "${ticketListImport}",
+        "${consoleImport}",
+        "${specArchiveImport}"
+      ],
+      "fileCount": 5,
+      "lineCount": 2006,
+      "todoCount": 0,
+      "coverage": 20,
+      "health": 79,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "services",
+      "name": "Services",
+      "type": "workspace",
+      "pathHints": [
+        "services"
+      ],
+      "dependencies": [],
+      "externalDependencies": [
+        "vue",
+        "react",
+        "express",
+        "cors"
+      ],
+      "fileCount": 13,
+      "lineCount": 6062,
+      "todoCount": 43,
+      "coverage": 8,
+      "health": 20,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "spec",
+      "name": "Spec Archive",
+      "type": "artifacts",
+      "pathHints": [
+        "spec"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 14,
+      "lineCount": 2062,
+      "todoCount": 90,
+      "coverage": 100,
+      "health": 20,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "spec-kit",
+      "name": "Spec Kit",
+      "type": "code",
+      "pathHints": [
+        "spec-kit"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 2,
+      "lineCount": 1223,
+      "todoCount": 0,
+      "coverage": 100,
+      "health": 100,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "src",
+      "name": "Application Source",
+      "type": "code",
+      "pathHints": [
+        "src"
+      ],
+      "dependencies": [],
+      "externalDependencies": [
+        "mermaid",
+        "cytoscape",
+        "cytoscape-edgehandles",
+        "vue"
+      ],
+      "fileCount": 5,
+      "lineCount": 2015,
+      "todoCount": 0,
+      "coverage": 20,
+      "health": 79,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "tests",
+      "name": "Tests",
+      "type": "code",
+      "pathHints": [
+        "tests"
+      ],
+      "dependencies": [
+        "backend",
+        "services"
+      ],
+      "externalDependencies": [
+        "node:assert",
+        "node:fs",
+        "node:path",
+        "express",
+        "vue",
+        "node:url"
+      ],
+      "fileCount": 19,
+      "lineCount": 1050,
+      "todoCount": 0,
+      "coverage": 100,
+      "health": 91,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "backend->services",
+      "source": "backend",
+      "target": "services",
+      "type": "internal"
+    },
+    {
+      "id": "scripts->services",
+      "source": "scripts",
+      "target": "services",
+      "type": "internal"
+    },
+    {
+      "id": "scripts->backend",
+      "source": "scripts",
+      "target": "backend",
+      "type": "internal"
+    },
+    {
+      "id": "tests->backend",
+      "source": "tests",
+      "target": "backend",
+      "type": "internal"
+    },
+    {
+      "id": "tests->services",
+      "source": "tests",
+      "target": "services",
+      "type": "internal"
+    }
+  ],
+  "summary": {
+    "moduleCount": 13,
+    "dependencyCount": 5,
+    "externalDependencyCount": 21,
+    "totalLines": 43270
+  }
+}

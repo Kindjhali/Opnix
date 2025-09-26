@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss"
+  ],
+  "plugins": ["stylelint-scss"],
+  "rules": {
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": true,
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global", "deep", "slotted"]
+      }
+    ],
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["v-deep", "v-global", "v-slotted"]
+      }
+    ],
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": ["composes"]
+      }
+    ],
+    "color-function-notation": "legacy",
+    "color-function-alias-notation": null,
+    "alpha-value-notation": "number",
+    "custom-property-empty-line-before": "never",
+    "no-descending-specificity": null
+  },
+  "ignoreFiles": [
+    "node_modules/**/*",
+    "exports/**/*",
+    ".storybook/**/*"
+  ]
+}

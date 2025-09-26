@@ -1,0 +1,292 @@
+{
+  "tickets": [
+    {
+      "id": 1,
+      "title": "Example: Fix Authentication Bug",
+      "description": "Users cannot login with @ symbol. Review auth validation logic and provide fix. Check /src/auth/validator.js line 45.",
+      "priority": "high",
+      "status": "in-progress",
+      "tags": [
+        "BUG",
+        "AUTH",
+        "BACKEND"
+      ],
+      "created": "2025-09-24T15:53:38.095Z",
+      "files": [
+        "src/auth/validator.js"
+      ],
+      "workflowId": "workflow-1"
+    },
+    {
+      "id": 2,
+      "title": "Improve health of Backend API (currently 47%)",
+      "description": "Improve health of Backend API (currently 47%)\nRelated modules: backend\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "backend"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 3,
+      "title": "Increase automated test coverage for Backend API (currently 0%)",
+      "description": "Increase automated test coverage for Backend API (currently 0%)\nRelated modules: backend\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "backend"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 4,
+      "title": "Backend API contains 5 TODO/FIXME markers that need attention",
+      "description": "Backend API contains 5 TODO/FIXME markers that need attention\nRelated modules: backend\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "backend"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 5,
+      "title": "Increase automated test coverage for Agent Library (currently 0%)",
+      "description": "Increase automated test coverage for Agent Library (currently 0%)\nRelated modules: agents\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "agents"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 6,
+      "title": "Increase automated test coverage for Workspace Data (currently 0%)",
+      "description": "Increase automated test coverage for Workspace Data (currently 0%)\nRelated modules: data\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "data"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 7,
+      "title": "Increase automated test coverage for Documentation (currently 0%)",
+      "description": "Increase automated test coverage for Documentation (currently 0%)\nRelated modules: docs\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "docs"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 8,
+      "title": "Increase automated test coverage for Frontend Interface (currently 33%)",
+      "description": "Increase automated test coverage for Frontend Interface (currently 33%)\nRelated modules: frontend\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "frontend"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 9,
+      "title": "Frontend Interface contains 4 TODO/FIXME markers that need attention",
+      "description": "Frontend Interface contains 4 TODO/FIXME markers that need attention\nRelated modules: frontend\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "frontend"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 10,
+      "title": "Increase automated test coverage for Automation Scripts (currently 33%)",
+      "description": "Increase automated test coverage for Automation Scripts (currently 33%)\nRelated modules: scripts\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "scripts"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 11,
+      "title": "Improve health of Services (currently 20%)",
+      "description": "Improve health of Services (currently 20%)\nRelated modules: services\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "services"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 12,
+      "title": "Increase automated test coverage for Services (currently 14%)",
+      "description": "Increase automated test coverage for Services (currently 14%)\nRelated modules: services\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "services"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 13,
+      "title": "Services contains 30 TODO/FIXME markers that need attention",
+      "description": "Services contains 30 TODO/FIXME markers that need attention\nRelated modules: services\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "services"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 14,
+      "title": "Improve health of Spec Archive (currently 20%)",
+      "description": "Improve health of Spec Archive (currently 20%)\nRelated modules: spec\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "spec"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 15,
+      "title": "Spec Archive contains 50 TODO/FIXME markers that need attention",
+      "description": "Spec Archive contains 50 TODO/FIXME markers that need attention\nRelated modules: spec\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "spec"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 16,
+      "title": "Increase automated test coverage for Application Source (currently 38%)",
+      "description": "Increase automated test coverage for Application Source (currently 38%)\nRelated modules: src\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "src"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 17,
+      "title": "Application Source contains 1 TODO/FIXME markers that need attention",
+      "description": "Application Source contains 1 TODO/FIXME markers that need attention\nRelated modules: src\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [
+        "src"
+      ],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    },
+    {
+      "id": 18,
+      "title": "Resolve 1 open high-priority ticket",
+      "description": "Resolve 1 open high-priority ticket\nThis ticket was generated automatically during the latest Opnix audit. Review spec/docs exports for full context.",
+      "priority": "high",
+      "status": "reported",
+      "tags": [
+        "FOLLOW_UP",
+        "AUDIT"
+      ],
+      "modules": [],
+      "created": "2025-09-25T16:17:36.261Z",
+      "source": "audit-follow-up"
+    }
+  ],
+  "nextId": 19
+}

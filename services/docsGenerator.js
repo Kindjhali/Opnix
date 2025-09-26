@@ -1,6 +1,27 @@
 const path = require('path');
 const fs = require('fs').promises;
 
+const statusReported = 'reported';
+const statusInProgress = 'inProgress';
+const statusFinished = 'finished';
+const priorityHigh = 'high';
+
+function normaliseTicketStatus(status) {
+    if (status === null || status === undefined) return statusReported;
+    const trimmed = String(status).trim();
+    if (!trimmed) return statusReported;
+    const condensed = trimmed.replace(/[\s_-]/g, '').toLowerCase();
+    if (condensed === 'reported' || condensed === 'open') return statusReported;
+    if (condensed === 'inprogress') return statusInProgress;
+    if (condensed === 'finished' || condensed === 'resolved' || condensed === 'complete') return statusFinished;
+    return trimmed;
+}
+
+function isOpenStatus(status) {
+    const canonical = normaliseTicketStatus(status);
+    return canonical === statusReported || canonical === statusInProgress;
+}
+
 function listToMarkdown(items) {
     if (!items || items.length === 0) return '- None';
     return items.map(item => `- ${item}`).join('\n');
@@ -8,9 +29,9 @@ function listToMarkdown(items) {
 
 function buildDocsMarkdown({ projectName, stats, modules, moduleEdges, features, tickets, techStack }) {
     const totalTickets = tickets.length;
-    const openTickets = tickets.filter(ticket => ticket.status === 'reported' || ticket.status === 'in_progress').length;
-    const closedTickets = tickets.filter(ticket => ticket.status === 'finished').length;
-    const highPriority = tickets.filter(ticket => ticket.priority === 'high').length;
+    const openTickets = tickets.filter(ticket => isOpenStatus(ticket.status)).length;
+    const closedTickets = tickets.filter(ticket => ticket.status === statusFinished).length;
+    const highPriority = tickets.filter(ticket => ticket.priority === priorityHigh).length;
 
     const moduleLines = modules.map(module => {
         const deps = module.dependencies && module.dependencies.length ? module.dependencies.join(', ') : 'None';
@@ -39,7 +60,7 @@ Generated: ${new Date().toISOString()}
 - Closed Tickets: ${closedTickets}
 - High Priority: ${highPriority}
 - Reported: ${stats.reported || 0}
-- In Progress: ${stats.in_progress || 0}
+- In Progress: ${stats.inProgress || 0}
 - Finished: ${stats.finished || 0}
 
 ## Module Summary
@@ -64,7 +85,7 @@ ${techDevDeps}
 ${frameworks}
 
 ## Ticket Backlog (Open)
-${tickets.filter(ticket => ticket.status === 'reported' || ticket.status === 'in_progress').map(ticket => `- [${ticket.priority}] #${ticket.id} — ${ticket.title}`).join('\n') || '- None'}
+${tickets.filter(ticket => isOpenStatus(ticket.status)).map(ticket => `- [${ticket.priority}] #${ticket.id} — ${ticket.title}`).join('\n') || '- None'}
 
 ---
 Generated automatically by the Opnix audit pipeline.

@@ -15,6 +15,15 @@
     "deployment-release",
     "ai-recovery",
     "documentation-enablement",
+    "canvas-strategy",
+    "modules-governance",
+    "features-grooming",
+    "bugs-readiness",
+    "api-readiness",
+    "diagrams-expectations",
+    "specs-distribution",
+    "docs-governance",
+    "audit-readiness",
     "risks-assumptions"
   ],
   "typeOrder": {
@@ -171,7 +180,8 @@
           "placeholder": "Reference initiatives, KPIs, or mandates this project supports.",
           "required": true
         }
-      ]
+      ],
+      "category": "spec"
     },
     "stakeholders": {
       "title": "Stakeholders & Governance",
@@ -212,7 +222,8 @@
           "placeholder": "Identify processes with unclear ownership so we can resolve them early.",
           "required": false
         }
-      ]
+      ],
+      "category": "spec"
     },
     "outcomes": {
       "title": "Success Criteria",
@@ -239,7 +250,8 @@
           "placeholder": "User feedback themes, stakeholder sentiment, demo reactions.",
           "required": false
         }
-      ]
+      ],
+      "category": "spec"
     },
     "scope-boundaries": {
       "title": "Scope: In & Out",
@@ -266,7 +278,8 @@
           "placeholder": "Include acceptance gates like demos, sign-offs, or compliance checks.",
           "required": true
         }
-      ]
+      ],
+      "category": "spec"
     },
     "constraints": {
       "title": "Constraints & Non-Negotiables",
@@ -293,7 +306,8 @@
           "placeholder": "Include licensing limits, cloud spend caps, approval processes.",
           "required": false
         }
-      ]
+      ],
+      "category": "spec"
     },
     "architecture-baseline": {
       "title": "Architecture Baseline",
@@ -320,7 +334,8 @@
           "placeholder": "Include brittle modules, missing tests, scaling bottlenecks.",
           "required": false
         }
-      ]
+      ],
+      "category": "spec"
     },
     "runtime-decisions": {
       "title": "Runtime & Framework Decisions",
@@ -359,7 +374,8 @@
           "placeholder": "e.g., Chakra UI, Tailwind, gRPC clients, analytics SDKs.",
           "required": false
         }
-      ]
+      ],
+      "category": "runbook"
     },
     "data-domain": {
       "title": "Data & Domain",
@@ -393,7 +409,8 @@
           "placeholder": "Refer to privacy policies, GDPR, SOC2 controls, or data residency rules.",
           "required": false
         }
-      ]
+      ],
+      "category": "spec"
     },
     "integrations": {
       "title": "Integrations",
@@ -420,7 +437,8 @@
           "placeholder": "Timeout strategies, retries, circuit breakers, manual overrides.",
           "required": true
         }
-      ]
+      ],
+      "category": "api"
     },
     "security-compliance": {
       "title": "Security & Compliance",
@@ -454,7 +472,8 @@
           "placeholder": "SIEM integration, threat detection rules, incident response plans.",
           "required": false
         }
-      ]
+      ],
+      "category": "runbook"
     },
     "quality-strategy": {
       "title": "Quality & Testing",
@@ -481,7 +500,8 @@
           "placeholder": "Acceptance tests, data requirements, UX assets, analytics tagging.",
           "required": true
         }
-      ]
+      ],
+      "category": "spec"
     },
     "operations-reliability": {
       "title": "Operations & Reliability",
@@ -515,7 +535,8 @@
           "placeholder": "Include SLAs for P0/P1 incidents and communication templates.",
           "required": true
         }
-      ]
+      ],
+      "category": "runbook"
     },
     "deployment-release": {
       "title": "Deployment & Release",
@@ -542,7 +563,8 @@
           "placeholder": "Automated rollback, database migration strategy, toggle ownership.",
           "required": true
         }
-      ]
+      ],
+      "category": "runbook"
     },
     "ai-recovery": {
       "title": "AI Remediation & Safeguards",
@@ -569,7 +591,8 @@
           "placeholder": "e.g., Payments, compliance workflows, data migrations.",
           "required": true
         }
-      ]
+      ],
+      "category": "runbook"
     },
     "documentation-enablement": {
       "title": "Documentation & Enablement",
@@ -596,7 +619,197 @@
           "placeholder": "Code walkthroughs, paired sessions, documentation reviews.",
           "required": true
         }
-      ]
+      ],
+      "category": "docs"
+    },
+    "canvas-strategy": {
+      "title": "Canvas Dependency Strategy",
+      "description": "Define how the dependency canvas will stay aligned with the evolving codebase.",
+      "questions": [
+        {
+          "id": "canvas-ownership-model",
+          "prompt": "Who is accountable for keeping the canvas accurate and how often is it reviewed?",
+          "type": "textarea",
+          "placeholder": "Architecture guild reviews weekly, platform team signs off pre-release, automated checks in CI/CD…",
+          "required": true
+        },
+        {
+          "id": "canvas-update-signal",
+          "prompt": "What signals (detector runs, ADRs, code reviews) should trigger a canvas refresh?",
+          "type": "textarea",
+          "placeholder": "e.g., Detector runs nightly, major feature merges require manual annotation, ADR approval auto-updates nodes.",
+          "required": true
+        }
+      ],
+      "category": "module"
+    },
+    "modules-governance": {
+      "title": "Module Governance",
+      "description": "Clarify ownership, versioning, and health expectations for modules surfaced on the canvas.",
+      "questions": [
+        {
+          "id": "module-ownership-matrix",
+          "prompt": "Map modules to owning teams and outline escalation paths when dependencies degrade.",
+          "type": "textarea",
+          "placeholder": "List module → squad, secondary contacts, escalation SLAs, and change approval requirements.",
+          "required": true
+        },
+        {
+          "id": "module-health-criteria",
+          "prompt": "What health metrics (coverage, TODO thresholds, coupling limits) should we enforce per module?",
+          "type": "textarea",
+          "placeholder": "Define minimum coverage, max TODO debt, dependency caps, and alerting thresholds.",
+          "required": true
+        }
+      ],
+      "category": "module"
+    },
+    "features-grooming": {
+      "title": "Feature Grooming & Delivery",
+      "description": "Ensure features move through a consistent discovery and acceptance workflow.",
+      "questions": [
+        {
+          "id": "feature-intake-workflow",
+          "prompt": "Describe the intake workflow from ideation to sprint-ready feature stories.",
+          "type": "textarea",
+          "placeholder": "Product triage → discovery docs → design review → technical spike → sprint backlog.",
+          "required": true
+        },
+        {
+          "id": "feature-acceptance-criteria",
+          "prompt": "What definition of ready/done criteria gate feature hand-off to delivery teams?",
+          "type": "textarea",
+          "placeholder": "Acceptance tests, analytics hooks, rollout plan, risk sign-off, release documentation.",
+          "required": true
+        }
+      ],
+      "category": "feature"
+    },
+    "bugs-readiness": {
+      "title": "Bug Response Readiness",
+      "description": "Capture how defects are triaged, prioritised, and prevented from regressing.",
+      "questions": [
+        {
+          "id": "bug-prioritisation-rules",
+          "prompt": "Outline the severity/priority scheme and who can override classifications.",
+          "type": "textarea",
+          "placeholder": "P0 = outage, P1 = critical path blocked, Service desk triages within 30 minutes, engineering lead approves downgrades.",
+          "required": true
+        },
+        {
+          "id": "bug-slo-policy",
+          "prompt": "Define remediation SLAs and the feedback loop back into automated testing.",
+          "type": "textarea",
+          "placeholder": "P0 resolved within 4h, P1 within 24h, regression tests added before closure, RCA required for repeat issues.",
+          "required": true
+        }
+      ],
+      "category": "bug"
+    },
+    "api-readiness": {
+      "title": "API Readiness & Monitoring",
+      "description": "Lock in how API behaviour is measured and communicated to consumers.",
+      "questions": [
+        {
+          "id": "api-monitoring-plan",
+          "prompt": "Which monitors, alerts, and dashboards guarantee API quality post-launch?",
+          "type": "textarea",
+          "placeholder": "Synthetic checks per region, error budget burn charts, consumer contract test pipelines.",
+          "required": true
+        },
+        {
+          "id": "api-breaking-change-policy",
+          "prompt": "How will you communicate and validate breaking changes with consumers?",
+          "type": "textarea",
+          "placeholder": "Release notes cadence, sandbox updates, consumer notification SLA, opt-in beta channels.",
+          "required": true
+        }
+      ],
+      "category": "api"
+    },
+    "diagrams-expectations": {
+      "title": "Diagram Expectations",
+      "description": "Determine how architectural diagrams are produced, refreshed, and consumed.",
+      "questions": [
+        {
+          "id": "diagram-consumers",
+          "prompt": "Who relies on diagrams and what level of detail do they expect?",
+          "type": "textarea",
+          "placeholder": "Platform engineers need deployment topology, onboarding docs need system context, auditors require data flow charts.",
+          "required": true
+        },
+        {
+          "id": "diagram-refresh-cadence",
+          "prompt": "When should diagrams be regenerated and who signs off on accuracy?",
+          "type": "textarea",
+          "placeholder": "Trigger on major releases, quarterly reviews with architecture council, automated diff from detector.",
+          "required": true
+        }
+      ],
+      "category": "diagram"
+    },
+    "specs-distribution": {
+      "title": "Spec Distribution & Review",
+      "description": "Clarify how specifications are reviewed, approved, and distributed to stakeholders.",
+      "questions": [
+        {
+          "id": "spec-review-cadence",
+          "prompt": "What cadence and forum will review updated specs?",
+          "type": "textarea",
+          "placeholder": "Weekly architecture review, async pull requests, sign-off from compliance before release.",
+          "required": true
+        },
+        {
+          "id": "spec-publication-channel",
+          "prompt": "Where should the spec live and how are consumers notified of updates?",
+          "type": "textarea",
+          "placeholder": "Store in spec/docs/, publish to Confluence, auto-post changelog to #architecture channel.",
+          "required": true
+        }
+      ],
+      "category": "docs"
+    },
+    "docs-governance": {
+      "title": "Docs Governance",
+      "description": "Ensure product and engineering docs remain accurate after go-live.",
+      "questions": [
+        {
+          "id": "docs-update-responsibility",
+          "prompt": "Who maintains each documentation surface (runbooks, API guides, onboarding manuals)?",
+          "type": "textarea",
+          "placeholder": "Operations owns runbooks, product owns FAQs, tech writers manage API guides with quarterly audits.",
+          "required": true
+        },
+        {
+          "id": "docs-tooling",
+          "prompt": "Which tooling and review workflows keep documentation versioned and discoverable?",
+          "type": "textarea",
+          "placeholder": "Docs-as-code in Git, CI spellcheck, staged previews, mandatory SME review before publish.",
+          "required": true
+        }
+      ],
+      "category": "docs"
+    },
+    "audit-readiness": {
+      "title": "Spec & Audit Readiness",
+      "description": "Capture evidence expectations for audits and spec completeness checks.",
+      "questions": [
+        {
+          "id": "audit-evidence-plan",
+          "prompt": "What artefacts must be produced or retained for compliance and internal audits?",
+          "type": "textarea",
+          "placeholder": "Deployment logs, change approvals, security test reports, signed spec baselines.",
+          "required": true
+        },
+        {
+          "id": "audit-blockers",
+          "prompt": "Identify known gaps or blockers that could fail a spec or compliance review.",
+          "type": "textarea",
+          "placeholder": "Outstanding penetration test, missing data retention policy, temporary exception approvals.",
+          "required": true
+        }
+      ],
+      "category": "runbook"
     },
     "risks-assumptions": {
       "title": "Risks, Assumptions & Open Questions",
@@ -623,7 +836,8 @@
           "placeholder": "Assign owners and due dates when possible.",
           "required": true
         }
-      ]
+      ],
+      "category": "spec"
     },
     "web-experience": {
       "title": "Web Experience",
@@ -650,7 +864,8 @@
           "placeholder": "Include measurement tooling (Lighthouse, WebPageTest).",
           "required": true
         }
-      ]
+      ],
+      "category": "feature"
     },
     "accessibility-seo": {
       "title": "Accessibility & Discoverability",
@@ -670,7 +885,8 @@
           "placeholder": "Include content governance, internationalisation, canonical rules.",
           "required": false
         }
-      ]
+      ],
+      "category": "feature"
     },
     "content-workflow": {
       "title": "Content Workflow",
@@ -683,7 +899,8 @@
           "placeholder": "CMS integration, editorial calendar, localization requirements.",
           "required": false
         }
-      ]
+      ],
+      "category": "spec"
     },
     "api-contracts": {
       "title": "API Contracts",
@@ -710,7 +927,8 @@
           "placeholder": "p95 latency < 200ms, 99.9% uptime, regional failover.",
           "required": true
         }
-      ]
+      ],
+      "category": "api"
     },
     "api-observability": {
       "title": "API Observability",
@@ -730,7 +948,8 @@
           "placeholder": "Pager thresholds, dashboards, anomaly detection.",
           "required": false
         }
-      ]
+      ],
+      "category": "api"
     },
     "api-governance": {
       "title": "API Governance",
@@ -750,7 +969,8 @@
           "placeholder": "Portal requirements, code samples, sandbox tokens.",
           "required": true
         }
-      ]
+      ],
+      "category": "api"
     },
     "mobile-delivery": {
       "title": "Mobile Delivery",
@@ -770,7 +990,8 @@
           "placeholder": "Beta programs, TestFlight/Play Console workflows.",
           "required": true
         }
-      ]
+      ],
+      "category": "feature"
     },
     "mobile-experience": {
       "title": "Mobile Experience",
@@ -790,7 +1011,8 @@
           "placeholder": "Specify permission handling, fallback experiences.",
           "required": false
         }
-      ]
+      ],
+      "category": "feature"
     },
     "device-support": {
       "title": "Device & OS Support",
@@ -803,7 +1025,8 @@
           "placeholder": "Include sunset policy for older devices.",
           "required": true
         }
-      ]
+      ],
+      "category": "feature"
     },
     "desktop-distribution": {
       "title": "Desktop Distribution",
@@ -823,7 +1046,8 @@
           "placeholder": "Delta updates, silent installs, user prompts.",
           "required": true
         }
-      ]
+      ],
+      "category": "runbook"
     },
     "hardware-dependencies": {
       "title": "Hardware & Peripheral Dependencies",
@@ -836,7 +1060,8 @@
           "placeholder": "Include vendor contacts, certification needs.",
           "required": false
         }
-      ]
+      ],
+      "category": "runbook"
     },
     "desktop-support": {
       "title": "Support & IT Integration",
@@ -849,7 +1074,8 @@
           "placeholder": "Mention packaging formats, security scans, whitelisting processes.",
           "required": true
         }
-      ]
+      ],
+      "category": "runbook"
     },
     "package-distribution": {
       "title": "Package Distribution",
@@ -869,7 +1095,8 @@
           "placeholder": "State policy for optional peer dependencies, native extensions.",
           "required": false
         }
-      ]
+      ],
+      "category": "module"
     },
     "versioning-governance": {
       "title": "Versioning & Backward Compatibility",
@@ -889,7 +1116,8 @@
           "placeholder": "Consumer contract tests, fixture suites, sample apps.",
           "required": true
         }
-      ]
+      ],
+      "category": "module"
     },
     "adoption-readiness": {
       "title": "Adoption & Support",
@@ -909,7 +1137,8 @@
           "placeholder": "Open-source vs internal support, response time commitments.",
           "required": true
         }
-      ]
+      ],
+      "category": "docs"
     },
     "frontend-state-management": {
       "title": "Frontend State & Composition",
@@ -929,7 +1158,8 @@
           "placeholder": "SSR vs CSR, suspense boundaries, prefetching.",
           "required": false
         }
-      ]
+      ],
+      "category": "feature"
     },
     "edge-rendering": {
       "title": "Edge Rendering & Caching",
@@ -942,7 +1172,8 @@
           "placeholder": "Cache lifetimes, surrogate keys, purge processes.",
           "required": true
         }
-      ]
+      ],
+      "category": "feature"
     },
     "frontend-architecture": {
       "title": "Angular Architecture Decisions",
@@ -955,7 +1186,53 @@
           "placeholder": "Feature modules, shell architecture, Nx workspace guidelines.",
           "required": true
         }
-      ]
+      ],
+      "category": "feature"
     }
+  },
+  "sectionCategories": {
+    "foundation": "spec",
+    "stakeholders": "spec",
+    "outcomes": "spec",
+    "scope-boundaries": "spec",
+    "constraints": "spec",
+    "architecture-baseline": "spec",
+    "runtime-decisions": "runbook",
+    "data-domain": "spec",
+    "integrations": "api",
+    "security-compliance": "runbook",
+    "quality-strategy": "spec",
+    "operations-reliability": "runbook",
+    "deployment-release": "runbook",
+    "ai-recovery": "runbook",
+    "documentation-enablement": "docs",
+    "canvas-strategy": "module",
+    "modules-governance": "module",
+    "features-grooming": "feature",
+    "bugs-readiness": "bug",
+    "api-readiness": "api",
+    "diagrams-expectations": "diagram",
+    "specs-distribution": "docs",
+    "docs-governance": "docs",
+    "audit-readiness": "runbook",
+    "risks-assumptions": "spec",
+    "web-experience": "feature",
+    "accessibility-seo": "feature",
+    "content-workflow": "spec",
+    "api-contracts": "api",
+    "api-observability": "api",
+    "api-governance": "api",
+    "mobile-delivery": "feature",
+    "mobile-experience": "feature",
+    "device-support": "feature",
+    "desktop-distribution": "runbook",
+    "hardware-dependencies": "runbook",
+    "desktop-support": "runbook",
+    "package-distribution": "module",
+    "versioning-governance": "module",
+    "adoption-readiness": "docs",
+    "frontend-state-management": "feature",
+    "edge-rendering": "feature",
+    "frontend-architecture": "feature"
   }
 }

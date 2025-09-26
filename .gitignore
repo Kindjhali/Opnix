@@ -1,3 +1,7 @@
 /node_modules/
 .claude
 .codex
+/spec/
+/.storybook-static/
+storybook-static/
+.opnix/

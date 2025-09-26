@@ -18,7 +18,7 @@ function buildSpecKitMarkdown(specPayload) {
     const features = Array.isArray(specPayload?.features) ? specPayload.features : [];
     const modules = Array.isArray(specPayload?.modules) ? specPayload.modules : [];
     const tickets = Array.isArray(specPayload?.tickets) ? specPayload.tickets : [];
-
+    
     const projectTypeLabel = projectType || 'General';
 
     const scenarios = features.slice(0, 2).map(feature => `**Given** the ${projectTypeLabel.toLowerCase()} includes module ${feature.moduleId || 'core'}, **When** ${feature.title.toLowerCase()}, **Then** ${feature.description || 'the system delivers the expected outcome'}`);
@@ -38,7 +38,7 @@ function buildSpecKitMarkdown(specPayload) {
     if (functionalRequirements.length === 0) {
         functionalRequirements.push('- **FR-001**: [NEEDS CLARIFICATION: define user-facing functionality]');
     }
-    modules.forEach((module, index) => {
+    modules.forEach((module) => {
         functionalRequirements.push(`- **FR-${String(functionalRequirements.length + 1).padStart(3, '0')}**: Maintain ${module.name} module with minimum health ${module.health || 'n/a'}% and coverage ${module.coverage || 0}%`);
     });
 
@@ -52,6 +52,10 @@ function buildSpecKitMarkdown(specPayload) {
 
     const dependencyStats = specPayload?.canvas?.summary || {};
     const questionEntries = Object.entries(specPayload?.questionAnswers || {});
+    const focusAreas = Array.isArray(specPayload?.insights?.patterns) ? specPayload.insights.patterns : [];
+    const focusLines = focusAreas.length
+        ? focusAreas.map(pattern => `- **${pattern.label}** — ${pattern.rationale}`)
+        : [];
 
     return `# Feature Specification: ${projectName}
 
@@ -88,6 +92,8 @@ ${entities.join('\n')}
 - **Modules Discovered**: ${modules.length}
 - **Dependencies**: ${dependencyStats.dependencyCount || 0}
 - **External Dependencies**: ${dependencyStats.externalDependencyCount || 0}
+
+${focusLines.length ? `## Detected Focus Areas\n${focusLines.join('\n')}\n` : ''}
 
 ## Review & Acceptance Checklist
 - [ ] No [NEEDS CLARIFICATION] markers remain

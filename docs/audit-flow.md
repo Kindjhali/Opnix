@@ -16,12 +16,13 @@ POST /api/claude/execute
 ## What the audit does
 
 1. **Module scan** – runs the full detector (`services/moduleDetector`) to build live module + dependency graphs.
-2. **Ticket analysis** – loads `tickets.json`, tallies status/priority/tag counts, and flags open high-priority issues.
-3. **Feature review** – inspects `features.json` to highlight proposals missing acceptance criteria.
-4. **Spec generation** – writes both JSON and GitHub Spec Kit files into `/exports` using the shared spec generator.
-5. **Documentation** – emits an audit markdown report with module, ticket, and tech stack summaries.
-6. **Canvas snapshot** – saves a Cytoscape-ready JSON payload for the current graph.
-7. **Audit report** – persists `opnix-audit-*.json` containing the structured summary returned to the client.
+2. **Ticket analysis** – loads `data/tickets.json`, tallies status/priority/tag counts, and flags open high-priority issues.
+3. **Feature review** – inspects `data/features.json` to highlight proposals missing acceptance criteria.
+4. **Checklist sync** – persists any wizard/audit checklists in `data/checklists.json` so status transitions flow through the new API hooks.
+5. **Spec generation** – writes both JSON and GitHub Spec Kit files into `spec/blueprints` using the shared spec generator.
+6. **Documentation** – emits an audit markdown report with module, ticket, and tech stack summaries.
+7. **Canvas snapshot** – saves a Cytoscape-ready JSON payload for the current graph.
+8. **Audit report** – persists `opnix-audit-*.json` containing the structured summary returned to the client.
 
 ## Response payload
 
@@ -34,7 +35,7 @@ The API returns:
 - `techStack`: dependencies, devDependencies, detected frameworks, and package manager (if present).
 - `followUps`: ordered list of recommended next actions (low health modules, missing criteria, etc.).
 - `featureReview`: per-feature prompts so the next agent can confirm scope and acceptance criteria.
-- `exports`: metadata for each file dropped into `/exports`.
+- `exports`: metadata for each file dropped into `spec/`.
 - `isNewProject`: boolean flag indicating an empty workspace.
 - `questionnaire`: when `isNewProject` is true, a scaffold of questions to kick off spec-driven planning.
 
@@ -45,12 +46,12 @@ When the repo looks fresh (no modules, tickets, or dependencies), the audit skip
 ## Typical first run checklist
 
 1. Run `setup` (Opnix auto-appends `--ultrathink`) to generate the baseline audit.
-2. Review `/exports` for:
-   - `opnix-spec-*.json`
-   - `opnix-spec-*.spec.md`
-   - `opnix-docs-*.md`
-   - `opnix-canvas-audit-*.json`
-   - `opnix-audit-*.json`
+2. Review `spec/` for:
+   - `blueprints/opnix-spec-*.json`
+   - `blueprints/opnix-spec-*.spec.md`
+   - `docs/opnix-docs-*.md`
+   - `canvas/opnix-canvas-audit-*.json`
+   - `audits/opnix-audit-*.json`
 3. Address items in `followUps` (e.g., add tests, complete feature criteria).
 4. Re-run `setup` after remediation to verify improvements.
 

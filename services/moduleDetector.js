@@ -31,9 +31,19 @@ const DIRECTORY_ALIASES = {
   server: { id: 'server', name: 'Server Layer', type: 'backend' },
   agents: { id: 'agents', name: 'Agent Library', type: 'knowledge' },
   docs: { id: 'docs', name: 'Documentation', type: 'documentation' },
-  exports: { id: 'exports', name: 'Generated Exports', type: 'artifacts' },
+  data: { id: 'data', name: 'Workspace Data', type: 'storage' },
+  spec: { id: 'spec', name: 'Spec Archive', type: 'artifacts' },
+  exports: { id: 'legacy-exports', name: 'Legacy Exports', type: 'artifacts' },
   scripts: { id: 'scripts', name: 'Automation Scripts', type: 'automation' }
 };
+
+const COMPOSITE_DIRECTORIES = new Set([
+  'packages',
+  'apps',
+  'services',
+  'modules',
+  'workspaces'
+]);
 
 const FRAMEWORK_HINTS = {
   frontend: ['react', 'vue', 'angular', 'svelte', 'next', 'nuxt'],
@@ -46,7 +56,7 @@ async function readJson(filePath) {
   try {
     const raw = await fsp.readFile(filePath, 'utf8');
     return JSON.parse(raw);
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -124,9 +134,9 @@ function parseImports(source) {
   const localImports = new Set();
   const externalImports = new Set();
 
-  const importRegex = /import\s+(?:[^;'"\n]+?\s+from\s+)?['\"]([^'\"]+)['\"]/g;
-  const requireRegex = /require\(\s*['\"]([^'\"]+)['\"]\s*\)/g;
-  const dynamicImportRegex = /import\(\s*['\"]([^'\"]+)['\"]\s*\)/g;
+  const importRegex = /import\s+(?:[^;'"\n]+?\s+from\s+)?['"]([^'"]+)['"]/g;
+  const requireRegex = /require\(\s*['"]([^'"]+)['"]\s*\)/g;
+  const dynamicImportRegex = /import\(\s*['"]([^'"]+)['"]\s*\)/g;
 
   let match;
   while ((match = importRegex.exec(source)) !== null) {
@@ -154,17 +164,40 @@ function parseImports(source) {
 }
 
 async function loadManualModules(rootDir) {
-  const manualPath = path.join(rootDir, 'modules.json');
-  const manual = await readJson(manualPath);
+  const dataPath = path.join(rootDir, 'data', 'modules.json');
+  const legacyPath = path.join(rootDir, 'modules.json');
+  let manual = await readJson(dataPath);
+  if (!manual) manual = await readJson(legacyPath);
   if (!manual) return [];
-  if (Array.isArray(manual)) return manual;
-  if (Array.isArray(manual.modules)) return manual.modules;
-  return [];
+  const records = Array.isArray(manual) ? manual : Array.isArray(manual.modules) ? manual.modules : [];
+  return records.map(entry => {
+    if (!entry || typeof entry !== 'object') return null;
+    const normalized = { ...entry };
+    normalized.id = normalized.id || sanitizeId(normalized.name || 'custom-module');
+    normalized.type = normalized.type || 'custom';
+    normalized.dependencies = Array.isArray(normalized.dependencies) ? normalized.dependencies : [];
+    normalized.externalDependencies = Array.isArray(normalized.externalDependencies) ? normalized.externalDependencies : [];
+    normalized.frameworks = Array.isArray(normalized.frameworks) ? normalized.frameworks : [];
+    normalized.rootPaths = [];
+    if (normalized.path) {
+      const absolute = path.isAbsolute(normalized.path)
+        ? normalizePath(normalized.path)
+        : normalizePath(path.join(rootDir, normalized.path));
+      normalized.rootPaths.push(absolute);
+    } else if (Array.isArray(normalized.rootPaths)) {
+      normalized.rootPaths = normalized.rootPaths.map(p => normalizePath(path.isAbsolute(p) ? p : path.join(rootDir, p)));
+    }
+    normalized.source = 'manual';
+    normalized.manual = true;
+    return normalized;
+  }).filter(Boolean);
 }
 
 async function loadManualLinks(rootDir) {
-  const linksPath = path.join(rootDir, 'module-links.json');
-  const links = await readJson(linksPath);
+  const primaryPath = path.join(rootDir, 'data', 'module-links.json');
+  const fallbackPath = path.join(rootDir, 'module-links.json');
+  let links = await readJson(primaryPath);
+  if (!links) links = await readJson(fallbackPath);
   if (!Array.isArray(links)) return [];
   return links.filter(link => link && link.source && link.target);
 }
@@ -196,14 +229,22 @@ async function detectModules(rootDir) {
         todoCount: 0,
         testFileCount: 0,
         frameworks: new Set(determineFrameworksForModule(definition.type, packageDeps)),
-        pathHints: new Set(definition.rootPaths || [])
+        pathHints: new Set(definition.rootPaths || []),
+        source: definition.source || 'auto'
       });
     } else if (definition.rootPaths) {
       const record = modules.get(id);
       definition.rootPaths.forEach(p => record.rootPaths.add(p));
       definition.rootPaths.forEach(p => record.pathHints.add(p));
     }
-    return modules.get(id);
+    const record = modules.get(id);
+    if (definition.source) {
+      record.source = definition.source;
+    }
+    if (definition.manual) {
+      record.manual = true;
+    }
+    return record;
   }
 
   // Backend module (server.js or app.js)
@@ -215,7 +256,8 @@ async function detectModules(rootDir) {
         id: 'backend',
         name: 'Backend API',
         type: 'backend',
-        rootPaths: [normalizePath(abs)]
+        rootPaths: [normalizePath(abs)],
+        source: 'auto'
       });
       break;
     }
@@ -223,17 +265,74 @@ async function detectModules(rootDir) {
 
   const entries = await fsp.readdir(rootDir, { withFileTypes: true });
 
+  async function registerCompositeModules(parentName, parentPath) {
+    let children;
+    try {
+      children = await fsp.readdir(parentPath, { withFileTypes: true });
+    } catch {
+      return;
+    }
+
+    let hasLocalFiles = false;
+
+    for (const child of children) {
+      if (child.isFile()) {
+        const ext = path.extname(child.name).toLowerCase();
+        if (CODE_EXTENSIONS.has(ext)) {
+          hasLocalFiles = true;
+        }
+        continue;
+      }
+
+      if (!child.isDirectory()) continue;
+      if (child.name.startsWith('.')) continue;
+      if (IGNORED_DIRECTORIES.has(child.name)) continue;
+
+      const childRoot = normalizePath(path.join(parentPath, child.name));
+      const classification = classifyDirectory(child.name);
+
+      ensureModule({
+        ...classification,
+        rootPaths: [childRoot],
+        source: 'directory'
+      });
+
+      if (COMPOSITE_DIRECTORIES.has(child.name.toLowerCase())) {
+        await registerCompositeModules(child.name, childRoot);
+      }
+    }
+
+    if (hasLocalFiles) {
+      const classification = classifyDirectory(parentName);
+      ensureModule({
+        ...classification,
+        type: classification.type === 'code' ? 'workspace' : classification.type,
+        rootPaths: [normalizePath(parentPath)],
+        source: 'directory'
+      });
+    }
+  }
+
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
     if (IGNORED_DIRECTORIES.has(entry.name)) continue;
     if (entry.name.startsWith('.')) continue;
 
+    const entryPath = path.join(rootDir, entry.name);
+    const lowerName = entry.name.toLowerCase();
+
+    if (COMPOSITE_DIRECTORIES.has(lowerName)) {
+      await registerCompositeModules(entry.name, entryPath);
+      continue;
+    }
+
     const classification = classifyDirectory(entry.name);
-    const moduleRoot = normalizePath(path.join(rootDir, entry.name));
+    const moduleRoot = normalizePath(entryPath);
 
     ensureModule({
       ...classification,
-      rootPaths: [moduleRoot]
+      rootPaths: [moduleRoot],
+      source: 'directory'
     });
   }
 
@@ -252,7 +351,9 @@ async function detectModules(rootDir) {
       id: manual.id,
       name: manual.name || manual.id,
       type: manual.type || 'custom',
-      rootPaths
+      rootPaths,
+      source: 'manual',
+      manual: true
     });
 
     if (record) {
@@ -269,6 +370,12 @@ async function detectModules(rootDir) {
   }
 
   const moduleList = Array.from(modules.values());
+  const moduleRootOwner = new Map();
+  moduleList.forEach(module => {
+    module.rootPaths.forEach(rootPath => {
+      moduleRootOwner.set(rootPath, module.id);
+    });
+  });
 
   function findModuleForPath(targetPath) {
     const normalized = normalizePath(targetPath);
@@ -281,16 +388,22 @@ async function detectModules(rootDir) {
     return null;
   }
 
-  async function walkFileSystem(startPath, visitor) {
+  async function walkFileSystem(startPath, currentModuleId, visitor) {
     const stats = await fsp.stat(startPath);
 
     if (stats.isDirectory()) {
+      const normalized = normalizePath(startPath);
+      const owner = moduleRootOwner.get(normalized);
+      if (owner && owner !== currentModuleId) {
+        return;
+      }
+
       const baseName = path.basename(startPath);
       if (IGNORED_DIRECTORIES.has(baseName)) return;
 
       const children = await fsp.readdir(startPath);
       for (const child of children) {
-        await walkFileSystem(path.join(startPath, child), visitor);
+        await walkFileSystem(path.join(startPath, child), currentModuleId, visitor);
       }
       return;
     }
@@ -304,7 +417,7 @@ async function detectModules(rootDir) {
       const stats = await fsp.stat(rootPath).catch(() => null);
       if (!stats) continue;
       if (stats.isDirectory()) {
-        await walkFileSystem(rootPath, async filePath => {
+        await walkFileSystem(rootPath, module.id, async filePath => {
           if (visited.has(filePath)) return;
           visited.add(filePath);
 
@@ -388,13 +501,6 @@ async function detectModules(rootDir) {
 
   const edges = [];
 
-  const summary = {
-    moduleCount: moduleList.length,
-    dependencyCount: 0,
-    externalDependencyCount: 0,
-    totalLines: 0
-  };
-
   const resultModules = moduleList.map(module => {
     const coverage = inferCoverage(module.fileCount, module.testFileCount);
     const externalCount = module.externalDependencies.size;
@@ -425,10 +531,6 @@ async function detectModules(rootDir) {
       });
     });
 
-    summary.dependencyCount += dependencies.length;
-    summary.externalDependencyCount += externalDependencies.length;
-    summary.totalLines += module.lineCount;
-
     return {
       id: module.id,
       name: module.name,
@@ -441,14 +543,38 @@ async function detectModules(rootDir) {
       todoCount: module.todoCount,
       coverage,
       health,
-      frameworks: Array.from(module.frameworks)
+      frameworks: Array.from(module.frameworks),
+      source: module.source || 'auto',
+      manual: Boolean(module.manual)
     };
   });
 
+  const filteredModules = resultModules.filter(module => {
+    if (module.manual) return true;
+    if (module.source === 'directory') {
+      const hasRoot = Array.isArray(module.pathHints) && module.pathHints.length > 0;
+      if (hasRoot) return true;
+    }
+    const hasCode = module.fileCount > 0 || module.lineCount > 0;
+    const hasDeps = (module.dependencies || []).length > 0;
+    const hasExternal = (module.externalDependencies || []).length > 0;
+    return hasCode || hasDeps || hasExternal;
+  });
+
+  const validIds = new Set(filteredModules.map(module => module.id));
+  const filteredEdges = edges.filter(edge => validIds.has(edge.source) && validIds.has(edge.target));
+
+  const filteredSummary = {
+    moduleCount: filteredModules.length,
+    dependencyCount: filteredEdges.length,
+    externalDependencyCount: filteredModules.reduce((total, module) => total + module.externalDependencies.length, 0),
+    totalLines: filteredModules.reduce((total, module) => total + module.lineCount, 0)
+  };
+
   return {
-    modules: resultModules,
-    edges,
-    summary
+    modules: filteredModules,
+    edges: filteredEdges,
+    summary: filteredSummary
   };
 }
 

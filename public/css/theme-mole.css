@@ -1,0 +1,25 @@
+/* MOLE THEME - Primary as TEXT, Secondary as BACKGROUND */
+:root[data-theme="mole"], .mole-theme {
+    --text-primary: #E94560;  /* Primary - main text */
+    --bg-primary: #0F3460;    /* Secondary - main background */
+
+    /* Additional Mole colors in order */
+    --accent-1: #FF8C3B;
+    --accent-2: #1FB6FF;
+    --bg-darkest: #0A0F1C;
+    --bg-dark: #121A30;
+    --bg-medium: #151B2E;
+    --bg-card: #1E2642;
+    --bg-hover: #2A3651;
+    --bg-alt1: #0E1420;
+    --bg-alt2: #222630;
+    --bg-alt3: #2A2E38;
+    --text-light: #FAEBD7;
+    --text-secondary: #C4D1E8;
+    --text-muted: #7B8AA8;
+    --border: #4A5568;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --info: #06B6D4;
+}

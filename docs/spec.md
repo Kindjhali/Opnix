@@ -6,10 +6,10 @@
 - All tooling is designed for neurodivergent-friendly workflows: deterministic flows, progressive disclosure, and high-contrast visuals derived from the MOLE and CANYON themes.
 
 ## Architecture Overview
-- `Frontend`: Vue app in `public/app.js` composed of canvases (Cytoscape), Mermaid diagram views, agent controls, and the spec/playbook panes.
-- `Backend`: `server.js` exposes REST endpoints for audits, module detection, ticket management, exports, and manual canvas links.
-- `Detectors & Data`: `services/moduleDetector.js` scans the filesystem, merges manual edges from `module-links.json`, and powers the CANVAS, MODULES, and DIAGRAM tabs. Tickets remain in `tickets.json`; interview questions in `public/data/interview-sections.json`.
-- `Exports`: Audit/spec/timeline outputs land in `/exports` with metadata returned to the client for download surfaces.
+- `Frontend`: Vue app in `src/App.vue + src/appOptions.js` composed of canvases (Cytoscape), Mermaid diagram views, agent controls, and the spec/playbook panes.
+- `Backend`: `server.js` exposes REST endpoints for audits, module detection, ticket management, the spec archive, and manual canvas links.
+- `Detectors & Data`: `services/moduleDetector.js` scans the filesystem, merges manual edges from `data/module-links.json`, and powers the CANVAS, MODULES, and DIAGRAM tabs. Tickets remain in `data/tickets.json`; interview questions in `public/data/interview-sections.json`.
+- `Spec archive`: Audit/spec/timeline outputs land in `spec/` with metadata returned to the client for download surfaces.
 
 ## Current Capabilities
 - `Setup audit`: `claude$ setup` (or POST `/api/claude/execute`) runs the full audit: module scan, ticket analysis, feature review, spec generation, documentation, canvas snapshot, and `opnix-audit-*.json` payloads.
@@ -22,7 +22,7 @@
 ## Visual Enablement Sprint Goals
 1. **Mermaid Diagram Engine** – autogenerate architecture/sequence/entity/flow diagrams from interview + detector data and expose raw Mermaid through APIs.
 2. **Storybook Integration** – run Storybook beside the Vue app, drive stories with live data, and add CI scripts.
-3. **Visual Timeline Canvas** – drag-and-drop roadmap/Gantt view wired to real features/tickets with `/exports` outputs.
+3. **Visual Timeline Canvas** – drag-and-drop roadmap/Gantt view wired to real features/tickets with `spec/` outputs.
 4. **Module Canvas Enhancements** – critical-path highlighting, health badges, edge annotations, and persisted manual notes.
 5. **Playbook Library** – UI pane rendering the interview blueprint with Markdown export for audits.
 6. **Dependency Book** – combined internal/external dependency dossier with risk scores, delivered via API and downloadable UI.
@@ -36,19 +36,19 @@
 ## Key Data Sources & Files
 - Interview blueprint: `public/data/interview-sections.json`
 - Module detector + aliases: `services/moduleDetector.js`
-- Canvas links store: `module-links.json`
-- Ticket backlog: `tickets.json`
+- Canvas links store: `data/module-links.json`
+- Ticket backlog: `data/tickets.json`
 - Audit pipeline doc: `docs/audit-flow.md`
 - Best-practice research: `docs/best_practice.md`
 - Canvas linking reference: `docs/canvas-linking.md`
 
 ## Operational Workflow
 1. Run `node server.js` (port 7337) and use the Claude bar `setup` command to generate a fresh audit.
-2. Inspect `/exports` artefacts (`opnix-spec-*.json`, `opnix-spec-*.spec.md`, `opnix-docs-*.md`, `opnix-canvas-audit-*.json`, `opnix-audit-*.json`).
+2. Inspect `spec/` artefacts (`blueprints/opnix-spec-*.json`, `blueprints/opnix-spec-*.spec.md`, `docs/opnix-docs-*.md`, `canvas/opnix-canvas-audit-*.json`, `audits/opnix-audit-*.json`).
 3. Iterate on follow-up actions (module health, missing acceptance criteria, roadmap planning) and rerun `setup` to validate improvements.
 
 ## Success Criteria
 - No placeholders: every UI view is backed by filesystem data or detector output.
 - Visual tooling (Mermaid, canvases, Storybook) reflects real modules, tickets, and interview answers.
-- Backward compatibility: existing `tickets.json` files and manual `module-links.json` edits remain valid.
+- Backward compatibility: existing `tickets.json` files and manual `module-links.json` edits are auto-migrated into `data/`.
 - Documentation stays synced with the actual implementation to keep future agents productive.

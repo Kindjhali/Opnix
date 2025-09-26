@@ -1,6 +1,6 @@
 # Installation Decision Tree
 
-OTKit now ships with an installation wizard that branches setup into two flows:
+Opnix now ships with an installation wizard that branches setup into two flows:
 
 1. **New Project Discovery** – guides greenfield repositories through the interview blueprint and playbook export so scope is captured before code exists.
 2. **Existing Repository Audit** – runs the full `claude$ setup` audit, generates specs/docs/canvas artefacts, and surfaces follow-up actions.
@@ -25,18 +25,22 @@ flowchart TD
   Decision -->|New project| Scope[Discovery flow]
   Scope --> Interview[Run Spec Builder interview]
   Scope --> Playbook[Use Playbook UI & export scope docs]
+  Scope --> ScaffoldNew[Scaffold .opnix workspace]
   Decision -->|Existing repo| Audit[Automated audit run]
-  Audit --> Exports[Spec, docs, canvas, audit payloads]
+  Audit --> Archive[Spec, docs, canvas, audit payloads]
+  Audit --> ScaffoldExisting[Refresh .opnix scaffold]
 ```
 
 ## New Project Flow
-- Generates `exports/opnix-new-project-scope-*.md` outlining the staged interview, section highlights, and next steps.
+- Generates `spec/revision/opnix-new-project-scope-*.md` outlining the staged interview, section highlights, and next steps.
 - Directs operators to the Spec Builder, Playbook UI, and `docs/interview-playbook.md` for discovery.
+- Writes `.opnix/scaffold/` with module dossiers, ticket stubs, tech-stack baseline, and starter framework code without overwriting prior runs.
 - Designed for workspaces without modules, tickets, or dependencies yet—ideal right after repo creation.
 
 ## Existing Repository Flow
 - Invokes the same audit pipeline exposed via `claude$ setup` to produce spec kits, documentation, canvas snapshots, and audit JSON.
-- Writes a summary handoff to `exports/opnix-existing-project-entry-*.md` with key stats and top follow-ups.
-- Ideal after dropping `tickets.json` or when scanning an established codebase.
+- Writes a summary handoff to `spec/audits/opnix-existing-project-entry-*.md` with key stats and top follow-ups.
+- Refreshes `.opnix/scaffold/` so module health, ticket exports, and tech-stack manifests always reflect the latest audit.
+- Ideal after dropping `data/tickets.json` or when scanning an established codebase.
 
-Re-run the wizard whenever the workspace changes (e.g., after initial discovery or post-remediation) to pivot between flows or refresh exports.
+The wizard remembers your last selection in `data/setup-state.json`, and you can review prior runs from the CLI history prompt. Re-run the wizard whenever the workspace changes (e.g., after initial discovery or post-remediation) to pivot between flows or refresh the spec archive.

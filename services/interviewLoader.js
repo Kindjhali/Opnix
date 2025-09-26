@@ -3,6 +3,7 @@ const fs = require('fs').promises;
 
 let blueprintCache = null;
 
+// Hook: swap the blueprint source here to support remote or per-vertical interview feeds.
 async function loadInterviewBlueprint() {
     if (blueprintCache) return blueprintCache;
     const blueprintPath = path.join(__dirname, '..', 'public', 'data', 'interview-sections.json');

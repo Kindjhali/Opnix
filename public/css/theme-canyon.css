@@ -1,0 +1,25 @@
+/* PLANETARY CANYON THEME - Primary as TEXT, Secondary as BACKGROUND */
+:root[data-theme="canyon"], .canyon-theme {
+    --text-primary: #F04A32;  /* Primary - main text */
+    --bg-primary: #0F4858;    /* Secondary - main background */
+
+    /* Additional Canyon colors in order */
+    --accent-1: #FFB55C;
+    --accent-2: #25C6BF;
+    --bg-darkest: #042935;
+    --bg-dark: #073D4A;
+    --bg-medium: #0D3440;
+    --bg-card: #164853;
+    --bg-hover: #1C5C70;
+    --bg-alt1: #042935;
+    --bg-alt2: #073D4A;
+    --bg-alt3: #0D3440;
+    --text-light: #C4B89A;
+    --text-secondary: #9A8E7A;
+    --text-muted: #6D6355;
+    --border: #6D6355;
+    --success: #25C6BF;
+    --warning: #FFB55C;
+    --danger: #F04A32;
+    --info: #25C6BF;
+}

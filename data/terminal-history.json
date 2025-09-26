@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1758818951358,
+    "command": "echo test",
+    "cwd": ".",
+    "stdout": "test\n",
+    "stderr": "",
+    "exitCode": 0,
+    "ranAt": "2025-09-25T16:49:11.353Z",
+    "durationMs": 5,
+    "timedOut": false,
+    "error": null
+  },
+  {
+    "id": 1758818958710,
+    "command": "echo [[ ultrathink ]] test",
+    "cwd": ".",
+    "stdout": "[[ ultrathink ]] test\n",
+    "stderr": "",
+    "exitCode": 0,
+    "ranAt": "2025-09-25T16:49:18.707Z",
+    "durationMs": 3,
+    "timedOut": false,
+    "error": null
+  },
+  {
+    "id": 1758818979298,
+    "command": "echo test",
+    "cwd": ".",
+    "stdout": "\n\u001b[36m░░░░░░░░░░ 0.0% (0k/160k)\u001b[0m | Task: System Ready | Files: 0 | DAIC: Discussion\ntest\n",
+    "stderr": "",
+    "exitCode": 0,
+    "ranAt": "2025-09-25T16:49:39.294Z",
+    "durationMs": 4,
+    "timedOut": false,
+    "error": null
+  },
+  {
+    "id": 1758818985511,
+    "command": "echo [[ ultrathink ]] analyzing",
+    "cwd": ".",
+    "stdout": "\n\u001b[36m░░░░░░░░░░ 0.0% (0k/160k)\u001b[0m | Task: UltraThink Analysis | Files: 0 | DAIC: Discussion\n[[ ultrathink ]] analyzing\n",
+    "stderr": "",
+    "exitCode": 0,
+    "ranAt": "2025-09-25T16:49:45.508Z",
+    "durationMs": 3,
+    "timedOut": false,
+    "error": null
+  }
+]
