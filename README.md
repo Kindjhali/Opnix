@@ -157,6 +157,256 @@ Opnix automatically:
 - ✅ Runs the interactive setup wizard
 - ✅ Starts the analysis server on port 7337
 
+## 🎯 Quick Start Guide
+
+### 1. Install Opnix
+
+```bash
+npm install -g opnix
+```
+
+### 2. Navigate to Your Project
+
+```bash
+cd your-project
+```
+
+### 3. Start Opnix
+
+```bash
+opnix
+```
+
+### 4. Open in Browser
+
+Navigate to http://localhost:7337
+
+---
+
+## 📖 Basic Usage
+
+### Understanding the Interface
+
+When you open Opnix, you'll see several tabs:
+
+- **Canvas** — Visual map of your project's modules and dependencies
+- **Modules** — List view of all detected modules with health metrics
+- **Tickets** — Task management board
+- **Features** — Feature planning with acceptance criteria
+- **Roadmap** — Timeline view of milestones and releases
+- **Specs** — Generated documentation and specifications
+- **Diagrams** — Architecture diagrams (Mermaid format)
+
+### Essential Workflows
+
+#### 1. Explore Your Architecture
+
+```bash
+# Start Opnix
+opnix
+
+# Open browser → Canvas tab
+# You'll see an interactive graph of your modules
+# Click and drag to explore dependencies
+```
+
+#### 2. Create a New Feature
+
+**Via UI:**
+1. Click **Features** tab
+2. Click **+ New Feature**
+3. Fill in name, description, acceptance criteria
+4. Link to relevant modules
+5. Save — tickets are auto-generated
+
+**Via CLI:**
+```bash
+curl -X POST http://localhost:7337/api/claude/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"command":"/new-feature"}'
+```
+
+#### 3. Track Work with Tickets
+
+**Via UI:**
+1. Click **Tickets** tab
+2. View all tasks in board view
+3. Filter by status, priority, tags
+4. Click a ticket to edit or complete
+
+**Via API:**
+```bash
+# Get all tickets
+curl http://localhost:7337/api/tickets
+
+# Create a ticket
+curl -X POST http://localhost:7337/api/tickets \
+  -H 'Content-Type: application/json' \
+  -d '{"title":"Fix bug","description":"..","priority":"high"}'
+```
+
+#### 4. Generate Documentation
+
+**Via Setup Wizard:**
+```bash
+opnix wizard
+# Follow prompts to generate full project specification
+```
+
+**Via CLI Interview:**
+```bash
+# Start spec interview
+curl -X POST http://localhost:7337/api/claude/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"command":"/spec"}'
+```
+
+**Via UI:**
+1. Click **Specs** tab
+2. Click **Generate Spec**
+3. Export as Markdown or JSON
+
+#### 5. Plan Your Roadmap
+
+**Via UI:**
+1. Click **Roadmap** tab
+2. Click **+ New Milestone**
+3. Add features to milestone
+4. Set target dates
+5. Export timeline
+
+#### 6. View Tech Stack
+
+**Via UI:**
+1. Click **Tech Stack** tab
+2. See all dependencies and versions
+3. Identify outdated packages
+4. Export inventory
+
+**Via API:**
+```bash
+curl http://localhost:7337/api/tech-stack
+```
+
+---
+
+## 🔧 Common Commands
+
+### Server Commands
+
+```bash
+# Start Opnix (default port 7337)
+opnix
+
+# Custom port
+opnix --port 8080
+
+# Analyze specific project
+opnix --project /path/to/project
+
+# Run setup wizard
+opnix wizard
+
+# Development mode (auto-reload)
+opnix dev
+
+# Show version
+opnix --version
+
+# Show help
+opnix --help
+```
+
+### API Endpoints (while server is running)
+
+```bash
+# Module graph
+curl http://localhost:7337/api/modules/graph
+
+# Run module detection
+curl http://localhost:7337/api/modules/detect
+
+# Get tickets
+curl http://localhost:7337/api/tickets
+
+# Get roadmap
+curl http://localhost:7337/api/roadmap
+
+# Generate architecture diagram
+curl http://localhost:7337/api/diagrams/architecture
+
+# Tech stack inventory
+curl http://localhost:7337/api/tech-stack
+
+# Start CLI interview
+curl -X POST http://localhost:7337/api/claude/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"command":"/spec"}'
+```
+
+### CLI Interviews (Slash Commands)
+
+Run structured interviews via API:
+
+```bash
+/spec          # Generate full project specification
+/new-feature   # Create feature with acceptance criteria
+/new-module    # Document a new module
+/new-bug       # Structured bug intake
+/new-diagram   # Create architecture diagram
+/new-api       # Specify API endpoints
+/runbook       # Generate operational runbook
+/plan          # Create delivery plan
+/tasks         # Export task queue
+```
+
+**Example:**
+```bash
+# Start feature interview
+curl -X POST http://localhost:7337/api/claude/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"command":"/new-feature"}'
+
+# Get session ID from response, then answer questions
+curl -X POST http://localhost:7337/api/claude/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"command":"/answer SESSION_ID QUESTION_ID your-answer"}'
+```
+
+---
+
+## 💡 Tips & Best Practices
+
+### First Time Setup
+
+1. **Run the wizard** — `opnix wizard` walks you through initial setup
+2. **Review Canvas** — Check that module detection is accurate
+3. **Create baseline spec** — Use `/spec` to document current state
+4. **Set up roadmap** — Plan your next features
+
+### Daily Workflow
+
+1. **Start Opnix** — `opnix` in your project directory
+2. **Review tickets** — Check what needs to be done
+3. **Update as you work** — Mark tickets complete, create new features
+4. **Generate docs** — Keep documentation in sync
+
+### Team Collaboration
+
+1. **Export documentation** — Share specs and diagrams with team
+2. **Use roadmap** — Keep everyone aligned on priorities
+3. **Track with tickets** — Maintain shared task visibility
+4. **Version control** — Commit `data/` directory to git
+
+### Performance Tips
+
+- Module detection runs automatically but can be triggered manually
+- Canvas is cached — refresh with **Detect Modules** button
+- Large projects may take longer to analyze initially
+- Use filters in Tickets tab to focus on relevant work
+
+---
+
 ## Core Features
 
 ### 1. Visual Module Canvas
