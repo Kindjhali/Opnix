@@ -91,41 +91,51 @@ High-contrast colors optimized for accessibility
 
 ## ⚡ Installation
 
-### Install into Your Project
+### Quick Start (Recommended)
+
+Clone Opnix into your project to analyze and manage it:
 
 ```bash
-# Navigate to your project
+# Navigate to your project root
 cd your-project
 
-# Install Opnix
-pnpm add opnix
+# Clone Opnix
+git clone https://github.com/Kindjhali/Opnix.git opnix
 
-# Or use npx to run without installing
-npx opnix
+# Install and setup
+cd opnix
+pnpm install
+
+# Start Opnix server (analyzes parent project)
+pnpm start
 ```
 
 **🌐 Open http://localhost:7337**
 
-> Opnix automatically:
-> - Detects your project structure
-> - Creates required directories (data/, spec/, .opnix/)
-> - Builds the production bundle
-> - Runs the setup wizard
-> - Starts the server
+> Opnix will automatically detect and analyze your project in the parent directory.
 
-### For Opnix Development
+### Alternative: Run from Separate Directory
 
 ```bash
-# Clone the Opnix repository
+# Clone Opnix anywhere
 git clone https://github.com/Kindjhali/Opnix.git
 cd opnix
 
 # Install dependencies
 pnpm install
 
-# Start development server
-pnpm dev
+# Point to your project and start
+PROJECT_PATH=/path/to/your-project pnpm start
 ```
+
+### What Happens on Install
+
+Opnix automatically:
+- ✅ Detects your project structure
+- ✅ Creates required directories (data/, spec/, .opnix/)
+- ✅ Builds the production bundle
+- ✅ Runs the interactive setup wizard
+- ✅ Starts the analysis server
 
 ## Core Features
 
