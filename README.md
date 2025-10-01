@@ -1,9 +1,21 @@
+```
+   ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄    ▄ ▄▄▄ ▄▄   ▄▄
+  █       █       █  █  █ █   █  █ █  █
+  █   ▄   █    ▄  █   █▄█ █   █  █▄█  █
+  █  █ █  █   █▄█ █       █   █       █
+  █  █▄█  █    ▄▄▄█  ▄    █   █       █
+  █       █   █   █ █ █   █   █ ██▄██ █
+  █▄▄▄▄▄▄▄█▄▄▄█   █▄█  █▄▄█▄▄▄█▄█   █▄█
+
+  Operational Toolkit · Visual Canvas · Audit Engine
+```
+
 # Opnix — Operational Toolkit
 
-Opnix delivers a neon-soaked command center for auditing, explaining, and visualising software projects end-to-end. It combines a Vue 3 single-page interface with an Express backend, filesystem-backed data, and automation that keeps every artefact grounded in the real repository—no mock payloads, no placeholders.
+Opnix delivers a visual command center for auditing, explaining, and visualising software projects end-to-end. It combines a Vue 3 single-page interface with an Express backend, filesystem-backed data, and automation that keeps every artefact grounded in the real repository—no mock payloads, no placeholders.
 
 ## Feature Highlights
-- **Neon Installation Flow** — `npm run setup:install` guides dependency setup, triggers the decision tree wizard, and hands you curated next steps in the CLI.
+- **One-Step Installation** — `pnpm install opnix@latest` automatically handles dependency setup, builds the production bundle, runs the setup wizard, and prepares your environment.
 - **New vs Existing Project Decision Tree** — automatically routes greenfield repos to discovery interviews or established codebases to the full audit (`scripts/setupWizard.js`).
 - **Automated Audits** — `claude$ setup` or the wizard runs module detection, ticket/feature analysis, spec-kit generation, canvas snapshots, and Markdown docs; artefacts land in `spec/`.
 - **Cytoscape Module Canvas** — renders live module graphs, merges manual links (`data/module-links.json`), supports drag-and-drop dependencies, and exports PNG/JSON payloads.
@@ -38,6 +50,7 @@ Opnix delivers a neon-soaked command center for auditing, explaining, and visual
 - **State Management**: `src/composables/appStore.js` exposes a reactive singleton (`useAppStore`) that serves as the central state store for all components, CLI flows, and automation
 - **Build System**: Vite bundles the modular frontend from `src/main.js` entry point to `public/assets/main.js` for production serving
 - **Backend**: `server.js` wires the Express instance, applies platform middleware (CORS, gzip compression), and mounts the modular routers in `routes/` (tickets, features, modules, docs, CLI, etc.) while delegating heavy orchestration to dedicated services such as `services/auditManager.js`.
+  - Detailed router/service relationships are charted in `docs/server-routing-map.md` (Mermaid diagram plus explanation).
 - **Data Sources**: `data/tickets.json`, `data/features.json`, `data/module-links.json`, and `public/data/interview-sections.json` provide persistent state; `spec/` stores generated artefacts.
 
 ## Theme System
@@ -53,22 +66,46 @@ Opnix delivers a neon-soaked command center for auditing, explaining, and visual
 - macOS, Linux, or Windows (WSL recommended)
 
 ## Getting Started
+
+### Quick Install (Recommended)
+
+Install Opnix with a single command:
+
 ```bash
-# 1. Clone the repository and enter the directory
+pnpm install opnix@latest
+```
+
+This automatically:
+- Installs all dependencies
+- Sets up project structure (data/, spec/, .opnix/)
+- Builds the production bundle
+- Runs the interactive setup wizard
+
+Then start the server:
+
+```bash
+pnpm start
+```
+
+Open http://localhost:7337 in your browser
+
+### Manual Installation
+
+If you prefer manual setup or are developing locally:
+
+```bash
+# 1. Clone and navigate
 git clone <your-fork-or-repo-url>
 cd opnix
 
-# 2. Run the neon installer (installs deps, ensures spec/ tree, launches wizard)
-pnpm run setup:install
+# 2. Install dependencies (runs postinstall automatically)
+pnpm install
 
-# 3. Build the production bundle (Vite)
-pnpm build
-
-# 4. Start the server
+# 3. Start the server
 pnpm start
 
-# 5. Open the interface
-open http://localhost:7337  # or use your browser of choice
+# 4. (Optional) Re-run setup wizard manually
+pnpm run setup:wizard
 ```
 
 ## Data Storage
@@ -151,13 +188,17 @@ Use this when you want to refresh the decision tree without re-running dependenc
 ## Command Reference
 | Task | Command |
 | --- | --- |
+| Install Opnix | `pnpm install opnix@latest` |
 | Start server | `pnpm start` |
 | Development mode (nodemon) | `pnpm run dev` |
-| Neon installer | `pnpm run setup:install` |
-| Decision tree only | `pnpm run setup:wizard` |
+| Re-run setup wizard | `pnpm run setup:wizard` |
+| Manual installer | `pnpm run setup:install` |
 | Claude audit (API) | `claude$ setup` via CLI bar or `POST /api/claude/execute` |
 | Export tickets as Markdown | `curl http://localhost:7337/api/export/markdown > tickets.md` |
 | Fetch architecture diagram | `curl http://localhost:7337/api/diagrams/architecture` |
+| Full test suite | `pnpm test:modules` |
+| E2E tests | `pnpm test:e2e` |
+| Linting | `pnpm lint` |
 
 ## CLI Interviews & Automation
 Keep the Express server running (`pnpm start`) and interact with the interview engine via the slash-command endpoint at `/api/claude/execute`. Each call returns JSON suitable for automation pipelines.
@@ -179,7 +220,10 @@ curl -s http://localhost:7337/api/claude/execute \
   -d '{"command":"/sessions"}'
 ```
 
-- `/spec`, `/new-feature`, `/new-module`, `/new-bug`, `/new-diagram`, `/new-api`, and `/runbook` reuse the progressive question engine that powers the UI.
+- `/spec`, `/new-feature`, `/new-module`, `/new-bug`, `/new-diagram`, `/new-api`, and `/runbook` reuse the progressive question engine that powers the UI. `/spec` automatically chains the plan generator and converts follow-ups into `plan-chain` tickets with a mirrored task queue under `.opnix/scaffold/tasks/`, so no manual `/plan` run is required.
+- `/specify` generates scoped specification exports (JSON/Markdown/Spec Kit) with optional section filters so you can create targeted artefacts without rerunning the full interview.
+- `/constitution` builds a governance digest from `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `agents/agent-organizer.md`, returning a CLI summary plus a Markdown artefact under `spec/cli-sessions/`.
+- Both flows are also available via the API (`POST /api/specs/export/scoped` and `POST /api/runbooks/constitution`) so UI surfaces and automations can reuse the same exporters.
 - Responses are persisted under `data/cli-sessions/` and Markdown transcripts land in `spec/cli-sessions/`; runbook flows also drop files into `spec/runbooks/`.
 - The Questions tab now includes a dedicated CLI Sessions panel with gating history, live progress, and transcript drill-down; `/help` lists the available commands from the terminal.
 - Planning commands pause when the DAIC state is not `Discussion` or when context usage tops 90%; reset via `POST /api/context/update` before retrying.
@@ -203,6 +247,7 @@ curl -s http://localhost:7337/api/claude/execute \
 | `src/components/` | Vue single-file components extracted from the SPA for reuse/storybook |
 | `src/stories/` | Storybook stories backed by live repository data |
 | `docs/install-decision-tree.md` | Installation wizard overview & Mermaid decision tree |
+| `docs/agent-coordination.md` | Multi-agent handoff protocol and API reference |
 | `docs/visual-enablement-scope.md` | Detailed plan for Mermaid + Storybook deliverables |
 | `docs/audit-flow.md` | Audit pipeline reference |
 | `docs/interview-playbook.md` | Interview stages and conditional sections |
@@ -223,7 +268,7 @@ curl -s http://localhost:7337/api/claude/execute \
 - Feature records include: `id`, `title`, `description`, `moduleId`, `priority`, `status`, `acceptanceCriteria`, `created`.
 
 ## Accessibility & Design
-- WCAG-compliant contrast ratios with neon accents (MOLE/CANYON themes).
+- WCAG-compliant contrast ratios with visual accents (MOLE/CANYON themes).
 - Progressive disclosure in the interview flow, timeline planning, and docs.
 - Animations respect motion reduction preferences; focus states and keyboard navigation are maintained across the interface.
 
@@ -245,7 +290,7 @@ curl -s http://localhost:7337/api/claude/execute \
 
 ## Contributing
 1. Fork the repo and create a feature branch.
-2. Follow the neon style guide (theme tokens in `index.html`) and prefer filesystem-backed data over mock objects.
+2. Follow the style guide (theme tokens in `index.html`) and prefer filesystem-backed data over mock objects.
 3. Add docs under `docs/` for any substantial feature or workflow.
 4. Run the installer + wizard to ensure no regressions in the onboarding flow.
 5. Open a PR with screenshots of UI changes when applicable.

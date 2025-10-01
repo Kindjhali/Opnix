@@ -4,7 +4,7 @@ Storybook surfaces Opnix components with the same real data used by the main app
 
 ## Embedded Viewer
 
-- The main Opnix console now hosts Storybook inside the **Storybook** tab. The iframe auto-applies the active MOLE or CANYON theme via `globals=theme:<name>` and inherits neon framing.
+- The main Opnix console now hosts Storybook inside the **Storybook** tab. The iframe auto-applies the active MOLE or CANYON theme via `globals=theme:<name>` and inherits visual framing.
 - Use the **Refresh** control in the tab to re-sync after regenerating stories or switching branches. Theme switches in the console instantly propagate without leaving the app.
 - When Storybook isn’t running locally, the panel surfaces guidance instead of a blank iframe so operators know how to start the service. Use the in-app **Storybook** tab’s “Start Storybook” button to trigger `/api/storybook/start`, and the refresh control if you need to re-sync the iframe without reloading the entire console.
 

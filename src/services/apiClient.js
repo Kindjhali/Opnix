@@ -212,6 +212,14 @@ export async function startStorybook() {
   return postJson('/api/storybook/start');
 }
 
+export async function fetchTechStackSummary() {
+  return getJson('/api/tech-stack');
+}
+
+export async function exportTechStackSummary() {
+  return postJson('/api/tech-stack/export');
+}
+
 export const apiClient = {
   fetchAgents,
   activateAgent,
@@ -252,7 +260,9 @@ export const apiClient = {
   generateApiSpec,
   exportApiSpec,
   testApiEndpoints,
-  startStorybook
+  startStorybook,
+  fetchTechStackSummary,
+  exportTechStackSummary
 };
 
 export default apiClient;

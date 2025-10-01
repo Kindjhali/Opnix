@@ -2,8 +2,8 @@
   <div class="tab-content" :class="{ active }">
     <div class="specs-layout">
       <section class="spec-builder">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h2 style="color: var(--text-bright); margin: 0;">Intelligent Spec Builder</h2>
+        <div class="spec-builder-header">
+          <h2 class="spec-builder-title">Intelligent Spec Builder</h2>
           <button 
             class="btn secondary" 
             type="button" 
@@ -15,9 +15,9 @@
             <span v-else>Reloading...</span>
           </button>
         </div>
-        <div style="margin-bottom: 2rem;">
-          <span style="color: var(--accent-cyan);">Phase: </span>
-          <span style="color: var(--accent-orange); font-weight: bold;">{{ currentPhase }}</span>
+        <div class="spec-phase-meta">
+          <span class="spec-phase-label">Phase: </span>
+          <span class="spec-phase-value">{{ currentPhase }}</span>
         </div>
 
         <transition name="fade">
@@ -91,12 +91,12 @@
           <div v-if="question.help" class="question-help">{{ question.help }}</div>
         </article>
 
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-top: 1rem;">
-          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
-            <label style="font-size: 0.8rem; color: var(--text-muted);">Export Format</label>
+        <div class="spec-export-controls">
+          <div class="spec-export-field">
+            <label class="spec-export-label">Export Format</label>
             <select
               :value="exportFormat"
-              style="min-width: 180px;"
+              class="spec-export-select"
               @change="onExportFormatChange($event.target.value)"
             >
               <option value="json">JSON</option>
@@ -105,13 +105,13 @@
             </select>
           </div>
           <button class="btn feature" type="button" @click="$emit('generate')">Generate &amp; Save Spec</button>
-          <div v-if="latestSpecMeta" style="color: var(--accent-cyan); font-size: 0.85rem;">
+          <div v-if="latestSpecMeta" class="specs-latest-meta">
             Saved as {{ latestSpecMeta.filename }}
           </div>
         </div>
 
-        <div v-if="generatedSpec" style="margin-top: 2rem;">
-          <h3 style="color: var(--text-bright); margin-bottom: 1rem;">Generated Spec:</h3>
+        <div v-if="generatedSpec" class="generated-spec-wrapper">
+          <h3 class="generated-spec-heading">Generated Spec:</h3>
           <pre class="api-spec">{{ generatedSpec }}</pre>
         </div>
       </section>
@@ -119,8 +119,8 @@
       <aside class="cli-sessions-panel">
         <header class="cli-sessions-header">
           <div>
-            <h3 style="margin: 0; color: var(--accent-cyan);">CLI Sessions</h3>
-            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Terminal interviews mirrored in real time</p>
+            <h3 class="cli-sessions-title">CLI Sessions</h3>
+            <p class="cli-sessions-subtitle">Terminal interviews mirrored in real time</p>
           </div>
           <button class="btn secondary" type="button" :disabled="cliSessionsLoading" @click="$emit('refresh-sessions')">
             {{ cliSessionsLoading ? 'Refreshing…' : 'Refresh' }}
@@ -128,7 +128,7 @@
         </header>
 
         <p v-if="cliSessionsError" class="form-error">{{ cliSessionsError }}</p>
-        <p v-else-if="!cliSessionsLoading && !cliSessions.length" style="color: var(--text-muted);">No CLI interviews recorded yet.</p>
+        <p v-else-if="!cliSessionsLoading && !cliSessions.length" class="cli-sessions-empty">No CLI interviews recorded yet.</p>
 
         <div class="cli-sessions-list" v-if="cliSessions.length">
           <button
@@ -144,7 +144,7 @@
                 {{ formatCliSessionStatus(session) }}
               </span>
             </div>
-            <div class="cli-session-meta" style="font-size: 0.8rem; color: var(--text-muted);">
+            <div class="cli-session-meta specs-cli-session-meta">
               <span>Updated {{ formatCliTimestamp(session.updatedAt || session.createdAt) }}</span>
             </div>
           </button>
@@ -153,10 +153,10 @@
         <section v-if="selectedSessionId || sessionDetails" class="cli-session-detail">
           <header class="cli-session-detail-header">
             <div>
-              <h4 style="margin: 0; color: var(--accent-cyan);">
+              <h4 class="cli-session-detail-title">
                 Session {{ (sessionDetails && sessionDetails.sessionId) || selectedSessionId }}
               </h4>
-              <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">
+              <p class="cli-session-detail-meta">
                 {{ (sessionDetails && (sessionDetails.command || ('/' + sessionDetails.category))) || 'Loading…' }} ·
                 {{ formatCliTimestamp(sessionDetails ? (sessionDetails.updatedAt || sessionDetails.createdAt) : null) }}
               </p>
@@ -165,11 +165,11 @@
           </header>
 
           <div v-if="sessionDetailsError" class="form-error">{{ sessionDetailsError }}</div>
-          <div v-else-if="!sessionDetails" style="font-size: 0.85rem; color: var(--text-muted);">Loading session details…</div>
+          <div v-else-if="!sessionDetails" class="cli-session-loading">Loading session details…</div>
           <template v-else>
             <section class="cli-session-section">
-              <h5 style="margin: 0 0 0.5rem; color: var(--text-bright);">Responses</h5>
-              <div v-if="!sessionDetails.responses || !sessionDetails.responses.length" style="font-size: 0.85rem; color: var(--text-muted);">
+              <h5 class="cli-session-section-title">Responses</h5>
+              <div v-if="!sessionDetails.responses || !sessionDetails.responses.length" class="cli-session-empty-message">
                 No responses recorded yet.
               </div>
               <div
@@ -177,13 +177,13 @@
                 :key="response.questionId"
                 class="cli-session-response"
               >
-                <div style="font-weight: 600;">{{ findCliQuestionPrompt(sessionDetails, response.questionId) }}</div>
-                <div style="white-space: pre-wrap;">{{ response.answer }}</div>
+                <div class="cli-session-response-question">{{ findCliQuestionPrompt(sessionDetails, response.questionId) }}</div>
+                <div class="cli-session-response-answer">{{ response.answer }}</div>
               </div>
             </section>
 
             <section class="cli-session-section" v-if="sessionDetails.artifacts && sessionDetails.artifacts.length">
-              <h5 style="margin: 1rem 0 0.5rem 0; color: var(--accent-orange);">Artifacts</h5>
+              <h5 class="cli-session-artifacts-title">Artifacts</h5>
               <div
                 v-for="artifact in sessionDetails.artifacts"
                 :key="artifact.filename || artifact.path"

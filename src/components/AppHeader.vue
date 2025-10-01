@@ -1,5 +1,5 @@
 <template>
-  <header class="header">
+  <header class="app-header header">
     <div class="theme-switcher">
       <button
         class="theme-btn"

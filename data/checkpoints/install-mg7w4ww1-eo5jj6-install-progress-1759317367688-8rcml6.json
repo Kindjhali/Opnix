@@ -1,0 +1,18 @@
+{
+  "id": "install-mg7w4ww1-eo5jj6-install-progress-1759317367688-8rcml6",
+  "sessionId": "install-mg7w4ww1-eo5jj6",
+  "type": "install-progress",
+  "description": "Package.json validated",
+  "critical": false,
+  "timestamp": "2025-10-01T11:16:07.688Z",
+  "context": {
+    "phase": "package-validated",
+    "priorInstall": true
+  },
+  "data": {
+    "phase": "package-validated",
+    "priorInstall": true,
+    "timestamp": "2025-10-01T11:16:07.688Z"
+  },
+  "version": "1.0.0"
+}

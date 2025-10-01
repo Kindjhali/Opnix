@@ -5,7 +5,7 @@
     <div v-if="docGenerating" class="doc-status">Generating documentation...</div>
 
     <div class="card">
-      <h2 style="color: var(--doc); margin-bottom: 1rem;">{{ docTitle }}</h2>
+      <h2 class="doc-card-title">{{ docTitle }}</h2>
       <div v-html="generatedDocs"></div>
     </div>
 

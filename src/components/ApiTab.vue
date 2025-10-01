@@ -13,7 +13,7 @@
 
     <div v-if="apiSpecWarnings && apiSpecWarnings.length" class="diagram-status diagram-status--warning" role="status">
       <strong>Warnings</strong>
-      <ul style="margin: 0; padding-left: 1.25rem;">
+      <ul class="api-warning-list">
         <li v-for="(warning, index) in apiSpecWarnings" :key="'api-warning-' + index">{{ warning }}</li>
       </ul>
     </div>

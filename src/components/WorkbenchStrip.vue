@@ -11,37 +11,19 @@
       @clear-tasks="$emit('clear-tasks')"
     />
 
-    <TerminalPanel
-      :history="terminalHistory"
-      :command="terminalCommand"
-      :working-directory="terminalWorkingDirectory"
-      :loading="terminalLoading"
-      :running="terminalRunning"
-      :error="terminalError"
-      :branch-status="branchStatus"
-      :branch-status-loading="branchStatusLoading"
-      :branch-status-error="branchStatusError"
-      :ticket-progress="ticketProgress"
-      :context-status="contextStatus"
-      :context-status-loading="contextStatusLoading"
-      :context-status-error="contextStatusError"
-      @update:command="$emit('update:terminalCommand', $event)"
-      @update:workingDirectory="$emit('update:terminalWorkingDirectory', $event)"
-      @run="$emit('run-terminal-command')"
-      @clear="$emit('clear-terminal')"
-    />
+    <XTerminal />
   </section>
 </template>
 
 <script>
 import CommandCenter from './CommandCenter.vue';
-import TerminalPanel from './TerminalPanel.vue';
+import XTerminal from './XTerminal.vue';
 
 export default {
   name: 'WorkbenchStrip',
   components: {
     CommandCenter,
-    TerminalPanel
+    XTerminal
   },
   props: {
     claudeCommand: {

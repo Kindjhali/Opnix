@@ -1,7 +1,7 @@
 <template>
   <div class="roadmap-detailed" ref="scrollContainer" @scroll="handleScroll">
-    <div class="virtual-spacer" :style="{ height: virtualHeight + 'px' }"></div>
-    <div class="virtual-window" :style="{ transform: `translateY(${translateY}px)` }">
+    <div class="virtual-spacer" ref="virtualSpacer"></div>
+    <div class="virtual-window" ref="virtualWindow">
       <article
         v-for="milestone in visibleMilestones"
         :key="milestone.id"
@@ -29,7 +29,7 @@
           </div>
           <div class="detailed-progress">
             <span class="progress-value">{{ milestone.progress }}%</span>
-            <div class="progress-bar"><span :style="{ width: milestone.progress + '%' }"></span></div>
+            <div class="progress-bar"><span :class="['progress-fill', progressWidthClass(milestone.progress)]"></span></div>
           </div>
         </header>
 
@@ -100,6 +100,8 @@ export default {
   emits: ['update-milestone'],
   setup(props, { emit }) {
     const scrollContainer = ref(null);
+    const virtualSpacer = ref(null);
+    const virtualWindow = ref(null);
     const virtualRange = ref({ start: 0, end: 0 });
     const isDisabled = computed(() => props.disabled);
 
@@ -116,6 +118,18 @@ export default {
     });
 
     const translateY = computed(() => virtualRange.value.start * ROW_HEIGHT);
+
+    watch(virtualHeight, value => {
+      if (virtualSpacer.value) {
+        virtualSpacer.value.style.height = `${value}px`;
+      }
+    }, { immediate: true });
+
+    watch(translateY, value => {
+      if (virtualWindow.value) {
+        virtualWindow.value.style.transform = `translateY(${value}px)`;
+      }
+    }, { immediate: true });
 
     const recalcRange = () => {
       const container = scrollContainer.value;
@@ -159,6 +173,17 @@ export default {
         .join(' ');
     };
 
+    const progressWidthClass = progress => {
+      const numeric = Number(progress);
+
+      if (!Number.isFinite(numeric)) {
+        return 'progress-width-0';
+      }
+
+      const clamped = Math.max(0, Math.min(100, Math.round(numeric)));
+      return `progress-width-${clamped}`;
+    };
+
     onMounted(() => {
       recalcRange();
     });
@@ -173,6 +198,8 @@ export default {
 
     return {
       scrollContainer,
+      virtualSpacer,
+      virtualWindow,
       visibleMilestones,
       virtualHeight,
       translateY,
@@ -181,172 +208,10 @@ export default {
       blurEditable,
       cancelEdit,
       formatStatus,
+      progressWidthClass,
       isDisabled
     };
   }
 };
 </script>
 
-<style scoped>
-.roadmap-detailed {
-  position: relative;
-  height: 100%;
-  overflow-y: auto;
-  padding: 1.25rem 1.5rem;
-  background: var(--surface-primary);
-}
-
-.virtual-spacer {
-  width: 100%;
-}
-
-.virtual-window {
-  position: absolute;
-  left: 0;
-  right: 0;
-  will-change: transform;
-}
-
-.detailed-card {
-  position: relative;
-  margin-bottom: 1rem;
-  padding: 1.2rem 1.4rem;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: var(--surface-elevated);
-  box-shadow: var(--shadow-elevated);
-  display: grid;
-  gap: 1rem;
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.detailed-card.disabled {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.detailed-card.is-completed {
-  border-color: var(--status-completed, var(--success));
-}
-
-.detailed-card.is-blocked {
-  border-color: var(--status-blocked, var(--danger));
-}
-
-.detailed-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.detailed-title {
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--text-bright);
-  outline: none;
-}
-
-.detailed-title[contenteditable]:focus,
-.detailed-notes[contenteditable]:focus {
-  border-bottom: 1px dashed var(--accent-1);
-}
-
-.detailed-notes {
-  margin: 0.35rem 0 0 0;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  min-height: 1rem;
-  outline: none;
-}
-
-.detailed-progress {
-  min-width: 160px;
-  display: grid;
-  gap: 0.35rem;
-  justify-items: flex-end;
-  transition: color 0.3s ease;
-}
-
-.progress-value {
-  font-size: 1.45rem;
-  font-weight: 700;
-  color: var(--accent-1);
-  transition: color 0.3s ease;
-  transition: color 0.3s ease;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 0.5rem;
-  border-radius: 999px;
-  background: var(--glass-overlay-soft);
-  overflow: hidden;
-  transition: background-color 0.3s ease;
-}
-
-.progress-bar span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-  transition: background 0.3s ease;
-}
-
-.detailed-meta {
-  display: grid;
-  gap: 0.45rem;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-}
-
-.meta-item dt {
-  margin: 0;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-}
-
-.meta-item dd {
-  margin: 0.15rem 0 0 0;
-  font-size: 0.92rem;
-  color: var(--text-primary);
-}
-
-.dependency-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2rem 0.55rem;
-  border-radius: 999px;
-  background: var(--glass-overlay-strong);
-  font-size: 0.75rem;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin-right: 0.35rem;
-}
-
-.detailed-links details {
-  margin-top: 0.4rem;
-  background: var(--glass-overlay-soft);
-  padding: 0.45rem 0.65rem;
-  border-radius: 8px;
-  border: 1px solid var(--glass-overlay-strong);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.detailed-links summary {
-  cursor: pointer;
-  color: var(--accent-1);
-  transition: color 0.3s ease;
-  transition: color 0.3s ease;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.detailed-links ul {
-  list-style: none;
-  margin: 0.35rem 0 0 0;
-  padding-left: 0.75rem;
-  font-size: 0.85rem;
-}
-</style>

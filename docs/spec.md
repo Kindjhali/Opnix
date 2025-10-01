@@ -2,7 +2,7 @@
 
 ## Context
 - Opnix delivers an operational command center that merges automated audits, visual canvases, and guided interviews so teams can inspect and explain a codebase end-to-end.
-- The system runs a Vue 3 single-page app against an Express backend with filesystem-backed data (no mock payloads) and a persistent neon/cyber aesthetic.
+- The system runs a Vue 3 single-page app against an Express backend with filesystem-backed data (no mock payloads) and a persistent visual aesthetic.
 - All tooling is designed for neurodivergent-friendly workflows: deterministic flows, progressive disclosure, and high-contrast visuals derived from the MOLE and CANYON themes.
 
 ## Architecture Overview
@@ -31,7 +31,7 @@
 - Maintain WCAG AA/AAA contrast, predictable layouts, and animation controls honouring `prefers-reduced-motion`.
 - Apply progressive disclosure: one primary action per screen, chunked content, accordion/tab patterns for secondary data.
 - Provide clear drag/drop feedback, 44×44px interaction targets, throttled updates, and semantic zooming on canvases.
-- Keep theme fonts (JetBrains Mono) and avoid sensory overload while preserving neon styling.
+- Keep theme fonts (JetBrains Mono) and avoid sensory overload while preserving visual styling.
 
 ## Key Data Sources & Files
 - Interview blueprint: `public/data/interview-sections.json`
@@ -42,10 +42,14 @@
 - Best-practice research: `docs/best_practice.md`
 - Canvas linking reference: `docs/canvas-linking.md`
 
+## Getting Started
+1. Install with `pnpm install opnix@latest` (handles all setup automatically)
+2. Start the server with `pnpm start` (port 7337)
+3. Use the Claude bar `setup` command to generate a fresh audit
+
 ## Operational Workflow
-1. Run `node server.js` (port 7337) and use the Claude bar `setup` command to generate a fresh audit.
-2. Inspect `spec/` artefacts (`blueprints/opnix-spec-*.json`, `blueprints/opnix-spec-*.spec.md`, `docs/opnix-docs-*.md`, `canvas/opnix-canvas-audit-*.json`, `audits/opnix-audit-*.json`).
-3. Iterate on follow-up actions (module health, missing acceptance criteria, roadmap planning) and rerun `setup` to validate improvements.
+1. Inspect `spec/` artefacts (`blueprints/opnix-spec-*.json`, `blueprints/opnix-spec-*.spec.md`, `docs/opnix-docs-*.md`, `canvas/opnix-canvas-audit-*.json`, `audits/opnix-audit-*.json`).
+2. Iterate on follow-up actions (module health, missing acceptance criteria, roadmap planning) and rerun `setup` to validate improvements.
 
 ## Success Criteria
 - No placeholders: every UI view is backed by filesystem data or detector output.

@@ -18,6 +18,7 @@ function createAuditManager({
     EXPORTS_DIR,
     rootDir,
     deriveTechStack,
+    techStackManager,
     inferProjectType,
     inferPrimaryLanguage,
     normaliseTicketStatus,
@@ -328,6 +329,22 @@ function createAuditManager({
 
         const canvasMeta = withRelativePath(await writeCanvasSnapshot(modulesResult));
 
+        let techStackDocMeta = null;
+        if (techStackManager && typeof techStackManager.exportTechStackMarkdown === 'function') {
+            try {
+                const techStackExport = await techStackManager.exportTechStackMarkdown();
+                if (techStackExport && techStackExport.export) {
+                    const meta = {
+                        ...techStackExport.export,
+                        format: 'markdown'
+                    };
+                    techStackDocMeta = withRelativePath(meta);
+                }
+            } catch (error) {
+                console.warn('Audit manager: tech stack export failed', error.message);
+            }
+        }
+
         const diagramsMetaRaw = await diagramGenerator.generateAllDiagrams({
             modules: modulesResult.modules,
             edges: modulesResult.edges,
@@ -367,6 +384,9 @@ function createAuditManager({
         }));
 
         const exportsListBase = [specJsonMeta, specKitMeta, docsMeta, canvasMeta, ...diagramsMeta];
+        if (techStackDocMeta) {
+            exportsListBase.push(techStackDocMeta);
+        }
         const questionnairePayload = isNewProject ? await interviewLoader.getNewProjectQuestionnaire() : undefined;
         const interviewBlueprint = isNewProject ? await interviewLoader.loadInterviewBlueprint() : undefined;
 
@@ -386,7 +406,8 @@ function createAuditManager({
                 specKit: specKitMeta,
                 docs: docsMeta,
                 canvas: canvasMeta,
-                diagrams: diagramsMeta
+                diagrams: diagramsMeta,
+                techStack: techStackDocMeta
             }
         };
 

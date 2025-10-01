@@ -26,6 +26,10 @@ function createNavigationBloc() {
       if (tab === 'roadmap' && typeof this.refreshRoadmapState === 'function') {
         this.refreshRoadmapState();
       }
+
+      if (tab === 'stack' && typeof this.refreshTechStackSummary === 'function') {
+        this.refreshTechStackSummary();
+      }
     }
   };
 }

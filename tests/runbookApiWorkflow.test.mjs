@@ -53,4 +53,5 @@ import { invokeRoute } from './helpers/invokeRoute.mjs';
   await unlink(sessionFile).catch(() => {});
 
   console.log('runbook API workflow tests passed');
+  process.exit(0);
 })();

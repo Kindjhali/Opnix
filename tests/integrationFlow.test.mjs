@@ -90,6 +90,7 @@ import {
     assert(exportsListing.some(file => file.relativePath === specRel), 'Exports listing should include generated spec');
 
     console.log('integrationFlow tests passed');
+    process.exit(0);
   } finally {
     await Promise.all(createdArtifacts.map(async artifactPath => {
       try {

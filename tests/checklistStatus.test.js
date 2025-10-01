@@ -21,6 +21,7 @@ function main() {
   shouldAllowWithHook();
   shouldRejectUnsupportedStatus();
   console.log('✓ checklist status validation tests passed');
+  process.exit(0);
 }
 
 main();

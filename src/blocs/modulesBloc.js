@@ -9,9 +9,7 @@ import {
   analyzeModuleDependenciesFlow,
   getModuleBugCountHelper,
   getModuleFeatureCountHelper,
-  getModuleNameHelper,
-  getHealthColorHelper,
-  getFeatureStatusColorHelper
+  getModuleNameHelper
 } from '../composables/moduleManager.js';
 
 import {
@@ -82,12 +80,6 @@ function createModulesBloc() {
     },
     getModuleName(moduleId) {
       return getModuleNameHelper.call(this, moduleId);
-    },
-    getHealthColor(value) {
-      return getHealthColorHelper(value);
-    },
-    getFeatureStatusColor(status) {
-      return getFeatureStatusColorHelper(status);
     }
   };
 }

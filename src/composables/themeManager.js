@@ -130,12 +130,24 @@ function applyThemeAttributes(theme) {
 }
 
 function persistTheme(theme) {
-  if (typeof localStorage !== 'undefined') {
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch {
-      // ignore storage errors (private mode, quota, etc.)
-    }
+  if (typeof localStorage === 'undefined') {
+    return;
+  }
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {
+    // ignore storage errors (private mode, quota, etc.)
+  }
+}
+
+function clearStoredTheme() {
+  if (typeof localStorage === 'undefined') {
+    return;
+  }
+  try {
+    localStorage.removeItem(THEME_STORAGE_KEY);
+  } catch {
+    // ignore storage errors
   }
 }
 
@@ -156,11 +168,68 @@ function resolveStore(context, scope) {
   return context || scope || useAppStore();
 }
 
-export function setThemeFlow(theme, context) {
+function detectSystemTheme() {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return null;
+  }
+
+  const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  if (darkQuery.matches) {
+    return 'mole';
+  }
+
+  const lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+  if (lightQuery.matches) {
+    return 'canyon';
+  }
+
+  return null;
+}
+
+function registerSystemThemeWatcher(store) {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return null;
+  }
+
+  const query = window.matchMedia('(prefers-color-scheme: dark)');
+  const handler = (event) => {
+    if (!store || store.themeMode !== 'system') {
+      return;
+    }
+    const nextTheme = event.matches ? 'mole' : 'canyon';
+    return setThemeFlow.call(store, nextTheme, undefined, { persist: false, source: 'system-watch' });
+  };
+
+  if (typeof query.addEventListener === 'function') {
+    query.addEventListener('change', handler);
+  } else if (typeof query.addListener === 'function') {
+    // Legacy browsers
+    query.addListener(handler);
+  }
+
+  if (store.themeMediaCleanup) {
+    store.themeMediaCleanup();
+  }
+
+  store.themeMediaCleanup = () => {
+    if (typeof query.removeEventListener === 'function') {
+      query.removeEventListener('change', handler);
+    } else if (typeof query.removeListener === 'function') {
+      query.removeListener(handler);
+    }
+    store.themeMediaCleanup = null;
+  };
+
+  return query;
+}
+
+export function setThemeFlow(theme, context, options = {}) {
   const store = resolveStore(context, this);
   if (!store) {
     return;
   }
+
+  const { persist = true } = options;
 
   store.themeError = '';
   store.themeLoading = true;
@@ -170,7 +239,16 @@ export function setThemeFlow(theme, context) {
     .then(() => {
       store.currentTheme = theme;
       applyThemeAttributes(theme);
-      persistTheme(theme);
+      if (persist) {
+        persistTheme(theme);
+        store.themeMode = 'manual';
+        if (store.themeMediaCleanup) {
+          store.themeMediaCleanup();
+        }
+      } else {
+        clearStoredTheme();
+        store.themeMode = 'system';
+      }
       configureMermaidTheme(theme);
       if (store.cy) {
         store.cy.resize();
@@ -185,9 +263,27 @@ export function setThemeFlow(theme, context) {
     });
 }
 
-export function bootstrapThemeFlow({ fallback = 'mole' } = {}, context) {
+export function bootstrapThemeFlow(config = {}, context) {
+  const { fallback = 'mole', respectSystemPreference = true } = config;
   const store = resolveStore(context, this);
+  if (!store) {
+    return Promise.resolve();
+  }
+
   const stored = getStoredTheme();
-  const theme = stored || fallback;
-  setThemeFlow.call(store, theme);
+
+  if (stored) {
+    return setThemeFlow.call(store, stored, undefined, { persist: true });
+  }
+
+  if (respectSystemPreference) {
+    const detected = detectSystemTheme();
+    store.themeMode = 'system';
+    registerSystemThemeWatcher(store);
+    if (detected) {
+      return setThemeFlow.call(store, detected, undefined, { persist: false });
+    }
+  }
+
+  return setThemeFlow.call(store, fallback, undefined, { persist: !respectSystemPreference });
 }

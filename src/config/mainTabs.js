@@ -7,7 +7,9 @@ export const MAIN_TABS = [
   { id: 'specs', icon: '📋', label: 'Specs' },
   { id: 'diagrams', icon: '📊', label: 'Diagrams' },
   { id: 'api', icon: '🔌', label: 'API' },
+  { id: 'terminal', icon: '💻', label: 'Terminal' },
   { id: 'storybook', icon: '📘', label: 'Storybook' },
+  { id: 'stack', icon: '🧰', label: 'Tech Stack' },
   { id: 'docs', icon: '📚', label: 'Docs' }
 ];
 

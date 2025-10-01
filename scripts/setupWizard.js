@@ -12,6 +12,8 @@ const interviewLoader = require('../services/interviewLoader');
 const server = require('../server');
 const scaffolder = require('../services/scaffolder');
 const { ProgressiveDocumentSystem } = require('../services/progressiveDocumentSystem');
+const checkpointManager = require('../services/checkpointManager');
+const gracefulFailureHandler = require('../services/gracefulFailureHandler');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const SPEC_DIR = server.EXPORTS_DIR || path.join(ROOT_DIR, 'spec');
@@ -127,12 +129,29 @@ function formatSummary(context) {
     ].join('\n');
 }
 
+function printBanner() {
+    const logo = [
+        '   ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄    ▄ ▄▄▄ ▄▄   ▄▄',
+        '  █       █       █  █  █ █   █  █ █  █',
+        '  █   ▄   █    ▄  █   █▄█ █   █  █▄█  █',
+        '  █  █ █  █   █▄█ █       █   █       █',
+        '  █  █▄█  █    ▄▄▄█  ▄    █   █       █',
+        '  █       █   █   █ █ █   █   █ ██▄██ █',
+        '  █▄▄▄▄▄▄▄█▄▄▄█   █▄█  █▄▄█▄▄▄█▄█   █▄█'
+    ];
+
+    console.log('\n');
+    logo.forEach(line => console.log(`  ${line}`));
+    console.log('\n  Operational Toolkit · Visual Canvas · Audit Engine');
+    console.log('  ────────────────────────────────────────────────────\n');
+}
+
 function printSummary(context, state, currentMode) {
     if (!process.stdin.isTTY) {
         return;
     }
-    console.log('────────────────────────────────────────');
-    console.log('Opnix Installation Decision Tree');
+    printBanner();
+    console.log('Installation Decision Tree');
     console.log('────────────────────────────────────────');
     console.log(formatSummary(context));
     console.log(`\nCurrent selection: ${currentMode === 'new' ? 'New project discovery' : 'Existing repo audit'}`);
@@ -434,13 +453,40 @@ async function promptForAgentFiles(context, mode) {
     }
 }
 
+async function checkFileExists(filePath) {
+    try {
+        await fs.access(filePath);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+async function promptOverwrite(filename) {
+    if (!process.stdin.isTTY) {
+        // Non-interactive: skip existing files
+        return false;
+    }
+
+    console.log(`\n⚠️  ${filename} already exists.`);
+    const answer = await new Promise(resolve => {
+        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+        rl.question('Overwrite? [y/N]: ', input => {
+            rl.close();
+            resolve(input.trim().toLowerCase());
+        });
+    });
+
+    return answer === 'y' || answer === 'yes';
+}
+
 async function generateAgentFiles(context, mode) {
     const timestamp = new Date().toISOString();
     const projectName = context.packageJson?.name || 'Opnix Project';
     const description = context.packageJson?.description || 'Project managed with Opnix';
     const modules = context.modulesResult?.modules || [];
     const techStack = extractTechStack(context.packageJson);
-    
+
     const templateData = {
         projectName,
         description,
@@ -453,24 +499,56 @@ async function generateAgentFiles(context, mode) {
     };
 
     const files = [];
+    const filesToGenerate = [
+        { name: 'CLAUDE.md', render: renderClaudeTemplate },
+        { name: 'AGENTS.md', render: renderAgentsTemplate },
+        { name: 'GEMINI.md', render: renderGeminiTemplate }
+    ];
 
-    // Generate CLAUDE.md
-    const claudeContent = renderClaudeTemplate(templateData);
-    const claudePath = path.join(ROOT_DIR, 'CLAUDE.md');
-    await fs.writeFile(claudePath, claudeContent, 'utf8');
-    files.push({ type: 'CLAUDE.md', path: claudePath });
+    for (const fileSpec of filesToGenerate) {
+        const filePath = path.join(ROOT_DIR, fileSpec.name);
 
-    // Generate AGENTS.md
-    const agentsContent = renderAgentsTemplate(templateData);
-    const agentsPath = path.join(ROOT_DIR, 'AGENTS.md');
-    await fs.writeFile(agentsPath, agentsContent, 'utf8');
-    files.push({ type: 'AGENTS.md', path: agentsPath });
+        // Check if file exists and prompt for overwrite
+        const exists = await checkFileExists(filePath);
+        if (exists) {
+            const shouldOverwrite = await promptOverwrite(fileSpec.name);
+            if (!shouldOverwrite) {
+                console.log(`[Opnix Setup] Skipping ${fileSpec.name} (file exists)`);
+                continue;
+            }
+        }
 
-    // Generate GEMINI.md
-    const geminiContent = renderGeminiTemplate(templateData);
-    const geminiPath = path.join(ROOT_DIR, 'GEMINI.md');
-    await fs.writeFile(geminiPath, geminiContent, 'utf8');
-    files.push({ type: 'GEMINI.md', path: geminiPath });
+        try {
+            // Generate content and write file
+            const content = fileSpec.render(templateData);
+            await fs.writeFile(filePath, content, 'utf8');
+
+            // Validate file was actually created
+            const created = await checkFileExists(filePath);
+            if (!created) {
+                throw new Error(`File ${fileSpec.name} was not created successfully`);
+            }
+
+            // Read back to verify content was written
+            const written = await fs.readFile(filePath, 'utf8');
+            if (written.length === 0) {
+                throw new Error(`File ${fileSpec.name} is empty after writing`);
+            }
+
+            files.push({ type: fileSpec.name, path: filePath });
+        } catch (error) {
+            // Provide specific error context
+            if (error.code === 'EACCES') {
+                throw new Error(`Permission denied writing ${fileSpec.name}: ${error.message}`);
+            } else if (error.code === 'ENOSPC') {
+                throw new Error(`No space left on device writing ${fileSpec.name}: ${error.message}`);
+            } else if (error.code === 'EROFS') {
+                throw new Error(`Read-only file system, cannot write ${fileSpec.name}: ${error.message}`);
+            } else {
+                throw new Error(`Failed to generate ${fileSpec.name}: ${error.message}`);
+            }
+        }
+    }
 
     return files;
 }
@@ -830,20 +908,90 @@ Focus on understanding the existing patterns and extending them consistently rat
 }
 
 async function main() {
+    const setupSessionId = `setup-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
     try {
+        // Initialize recovery system for setup
+        checkpointManager.initialize();
+
+        // Create initial checkpoint
+        await checkpointManager.createCheckpoint(setupSessionId, {
+            phase: 'initialization',
+            timestamp: new Date().toISOString()
+        }, {
+            type: 'setup-start',
+            description: 'Setup wizard initialization',
+            critical: true,
+            context: { phase: 'init' }
+        });
+
         const cliOptions = parseCliOptions(process.argv.slice(2));
         const state = await loadSetupState();
+
+        // Checkpoint after loading state
+        await checkpointManager.createCheckpoint(setupSessionId, {
+            phase: 'state-loaded',
+            state,
+            cliOptions,
+            timestamp: new Date().toISOString()
+        }, {
+            type: 'setup-progress',
+            description: 'Setup state loaded',
+            context: { phase: 'state-loaded' }
+        });
+
         const context = await collectContext();
         const defaultMode = inferDefaultMode(context);
         const mode = await promptForMode(defaultMode, context, state, cliOptions);
+
+        // Checkpoint after mode selection
+        await checkpointManager.createCheckpoint(setupSessionId, {
+            phase: 'mode-selected',
+            state,
+            context,
+            mode,
+            timestamp: new Date().toISOString()
+        }, {
+            type: 'setup-progress',
+            description: `Setup mode selected: ${mode}`,
+            context: { phase: 'mode-selected', mode }
+        });
+
         await persistSetupState({ ...state, lastSelectedMode: mode });
+
         if (mode === 'new') {
             await handleNewProject(context);
         } else {
             await handleExistingProject();
         }
+
+        // Final checkpoint
+        await checkpointManager.createCheckpoint(setupSessionId, {
+            phase: 'completed',
+            mode,
+            completedAt: new Date().toISOString()
+        }, {
+            type: 'setup-complete',
+            description: 'Setup wizard completed successfully',
+            critical: true,
+            context: { phase: 'completed', mode }
+        });
+
         console.log('\n[Opnix Setup] Decision tree complete.');
+        process.exit(0);
+
     } catch (error) {
+        // Handle setup failure with recovery
+        try {
+            await gracefulFailureHandler.handleSessionFailure(setupSessionId, error, {
+                sessionType: 'setup',
+                phase: 'main',
+                operation: 'setup-wizard'
+            });
+        } catch (recoveryError) {
+            console.error('[Opnix Setup] Recovery handling failed:', recoveryError.message);
+        }
+
         console.error('[Opnix Setup] Failed to run setup wizard:', error);
         process.exitCode = 1;
     }

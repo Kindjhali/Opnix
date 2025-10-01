@@ -1,0 +1,16 @@
+{
+  "id": "setup-mg7vvams-r3cnzu-setup-start-1759316918933-j0u2yb",
+  "sessionId": "setup-mg7vvams-r3cnzu",
+  "type": "setup-start",
+  "description": "Setup wizard initialization",
+  "critical": true,
+  "timestamp": "2025-10-01T11:08:38.933Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-01T11:08:38.932Z"
+  },
+  "version": "1.0.0"
+}

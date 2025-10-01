@@ -19,7 +19,13 @@ import { runInitialAudit } from '../server.js';
       throw new Error('runInitialAudit returned no exports');
     }
 
+    const hasTechStackExport = result.exports.some(item => (item.relativePath || item.path || '').includes('tech-stack'));
+    if (!hasTechStackExport) {
+      throw new Error('runInitialAudit did not include tech stack export');
+    }
+
     console.log('✓ runInitialAudit returned expected structure');
+    process.exit(0);
   } catch (error) {
     console.error('✗ runInitialAudit smoke test failed:', error);
     process.exit(1);

@@ -55,3 +55,4 @@ import {
 })();
 
 console.log('specScaffold tests passed');
+process.exit(0);

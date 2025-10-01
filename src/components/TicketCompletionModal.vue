@@ -1,9 +1,9 @@
 <template>
   <div class="modal" :class="{ active }">
-    <div class="modal-content" style="position: relative;">
+    <div class="modal-content">
       <button class="close-modal" type="button" @click="$emit('cancel')">×</button>
-      <h2 style="color: var(--success); margin-bottom: 1rem;">Wrap Up Ticket</h2>
-      <p style="margin-bottom: 1rem; color: var(--text-muted);">
+      <h2 class="ticket-completion-title">Wrap Up Ticket</h2>
+      <p class="ticket-completion-lead">
         Provide a concise summary of what changed, how it was validated, and any follow-up actions before closing this ticket.
       </p>
       <div class="form-group">

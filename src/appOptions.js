@@ -13,7 +13,8 @@ import {
     getDiagramsProps,
     getApiProps,
     getStorybookProps,
-    getDocsProps
+    getDocsProps,
+    getTechStackProps
 } from './composables/tabProps.js';
 
 import createDocsBloc from './blocs/docsBloc.js';
@@ -34,6 +35,7 @@ import createFormattingBloc from './blocs/formattingBloc.js';
 import createBootstrapBloc from './blocs/bootstrapBloc.js';
 import createRoadmapBloc from './blocs/roadmapBloc.js';
 import createRoadmapSupportBloc from './blocs/roadmapSupportBloc.js';
+import createTechStackBloc from './blocs/techStackBloc.js';
 
 cytoscape.use(cytoscapeEdgehandles);
 
@@ -68,6 +70,7 @@ const formattingBloc = createFormattingBloc();
 const bootstrapBloc = createBootstrapBloc();
 const roadmapBloc = createRoadmapBloc();
 const roadmapSupportBloc = createRoadmapSupportBloc();
+const techStackBloc = createTechStackBloc();
 
 export default {
     data() {
@@ -129,6 +132,9 @@ export default {
         },
         docsProps() {
             return getDocsProps(this);
+        },
+        techStackProps() {
+            return getTechStackProps(this);
         }
     },
     methods: {
@@ -150,7 +156,40 @@ export default {
         ...formattingBloc,
         ...roadmapSupportBloc,
         ...roadmapBloc,
-        
+        ...techStackBloc,
+
+        // Bulk operations methods
+        async refreshTickets() {
+            await this.fetchTickets();
+        },
+        async refreshFeatures() {
+            await this.fetchFeatures();
+        },
+        handleBulkExport(data) {
+            // Handle bulk export for selected items
+            const { type, items } = data;
+            const exportData = {
+                type,
+                items,
+                exportedAt: new Date().toISOString(),
+                count: items.length
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${type}-bulk-export-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            console.log(`✓ Exported ${items.length} ${type}`);
+        }
+
     },
     mounted() {
         this.bootstrapTheme({ fallback: 'mole' });

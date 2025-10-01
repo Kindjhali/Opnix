@@ -1,8 +1,8 @@
 <template>
-  <div class="modal" :class="{ active }">
-    <div class="modal-content" style="position: relative;">
+  <div class="modal feature-modal" :class="{ active }" role="dialog" aria-labelledby="feature-modal-title">
+    <div class="modal-content">
       <button class="close-modal" type="button" @click="$emit('close')">×</button>
-      <h2 style="color: var(--feature); margin-bottom: 1rem;">Propose New Feature</h2>
+      <h2 id="feature-modal-title" class="feature-modal-title">Propose New Feature</h2>
 
       <div class="form-group">
         <label>Title</label>

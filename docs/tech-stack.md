@@ -1,5 +1,24 @@
 # Opnix Tech Stack
 
+## Stack Tab Interface
+
+- The main navigation now exposes a **Tech Stack** tab (🧰) that renders the latest stack snapshot from `/api/tech-stack`.
+- Snapshot cards surface package metadata, dependency counts, module breakdowns, and detected frameworks.
+- A module catalogue table lists source, health, coverage, and dependency details for every module.
+- Age indicators flag when the snapshot is older than six hours so operators can refresh before relying on it.
+- Dependency categories group runtime, tooling, testing, and infrastructure packages so the Stack tab highlights hotspots at a glance.
+- Each audit run now produces a tech stack Markdown export that lands under `spec/docs/` and is listed alongside other Docs artefacts.
+- CLI insights are split into project vs module context so interview answers stay actionable at a glance.
+- Refresh requests re-run the stack summariser, while **Export Markdown** saves a versioned `spec/docs/tech-stack-<timestamp>.md` file and refreshes the Docs tab archives.
+- Completing any CLI interview (e.g. `/spec`, `/new-module`, `/new-feature`) now auto-refreshes the tech stack summary so the tab stays aligned with the latest answers.
+
+## Question Context Metadata
+
+- Interview sections now expose a `context` field (`project` or `module`) so stack reporting can differentiate high-level discovery responses from module governance prompts.
+- CLI sessions attach the same context to each question, allowing the Stack tab and upcoming exports to filter by scope.
+- Foundation questionnaire includes a new `project-status` prompt (new build vs modernization) so tech stack summaries reflect lifecycle context.
+- The module interview flow now includes a `module-tech-stack` section that records per-module languages, frameworks, and integration touchpoints.
+
 ## Package Management Policy (MANDATORY)
 
 **ALL packages MUST be the latest stable versions as of September 2025.**

@@ -42,7 +42,7 @@
           <div class="terminal-progress-bar" aria-hidden="true">
             <span
               class="terminal-progress-open"
-              :style="{ width: progressOpenWidth }"
+              :class="progressOpenClass"
             ></span>
           </div>
           <span class="terminal-progress-meta">{{ ticketProgress.open }} open · {{ ticketProgress.closed }} closed</span>
@@ -56,7 +56,7 @@
         >
           <span class="terminal-context-label">Context</span>
           <div class="terminal-context-bar" aria-hidden="true">
-            <span class="terminal-context-fill" :style="{ width: contextBarWidth }"></span>
+            <span class="terminal-context-fill" :class="contextBarClass"></span>
           </div>
           <span class="terminal-context-usage">{{ contextUsageLabel }}</span>
           <span v-if="contextStatusLoading" class="terminal-context-meta">syncing...</span>
@@ -290,11 +290,11 @@ export default {
       const { open = 0, closed = 0, openPct = 0, closedPct = 0 } = this.ticketProgress;
       return `Ticket progress: ${open} open (${openPct}% open), ${closed} closed (${closedPct}% closed)`;
     },
-    progressOpenWidth() {
-      if (!this.ticketProgress) return '0%';
+    progressOpenClass() {
+      if (!this.ticketProgress) return 'terminal-progress-open--pct-0';
       const pct = Number.isFinite(this.ticketProgress.openPct) ? this.ticketProgress.openPct : 0;
-      const clamped = Math.max(0, Math.min(100, pct));
-      return `${clamped}%`;
+      const clamped = Math.max(0, Math.min(100, Math.round(pct)));
+      return `terminal-progress-open--pct-${clamped}`;
     },
     contextInfo() {
       const status = this.contextStatus || {};
@@ -317,9 +317,9 @@ export default {
         daicState: status.daicState || ''
       };
     },
-    contextBarWidth() {
-      const pct = this.contextInfo.percentage;
-      return `${Math.max(0, Math.min(100, pct))}%`;
+    contextBarClass() {
+      const pct = Math.max(0, Math.min(100, Math.round(this.contextInfo.percentage || 0)));
+      return `terminal-context-fill--pct-${pct}`;
     },
     contextUsageLabel() {
       if (!this.contextInfo.available) {

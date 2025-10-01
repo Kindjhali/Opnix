@@ -1,0 +1,226 @@
+
+> opnix@1.0.0 test:e2e /home/aaron/opnix
+> playwright test
+
+
+Running 26 tests using 1 worker
+
+✓ Application loaded successfully
+  ✓   1 [chromium] › tests/e2e/full-user-journey.spec.js:28:7 › Opnix Complete User Journey › 01 - Application loads and displays correctly (1.0s)
+✓ App header verified
+  ✓   2 [chromium] › tests/e2e/full-user-journey.spec.js:43:7 › Opnix Complete User Journey › 02 - App Header and branding visible (803ms)
+Current theme: mole
+  ✘   3 [chromium] › tests/e2e/full-user-journey.spec.js:58:7 › Opnix Complete User Journey › 03 - Theme switcher functionality (6.1s)
+  ✘   4 [chromium] › tests/e2e/full-user-journey.spec.js:111:7 › Opnix Complete User Journey › 04 - Tab navigation - Canvas tab (6.9s)
+✓ Modules tab navigation works
+  ✓   5 [chromium] › tests/e2e/full-user-journey.spec.js:131:7 › Opnix Complete User Journey › 05 - Tab navigation - Modules tab (1.9s)
+✓ Roadmap tab navigation works
+  ✓   6 [chromium] › tests/e2e/full-user-journey.spec.js:147:7 › Opnix Complete User Journey › 06 - Tab navigation - Roadmap tab (1.6s)
+  ✘   7 [chromium] › tests/e2e/full-user-journey.spec.js:167:7 › Opnix Complete User Journey › 07 - Tab navigation - Tickets/Bugs tab (1.6s)
+✓ Features tab navigation works
+  ✓   8 [chromium] › tests/e2e/full-user-journey.spec.js:187:7 › Opnix Complete User Journey › 08 - Tab navigation - Features tab (2.0s)
+✓ Specs tab navigation works
+  ✓   9 [chromium] › tests/e2e/full-user-journey.spec.js:203:7 › Opnix Complete User Journey › 09 - Tab navigation - Specs tab (1.7s)
+✓ Docs tab navigation works
+  ✓  10 [chromium] › tests/e2e/full-user-journey.spec.js:219:7 › Opnix Complete User Journey › 10 - Tab navigation - Docs tab (1.7s)
+✓ API tab navigation works
+  ✓  11 [chromium] › tests/e2e/full-user-journey.spec.js:239:7 › Opnix Complete User Journey › 11 - Tab navigation - API tab (1.7s)
+✓ Diagrams tab navigation works
+  ✓  12 [chromium] › tests/e2e/full-user-journey.spec.js:255:7 › Opnix Complete User Journey › 12 - Tab navigation - Diagrams tab (1.6s)
+✓ Storybook tab navigation works
+  ✓  13 [chromium] › tests/e2e/full-user-journey.spec.js:271:7 › Opnix Complete User Journey › 13 - Tab navigation - Storybook tab (2.7s)
+  ✘  14 [chromium] › tests/e2e/full-user-journey.spec.js:287:7 › Opnix Complete User Journey › 14 - Command Center - Open and close (6.8s)
+✓ Statusline panel visible
+  ✓  15 [chromium] › tests/e2e/full-user-journey.spec.js:316:7 › Opnix Complete User Journey › 15 - Statusline panel visibility (779ms)
+✓ Terminal panel visible
+  ✓  16 [chromium] › tests/e2e/full-user-journey.spec.js:330:7 › Opnix Complete User Journey › 16 - Terminal panel visibility (613ms)
+✓ Module detection works
+  ✓  17 [chromium] › tests/e2e/full-user-journey.spec.js:344:7 › Opnix Complete User Journey › 17 - Module detection button (4.9s)
+✓ New ticket modal works
+  ✓  18 [chromium] › tests/e2e/full-user-journey.spec.js:372:7 › Opnix Complete User Journey › 18 - Create new ticket/bug modal (2.7s)
+✓ New feature modal works
+  ✓  19 [chromium] › tests/e2e/full-user-journey.spec.js:405:7 › Opnix Complete User Journey › 19 - Create new feature modal (2.7s)
+✓ Roadmap view toggle works
+  ✓  20 [chromium] › tests/e2e/full-user-journey.spec.js:438:7 › Opnix Complete User Journey › 20 - Roadmap view toggle (2.8s)
+✓ Canvas zoom controls work
+  ✓  21 [chromium] › tests/e2e/full-user-journey.spec.js:466:7 › Opnix Complete User Journey › 21 - Canvas zoom and pan controls (2.8s)
+⚠ Docs files not found
+  ✓  22 [chromium] › tests/e2e/full-user-journey.spec.js:495:7 › Opnix Complete User Journey › 22 - Docs file browser navigation (1.8s)
+⚠ Export triggered but no download detected
+  ✓  23 [chromium] › tests/e2e/full-user-journey.spec.js:523:7 › Opnix Complete User Journey › 23 - Export functionality (7.0s)
+✓ Keyboard shortcuts work
+  ✓  24 [chromium] › tests/e2e/full-user-journey.spec.js:556:7 › Opnix Complete User Journey › 24 - Keyboard shortcuts (1.3s)
+✓ Responsive layout tested
+  ✓  25 [chromium] › tests/e2e/full-user-journey.spec.js:575:7 › Opnix Complete User Journey › 25 - Responsive layout - mobile viewport (2.6s)
+
+=== E2E Test Complete ===
+URL: http://localhost:7337/
+Title: Opnix // Operational Toolkit v1.0
+Screenshots saved to: test-results/screenshots/
+✓ All user journey tests completed
+  ✓  26 [chromium] › tests/e2e/full-user-journey.spec.js:595:7 › Opnix Complete User Journey › 26 - Final full page overview (1.8s)
+
+
+  1) [chromium] › tests/e2e/full-user-journey.spec.js:58:7 › Opnix Complete User Journey › 03 - Theme switcher functionality 
+
+    TimeoutError: page.waitForFunction: Timeout 5000ms exceeded.
+
+      72 |
+      73 |       // Wait for theme attribute to actually change (theme loading is async)
+    > 74 |       await page.waitForFunction(
+         |                  ^
+      75 |         (expectedTheme) => {
+      76 |           const currentTheme = document.body.getAttribute('data-theme');
+      77 |           return currentTheme !== expectedTheme;
+        at /home/aaron/opnix/tests/e2e/full-user-journey.spec.js:74:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/e2e/full-user-journey.spec.js:111:7 › Opnix Complete User Journey › 04 - Tab navigation - Canvas tab 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m()[22m failed
+
+    Locator:  locator('#canvas-container, .modules-canvas')
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('#canvas-container, .modules-canvas')[22m
+    [2m    9 × locator resolved to <div id="canvas-container" class="modules-canvas __________cytoscape_container">…</div>[22m
+    [2m      - unexpected value "hidden"[22m
+
+
+      118 |
+      119 |       // Verify canvas container visible
+    > 120 |       await expect(page.locator('#canvas-container, .modules-canvas')).toBeVisible();
+          |                                                                        ^
+      121 |
+      122 |       // Screenshot canvas view
+      123 |       await page.screenshot({ path: 'test-results/screenshots/04-tab-canvas.png', fullPage: true });
+        at /home/aaron/opnix/tests/e2e/full-user-journey.spec.js:120:72
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-bff5a-Tab-navigation---Canvas-tab-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-bff5a-Tab-navigation---Canvas-tab-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/full-user-journey-Opnix-Co-bff5a-Tab-navigation---Canvas-tab-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-bff5a-Tab-navigation---Canvas-tab-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/full-user-journey-Opnix-Co-bff5a-Tab-navigation---Canvas-tab-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/e2e/full-user-journey.spec.js:167:7 › Opnix Complete User Journey › 07 - Tab navigation - Tickets/Bugs tab 
+
+    Error: expect.toBeVisible: Error: strict mode violation: locator('.tickets-board, [class*="ticket"]') resolved to 2 elements:
+        1) <div class="tab-content tickets-board active">…</div> aka locator('div').filter({ hasText: '+ New Bug🐍 Python' }).nth(2)
+        2) <div class="grid ticket-grid"></div> aka locator('section').filter({ hasText: '+ New Bug🐍 Python' }).locator('div').nth(2)
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('.tickets-board, [class*="ticket"]')[22m
+
+
+      174 |       // Verify tickets board visible
+      175 |       const ticketsBoard = page.locator('.tickets-board, [class*="ticket"]');
+    > 176 |       await expect(ticketsBoard).toBeVisible();
+          |                                  ^
+      177 |
+      178 |       // Screenshot tickets
+      179 |       await page.screenshot({ path: 'test-results/screenshots/07-tab-tickets.png', fullPage: true });
+        at /home/aaron/opnix/tests/e2e/full-user-journey.spec.js:176:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-8ba34-vigation---Tickets-Bugs-tab-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-8ba34-vigation---Tickets-Bugs-tab-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/full-user-journey-Opnix-Co-8ba34-vigation---Tickets-Bugs-tab-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-8ba34-vigation---Tickets-Bugs-tab-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/full-user-journey-Opnix-Co-8ba34-vigation---Tickets-Bugs-tab-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests/e2e/full-user-journey.spec.js:287:7 › Opnix Complete User Journey › 14 - Command Center - Open and close 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mnot[2m.[22mtoBeVisible[2m()[22m failed
+
+    Locator:  locator('.command-center, [role="dialog"]')
+    Expected: not visible
+    Received: visible
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "not toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('.command-center, [role="dialog"]')[22m
+    [2m    9 × locator resolved to <section class="command-center" data-command-center="" aria-label="Command Center">…</section>[22m
+    [2m      - unexpected value "visible"[22m
+
+
+      306 |
+      307 |       // Verify closed
+    > 308 |       await expect(commandCenter).not.toBeVisible();
+          |                                       ^
+      309 |
+      310 |       console.log('✓ Command center open/close works');
+      311 |     } else {
+        at /home/aaron/opnix/tests/e2e/full-user-journey.spec.js:308:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-bcf0e-and-Center---Open-and-close-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-bcf0e-and-Center---Open-and-close-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/full-user-journey-Opnix-Co-bcf0e-and-Center---Open-and-close-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-bcf0e-and-Center---Open-and-close-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/full-user-journey-Opnix-Co-bcf0e-and-Center---Open-and-close-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [chromium] › tests/e2e/full-user-journey.spec.js:58:7 › Opnix Complete User Journey › 03 - Theme switcher functionality 
+    [chromium] › tests/e2e/full-user-journey.spec.js:111:7 › Opnix Complete User Journey › 04 - Tab navigation - Canvas tab 
+    [chromium] › tests/e2e/full-user-journey.spec.js:167:7 › Opnix Complete User Journey › 07 - Tab navigation - Tickets/Bugs tab 
+    [chromium] › tests/e2e/full-user-journey.spec.js:287:7 › Opnix Complete User Journey › 14 - Command Center - Open and close 
+  22 passed (1.2m)
+
+[36m  Serving HTML report at http://localhost:35527. Press Ctrl+C to quit.[39m

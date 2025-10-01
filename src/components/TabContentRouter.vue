@@ -31,7 +31,6 @@
       :filter="featuresProps.filter"
       :get-module-feature-count="featuresProps.getModuleFeatureCount"
       :get-module-name="featuresProps.getModuleName"
-      :get-feature-status-color="featuresProps.getFeatureStatusColor"
       @create="featuresProps.onCreate"
       @report="featuresProps.onReport"
       @toggle-module="featuresProps.onToggleModule"
@@ -45,7 +44,6 @@
       :summary="modulesProps.summary"
       :get-module-bug-count="modulesProps.getModuleBugCount"
       :get-module-feature-count="modulesProps.getModuleFeatureCount"
-      :get-health-color="modulesProps.getHealthColor"
       @create="modulesProps.onCreate"
       @detect="modulesProps.onDetect"
       @analyze-dependencies="modulesProps.onAnalyzeDependencies"
@@ -119,6 +117,19 @@
       :on-refresh="storybookProps.onRefresh"
     />
 
+    <TechStackTab
+      v-else-if="activeTab === 'stack'"
+      :active="techStackProps.active"
+      :summary="techStackProps.summary"
+      :loading="techStackProps.loading"
+      :error="techStackProps.error"
+      :exporting="techStackProps.exporting"
+      :export-error="techStackProps.exportError"
+      :export-result="techStackProps.exportResult"
+      @refresh="techStackProps.onRefresh"
+      @export="techStackProps.onExport"
+    />
+
     <DocsTab
       v-else-if="activeTab === 'docs'"
       :active="docsProps.active"
@@ -151,6 +162,7 @@ import SpecsTab from './SpecsTab.vue';
 import DiagramsTab from './DiagramsTab.vue';
 import ApiTab from './ApiTab.vue';
 import StorybookFrame from './StorybookFrame.vue';
+import TechStackTab from './TechStackTab.vue';
 import DocsTab from './DocsTab.vue';
 
 export default {
@@ -165,6 +177,7 @@ export default {
     DiagramsTab,
     ApiTab,
     StorybookFrame,
+    TechStackTab,
     DocsTab
   },
   props: {
@@ -205,6 +218,10 @@ export default {
       default: () => ({})
     },
     storybookProps: {
+      type: Object,
+      default: () => ({})
+    },
+    techStackProps: {
       type: Object,
       default: () => ({})
     },

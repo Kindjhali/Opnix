@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { setThemeFlow } from '../src/composables/themeManager.js';
+import { setThemeFlow, bootstrapThemeFlow } from '../src/composables/themeManager.js';
 
 class LinkElement {
   constructor() {
@@ -97,6 +97,9 @@ globalThis.localStorage = {
   },
   getItem(key) {
     return storage.has(String(key)) ? storage.get(String(key)) : null;
+  },
+  removeItem(key) {
+    storage.delete(String(key));
   }
 };
 
@@ -105,7 +108,9 @@ await (async () => {
     currentTheme: 'mole',
     themeLoading: false,
     themeError: '',
-    cy: null
+    cy: null,
+    themeMode: 'manual',
+    themeMediaCleanup: null
   };
 
   const pending = setThemeFlow.call(store, 'canyon');
@@ -127,7 +132,9 @@ await (async () => {
     currentTheme: 'canyon',
     themeLoading: false,
     themeError: '',
-    cy: null
+    cy: null,
+    themeMode: 'manual',
+    themeMediaCleanup: null
   };
 
   await setThemeFlow.call(store, 'nebula');
@@ -141,7 +148,9 @@ await (async () => {
     currentTheme: 'canyon',
     themeLoading: false,
     themeError: '',
-    cy: null
+    cy: null,
+    themeMode: 'manual',
+    themeMediaCleanup: null
   };
 
   const start = performance.now();
@@ -150,4 +159,123 @@ await (async () => {
   assert.ok(duration < 20, `theme swap should complete quickly (observed ${duration.toFixed(2)}ms)`);
 })();
 
+await (async () => {
+  console.log('Testing comprehensive theme switching performance...');
+
+  const store = {
+    currentTheme: 'mole',
+    themeLoading: false,
+    themeError: '',
+    cy: null,
+    themeMode: 'manual',
+    themeMediaCleanup: null
+  };
+
+  // Test MOLE → CANYON performance
+  const start1 = performance.now();
+  await setThemeFlow.call(store, 'canyon');
+  const duration1 = performance.now() - start1;
+  assert.ok(duration1 < 100, `MOLE → CANYON switch should be under 100ms (observed ${duration1.toFixed(2)}ms)`);
+  assert.equal(store.currentTheme, 'canyon', 'theme should switch to canyon');
+
+  // Test CANYON → MOLE performance
+  const start2 = performance.now();
+  await setThemeFlow.call(store, 'mole');
+  const duration2 = performance.now() - start2;
+  assert.ok(duration2 < 100, `CANYON → MOLE switch should be under 100ms (observed ${duration2.toFixed(2)}ms)`);
+  assert.equal(store.currentTheme, 'mole', 'theme should switch back to mole');
+
+  // Test multiple rapid switches for performance degradation
+  const switchTimes = [];
+  for (let i = 0; i < 5; i++) {
+    const targetTheme = i % 2 === 0 ? 'canyon' : 'mole';
+    const startTime = performance.now();
+    await setThemeFlow.call(store, targetTheme);
+    const switchTime = performance.now() - startTime;
+    switchTimes.push(switchTime);
+    assert.ok(switchTime < 100, `Switch ${i + 1} should be under 100ms (observed ${switchTime.toFixed(2)}ms)`);
+  }
+
+  // Check for performance degradation (no switch should be more than 2x the first)
+  const firstSwitchTime = switchTimes[0];
+  const maxAllowedTime = Math.max(firstSwitchTime * 2, 50); // At least 50ms threshold
+  for (let i = 1; i < switchTimes.length; i++) {
+    assert.ok(switchTimes[i] < maxAllowedTime,
+      `Switch ${i + 1} (${switchTimes[i].toFixed(2)}ms) should not be significantly slower than first switch (${firstSwitchTime.toFixed(2)}ms)`);
+  }
+
+  const avgTime = switchTimes.reduce((sum, time) => sum + time, 0) / switchTimes.length;
+  console.log(`Average theme switch time: ${avgTime.toFixed(2)}ms`);
+
+  assert.ok(avgTime < 50, `Average switch time should be under 50ms (observed ${avgTime.toFixed(2)}ms)`);
+})();
+
+await (async () => {
+  console.log('Testing devtools/system theme synchronisation...');
+
+  storage.clear();
+
+  let changeListener = null;
+  let removeCalled = false;
+
+  const darkMediaQuery = {
+    matches: true,
+    addEventListener(type, handler) {
+      if (type === 'change') {
+        changeListener = handler;
+      }
+    },
+    removeEventListener(type, handler) {
+      if (type === 'change' && handler === changeListener) {
+        removeCalled = true;
+      }
+    }
+  };
+
+  globalThis.window = {
+    matchMedia(query) {
+      if (query === '(prefers-color-scheme: dark)') {
+        return darkMediaQuery;
+      }
+      return {
+        matches: false,
+        addEventListener() {},
+        removeEventListener() {}
+      };
+    }
+  };
+
+  const store = {
+    currentTheme: 'mole',
+    themeLoading: false,
+    themeError: '',
+    cy: null,
+    themeMode: 'system',
+    themeMediaCleanup: null
+  };
+
+  await bootstrapThemeFlow.call(store, { fallback: 'canyon' });
+
+  assert.equal(store.currentTheme, 'mole', 'system preference applies dark theme initially');
+  assert.equal(store.themeMode, 'system', 'store remains in system mode');
+  assert.equal(storage.get('opnixTheme'), undefined, 'system-driven theme does not persist to storage');
+  assert.ok(typeof store.themeMediaCleanup === 'function', 'system mode registers cleanup handler');
+
+  darkMediaQuery.matches = false;
+  await changeListener?.({ matches: false });
+  assert.equal(store.currentTheme, 'canyon', 'system watcher flips theme when preference changes');
+  assert.equal(store.themeMode, 'system', 'system mode persists after change');
+
+  await setThemeFlow.call(store, 'mole', undefined, { persist: true });
+  assert.equal(store.themeMode, 'manual', 'manual override switches theme mode');
+  assert.equal(storage.get('opnixTheme'), 'mole', 'manual override persists theme');
+  assert.equal(store.themeMediaCleanup, null, 'manual override clears media cleanup handler');
+  assert.equal(removeCalled, true, 'manual override detaches system listener');
+
+  darkMediaQuery.matches = true;
+  await changeListener?.({ matches: true });
+  assert.equal(store.currentTheme, 'mole', 'system events ignored after manual override');
+})();
+
 console.log('themeManager tests passed');
+process.exit(0);

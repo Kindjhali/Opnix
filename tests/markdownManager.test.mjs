@@ -100,4 +100,5 @@ function invokeRoute(handler, { method = 'GET', body = {}, params = {}, query = 
   }
 
   console.log('markdown manager tests passed');
+process.exit(0);
 })();

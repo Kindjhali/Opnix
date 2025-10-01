@@ -17,6 +17,17 @@
         <option value="deployed">Deployed</option>
       </select>
       <button class="btn secondary" type="button" @click="$emit('report')">Generate Report</button>
+
+      <!-- Bulk Operations Toggle -->
+      <button
+        class="btn bulk-toggle"
+        :class="{ active: isInSelectionMode }"
+        type="button"
+        @click="toggleSelectionMode"
+        title="Toggle bulk selection mode"
+      >
+        {{ isInSelectionMode ? '☑️ Exit Selection' : '☐ Bulk Select' }}
+      </button>
     </div>
 
     <div class="tag-cloud">
@@ -32,34 +43,57 @@
     </div>
 
     <div class="grid">
-      <div v-for="feature in features" :key="feature.id" class="card">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+      <div
+        v-for="feature in features"
+        :key="feature.id"
+        :class="[
+          'card',
+          {
+            'selection-mode': isInSelectionMode,
+            'selected': isFeatureSelected(feature.id)
+          }
+        ]"
+        @click="handleFeatureClick(feature, $event)"
+        @keydown="handleKeyDown(feature.id, $event)"
+        tabindex="0"
+      >
+        <div class="feature-card-header">
+          <!-- Selection Checkbox -->
+          <div class="selection-checkbox" v-if="isInSelectionMode">
+            <input
+              type="checkbox"
+              :checked="isFeatureSelected(feature.id)"
+              @change="toggleFeatureSelection(feature.id)"
+              @click.stop
+            />
+          </div>
+
           <span class="badge feature">FEATURE</span>
-          <span style="color: var(--text-muted);">#F-{{ feature.id }}</span>
+          <span class="feature-card-id">#F-{{ feature.id }}</span>
         </div>
-        <h3 style="color: var(--feature); margin-bottom: 0.5rem;">{{ feature.title }}</h3>
-        <p style="margin-bottom: 1rem;">{{ feature.description }}</p>
-        <div style="margin-bottom: 1rem;">
-          <strong style="color: var(--accent-orange);">Module:</strong>
+        <h3 class="feature-card-title">{{ feature.title }}</h3>
+        <p class="feature-card-description">{{ feature.description }}</p>
+        <div class="feature-card-section">
+          <strong class="feature-card-label">Module:</strong>
           {{ getModuleName(feature.moduleId) }}
         </div>
-        <div style="margin-bottom: 1rem;" v-if="feature.acceptanceCriteria">
-          <strong style="color: var(--accent-orange);">Acceptance Criteria:</strong>
-          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <div class="feature-card-section" v-if="feature.acceptanceCriteria">
+          <strong class="feature-card-label">Acceptance Criteria:</strong>
+          <ul class="feature-card-acceptance-list">
             <li v-for="(criteria, index) in feature.acceptanceCriteria" :key="index">
               {{ criteria }}
             </li>
           </ul>
         </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span class="badge" :style="{ background: getFeatureStatusColor(feature.status) }">
+        <div class="feature-card-footer">
+          <span :class="['badge', 'feature-status', featureStatusClass(feature.status)]">
             {{ feature.status }}
           </span>
-          <div style="text-align: right;">
-            <div style="color: var(--text-muted); font-size: 0.8rem;">
+          <div class="feature-card-meta">
+            <div class="feature-card-meta-row">
               Priority: {{ feature.priority }}
             </div>
-            <div style="color: var(--text-muted); font-size: 0.8rem;">
+            <div class="feature-card-meta-row">
               Votes: {{ feature.votes }}
             </div>
           </div>
@@ -70,6 +104,8 @@
 </template>
 
 <script>
+import { useBulkOperations } from '../composables/bulkOperationsManager.js';
+
 export default {
   name: 'FeaturesTab',
   props: {
@@ -100,17 +136,44 @@ export default {
     getModuleName: {
       type: Function,
       required: true
-    },
-    getFeatureStatusColor: {
-      type: Function,
-      required: true
     }
   },
   emits: ['create', 'report', 'toggle-module', 'update:filter'],
+  setup() {
+    return useBulkOperations();
+  },
   data() {
     return {
       localFilter: { ...this.filter }
     };
+  },
+  methods: {
+    featureStatusClass(status) {
+      if (!status) {
+        return 'feature-status-unknown';
+      }
+
+      const normalized = String(status)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-');
+
+      return normalized ? `feature-status-${normalized}` : 'feature-status-unknown';
+    },
+    handleFeatureClick(feature, event) {
+      if (this.isInSelectionMode) {
+        event.preventDefault();
+        this.handleKeyboardSelection(event, feature.id, 'feature');
+      }
+      // Normal feature click behavior would go here
+    },
+    handleKeyDown(featureId, event) {
+      if (this.isInSelectionMode) {
+        if (event.key === ' ' || event.key === 'Enter') {
+          event.preventDefault();
+          this.toggleFeatureSelection(featureId);
+        }
+      }
+    }
   },
   watch: {
     filter: {

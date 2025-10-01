@@ -1,0 +1,16 @@
+{
+  "id": "install-mg7w4ww1-eo5jj6-install-progress-1759317367690-6bgryy",
+  "sessionId": "install-mg7w4ww1-eo5jj6",
+  "type": "install-progress",
+  "description": "Directories and runtime bundle setup complete",
+  "critical": false,
+  "timestamp": "2025-10-01T11:16:07.690Z",
+  "context": {
+    "phase": "directories-setup"
+  },
+  "data": {
+    "phase": "directories-setup",
+    "timestamp": "2025-10-01T11:16:07.690Z"
+  },
+  "version": "1.0.0"
+}

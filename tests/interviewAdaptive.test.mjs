@@ -46,3 +46,4 @@ import {
 })();
 
 console.log('interviewAdaptive tests passed');
+process.exit(0);

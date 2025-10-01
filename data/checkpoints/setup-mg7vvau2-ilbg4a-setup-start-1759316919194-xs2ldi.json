@@ -1,0 +1,16 @@
+{
+  "id": "setup-mg7vvau2-ilbg4a-setup-start-1759316919194-xs2ldi",
+  "sessionId": "setup-mg7vvau2-ilbg4a",
+  "type": "setup-start",
+  "description": "Setup wizard initialization",
+  "critical": true,
+  "timestamp": "2025-10-01T11:08:39.195Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-01T11:08:39.194Z"
+  },
+  "version": "1.0.0"
+}

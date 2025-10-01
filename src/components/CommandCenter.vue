@@ -1,5 +1,5 @@
 <template>
-  <section class="command-center" aria-label="Command Center">
+  <section class="command-center" aria-label="Command Center" data-command-center>
     <header class="command-header">
       <div class="command-title">
         <span class="command-icon" aria-hidden="true">⌘</span>
@@ -49,16 +49,25 @@
       :ticket-progress="ticketProgress"
       :latest-audit="latestAudit"
     />
+
+    <RecentSessions
+      @session-resumed="handleSessionResumed"
+      @session-deleted="handleSessionDeleted"
+      @session-view="handleSessionView"
+      @view-all-sessions="handleViewAllSessions"
+    />
   </section>
 </template>
 
 <script>
 import StatuslinePanel from './StatuslinePanel.vue';
+import RecentSessions from './RecentSessions.vue';
 
 export default {
   name: 'CommandCenter',
   components: {
-    StatuslinePanel
+    StatuslinePanel,
+    RecentSessions
   },
   props: {
     claudeCommand: {
@@ -109,6 +118,26 @@ export default {
     },
     clearTasks() {
       this.$emit('clear-tasks');
+    },
+    handleSessionResumed(sessionId) {
+      console.log('Session resumed:', sessionId);
+      // Could emit event to parent or show notification
+      this.$emit('session-resumed', sessionId);
+    },
+    handleSessionDeleted(sessionId) {
+      console.log('Session deleted:', sessionId);
+      // Could emit event to parent or show notification
+      this.$emit('session-deleted', sessionId);
+    },
+    handleSessionView(sessionId) {
+      console.log('View session:', sessionId);
+      // Could navigate to session detail view
+      this.$emit('session-view', sessionId);
+    },
+    handleViewAllSessions() {
+      console.log('View all sessions');
+      // Could navigate to sessions management page
+      this.$emit('view-all-sessions');
     }
   }
 };

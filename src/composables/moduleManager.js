@@ -77,13 +77,3 @@ export function getHealthColorHelper(health) {
   return '#EF4444';
 }
 
-export function getFeatureStatusColorHelper(status) {
-  const colors = {
-    proposed: '#8B5CF6',
-    approved: '#06B6D4',
-    'in-development': '#F59E0B',
-    testing: '#EC4899',
-    deployed: '#10B981'
-  };
-  return colors[status] || '#7B8AA8';
-}

@@ -1,6 +1,7 @@
 <template>
   <div class="modals-layer" aria-live="polite">
     <RunbookModal
+      v-if="runbookModalActive"
       :active="runbookModalActive"
       :interview-error="runbookInterviewError"
       :generating="runbookGenerating"
@@ -18,6 +19,7 @@
     />
 
     <BugModal
+      v-if="bugModalActive"
       :active="bugModalActive"
       :bug="bugDraft"
       :modules="modules"
@@ -27,6 +29,7 @@
     />
 
     <TicketCompletionModal
+      v-if="ticketModalActive"
       :active="ticketModalActive"
       :summary="ticketCompletionSummary"
       :error="ticketCompletionError"
@@ -36,6 +39,7 @@
     />
 
     <FeatureModal
+      v-if="featureModalActive"
       :active="featureModalActive"
       :feature="featureDraft"
       :modules="modules"
@@ -45,6 +49,7 @@
     />
 
     <AddModuleModal
+      v-if="addModuleModalActive"
       :active="addModuleModalActive"
       :module-draft="moduleDraft"
       @close="$emit('close-add-module')"

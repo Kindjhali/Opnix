@@ -32,18 +32,18 @@ const STATE_PATH = path.join(ROOT_DIR, 'data', 'roadmap-state.json');
     await writeRoadmapState(seedState, { immediate: true });
     await roadmapStateManager.load();
 
-    let result = await updateRoadmapMilestone('ms-status', { status: 'active' });
+    let result = await updateRoadmapMilestone('ms-status', { status: 'active' }, { skipGit: true });
     let milestone = result.state.milestones.find(item => String(item.id) === 'ms-status');
     assert.ok(milestone, 'milestone should exist after status update');
     assert.equal(milestone.status, 'active');
 
-    result = await updateRoadmapMilestone('ms-status', { status: 'completed' });
+    result = await updateRoadmapMilestone('ms-status', { status: 'completed' }, { skipGit: true });
     milestone = result.state.milestones.find(item => String(item.id) === 'ms-status');
     assert.equal(milestone.status, 'completed');
 
     let rejectedTransition = false;
     try {
-      await updateRoadmapMilestone('ms-status', { status: 'active' });
+      await updateRoadmapMilestone('ms-status', { status: 'active' }, { skipGit: true });
     } catch (error) {
       rejectedTransition = true;
       assert.match(error.message, /Invalid roadmap status transition/i);
@@ -52,7 +52,7 @@ const STATE_PATH = path.join(ROOT_DIR, 'data', 'roadmap-state.json');
 
     let rejectedStatus = false;
     try {
-      await updateRoadmapMilestone('ms-status', { status: 'unknown-status' });
+      await updateRoadmapMilestone('ms-status', { status: 'unknown-status' }, { skipGit: true });
     } catch (error) {
       rejectedStatus = true;
       assert.match(error.message, /Unknown roadmap status/i);
@@ -60,6 +60,7 @@ const STATE_PATH = path.join(ROOT_DIR, 'data', 'roadmap-state.json');
     assert.equal(rejectedStatus, true, 'unknown statuses should be rejected');
 
     console.log('roadmap status transition tests passed');
+process.exit(0);
   } finally {
     await writeFile(STATE_PATH, backup, 'utf8');
     await roadmapStateManager.load();

@@ -971,11 +971,14 @@ class RoadmapStateManager extends EventEmitter {
       await this.load();
     }
 
-    const key = Object.prototype.hasOwnProperty.call(this.state.milestones, id)
-      ? id
-      : Object.prototype.hasOwnProperty.call(this.state.milestones, String(id))
-        ? String(id)
-        : null;
+    // Find the milestone by searching through the milestones object
+    let key = null;
+    for (const [milestoneKey, milestone] of Object.entries(this.state.milestones)) {
+      if (milestone.id === id || milestone.id === String(id)) {
+        key = milestoneKey;
+        break;
+      }
+    }
 
     if (!key) {
       throw new Error(`Unknown milestone: ${id}`);

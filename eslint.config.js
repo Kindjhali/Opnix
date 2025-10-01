@@ -55,7 +55,7 @@ module.exports = [
         'ignoreDestructuring': false,
         'ignoreImports': false,
         'ignoreGlobals': false,
-        'allow': ['__dirname', '__filename', 'child_process', 'process_exit']
+        'allow': ['__dirname', '__filename', 'child_process', 'process_exit', 'ansi_up', 'node_modules', 'npm_package_name']
       }]
     }
   },
@@ -97,7 +97,11 @@ module.exports = [
         queueMicrotask: 'readonly',
         document: 'readonly',
         localStorage: 'readonly',
-        performance: 'readonly'
+        performance: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly'
       }
     }
   },
@@ -122,7 +126,14 @@ module.exports = [
       globals: {
         console: 'readonly',
         window: 'readonly',
-        document: 'readonly'
+        document: 'readonly',
+        fetch: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        confirm: 'readonly',
+        alert: 'readonly'
       }
     },
     rules: {
@@ -134,6 +145,7 @@ module.exports = [
       'vue/html-indent': 'off',
       'vue/require-explicit-emits': 'off',
       'vue/html-self-closing': 'off',
+      'vue/no-deprecated-dollar-listeners-api': 'off',
       'vue/no-v-html': 'off',
       'vue/attributes-order': 'off',
       'vue/order-in-components': 'off',
@@ -142,7 +154,7 @@ module.exports = [
         'ignoreDestructuring': false,
         'ignoreImports': false,
         'ignoreGlobals': false,
-        'allow': ['__dirname', '__filename', 'child_process', 'process_exit']
+        'allow': ['__dirname', '__filename', 'child_process', 'process_exit', 'ansi_up', 'node_modules', 'npm_package_name']
       }]
     }
   },

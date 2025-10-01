@@ -35,7 +35,6 @@ export function getFeaturesProps(ctx) {
     filter: ctx.featureFilter,
     getModuleFeatureCount: moduleId => bind(ctx.getModuleFeatureCount, ctx)(moduleId),
     getModuleName: moduleId => bind(ctx.getModuleName, ctx)(moduleId),
-    getFeatureStatusColor: status => bind(ctx.getFeatureStatusColor, ctx)(status),
     onCreate: () => bind(ctx.openFeatureModal, ctx)(),
     onReport: () => bind(ctx.generateFeatureReport, ctx)(),
     onToggleModule: moduleId => bind(ctx.toggleModule, ctx)(moduleId),
@@ -50,7 +49,6 @@ export function getModulesProps(ctx) {
     summary: ctx.moduleSummary,
     getModuleBugCount: moduleId => bind(ctx.getModuleBugCount, ctx)(moduleId),
     getModuleFeatureCount: moduleId => bind(ctx.getModuleFeatureCount, ctx)(moduleId),
-    getHealthColor: value => bind(ctx.getHealthColor, ctx)(value),
     onCreate: () => bind(ctx.openAddModuleModal, ctx)(),
     onDetect: () => bind(ctx.detectModules, ctx)(),
     onAnalyzeDependencies: module => bind(ctx.analyzeModuleDependencies, ctx)(module),
@@ -172,5 +170,20 @@ export function getDocsProps(ctx) {
     onUpdateDocType: value => bind(ctx.updateDocType, ctx)(value),
     onStartRunbookInterview: () => bind(ctx.startRunbookInterview, ctx)(),
     onQuickGenerateRunbook: () => bind(ctx.quickGenerateRunbook, ctx)()
+  };
+}
+
+
+export function getTechStackProps(ctx) {
+  return {
+    active: ctx.activeTab === 'stack',
+    summary: ctx.techStackSummary,
+    loading: ctx.techStackLoading,
+    error: ctx.techStackError,
+    exporting: ctx.techStackExporting,
+    exportError: ctx.techStackExportError,
+    exportResult: ctx.techStackExportResult,
+    onRefresh: () => bind(ctx.refreshTechStackSummary, ctx)(),
+    onExport: () => bind(ctx.exportTechStackSummary, ctx)()
   };
 }

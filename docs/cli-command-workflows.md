@@ -5,6 +5,8 @@ Expose the progressive question flows (spec, feature, module, bug, diagram, API,
 
 ## Current Behaviour
 - Commands `/spec`, `/new-feature`, `/new-module`, `/new-bug`, `/new-diagram`, `/new-api`, and `/runbook` create a CLI interview session backed by the blueprint in `public/data/interview-sections.json`.
+- Follow-up commands `/plan` and `/tasks` reuse the latest audit to compile a delivery plan and task queue summary without starting a new interview.
+- When `/spec` or `/new-module` sessions finish, the CLI response now highlights tech stack deltas (new packages, frameworks, or category counts) so operators can immediately see what changed.
 - Questions are filtered by the new `category` metadata on each section; the first question is returned immediately with instructions to continue.
 - Responses are captured via `/answer <sessionId> <questionId> <your answer>` and persisted in `data/cli-sessions/<sessionId>.json`.
 - Sessions return the next question until completion, at which point a summary of all responses is displayed and stored.
@@ -13,7 +15,12 @@ Expose the progressive question flows (spec, feature, module, bug, diagram, API,
 - REST helpers backing `/api/terminal/*` and `/api/cli/sessions*` now live in `routes/cli.js`, keeping the server entrypoint lean while letting tests import the handlers directly.
 - Front-end helpers (`terminalManager`, `commandCenterManager`, `themeManager`) resolve a shared `useAppStore()` instance when no Vue component context is provided, so CLI routes and automated tests reuse the exact same flows as the UI.
 - Spec interviews also trigger the full audit pipeline (spec JSON/Spec Kit, docs, diagrams). Module interviews publish a module summary JSON snapshot, and feature interviews generate a markdown plan so every transcript is paired with useful artefacts.
-- Runbook interviews compile responses with module/ticket snapshots into Markdown runbooks under `spec/runbooks/` and report the file path back to the CLI.
+- Completed `/spec` sessions now chain the delivery plan into actionable work: follow-up items become real tickets (`source: plan-chain`) and a structured task queue is written to `.opnix/scaffold/tasks/` for multi-agent handoffs.
+- Completed `/spec` sessions automatically draft an operational runbook using the default template set, wiring ticket/module context into `spec/runbooks/` without requiring a separate `/runbook` command.
+- Runbook interviews compile responses with module/ticket snapshots into Markdown runbooks under `spec/runbooks/`, merge the latest session auto-save history, and report the file path back to the CLI.
+- Runbook templates are discoverable via `GET /api/runbooks/templates` so the UI and automation can present curated playbooks (operational overview, incident response, release readiness) that the generator appends to the final Markdown.
+- `/constitution` aggregates governance guidance from `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `agents/agent-organizer.md`, returning an excerpt digest plus a Markdown artefact in `spec/cli-sessions/`.
+- `/specify` generates scoped specification exports (JSON/Markdown/Spec Kit) with optional section filters so operators can produce targeted artefacts without running the full interview.
 - The Questions tab now mirrors CLI activity: a sessions list shows in-progress/completed interviews, and you can drill into a session to read responses and artefact paths without leaving the UI.
 
 Example flow:
@@ -43,12 +50,24 @@ Example flow:
 | `/new-bug` | Incident intake (repro steps, severity, context) | Ticket entry in `data/tickets.json`, optional checklists |
 | `/new-diagram` | Diagram briefing (architecture context, scope) | Mermaid source queued for Diagram tab, stored in exports |
 | `/new-api` | Endpoint specification (resources, verbs, contracts) | Generates live OpenAPI draft via `/api/api-spec/*`, exports Markdown/JSON, runs automated checks |
-| `/runbook` | Operational readiness interview (deployment, incident, compliance playbooks) | Markdown runbook in `spec/runbooks/` plus transcript |
+| `/runbook` | Operational readiness interview (deployment, incident, compliance playbooks) | Markdown runbook in `spec/runbooks/` enriched with templates + context history, plus transcript |
+| `/specify` | Scoped spec export with section/format filters | JSON/Markdown/Spec Kit export saved under `spec/blueprints/` plus CLI summary |
+| `/constitution` | Governance digest (agents + installer guidance) | Markdown digest in `spec/cli-sessions/` referencing AGENTS/CLAUDE/GEMINI guidance |
+| `/plan` | Post-interview delivery plan summary | Delivery plan Markdown capturing follow-ups, hotspots, export pointers |
+| `/tasks` | Task queue and follow-up checklist snapshot | Task summary Markdown listing open/high-priority tickets and new audit follow-ups |
 
-Commands such as `/plan` or `/tasks` are not implemented; keep docs and CLI help in sync with the matrix above.
+The scoped spec export and constitution digest also surface as API endpoints (`POST /api/specs/export/scoped` and `POST /api/runbooks/constitution`), letting the Vue app and automation scripts reuse the CLI logic without shelling out.
+
+## Prerequisites
+First, install and start Opnix:
+
+```bash
+pnpm install opnix@latest  # One-step installation
+pnpm start                  # Start the server
+```
 
 ## Usage
-1. Start the Express server with `pnpm start`. The slash-command endpoint listens on `http://localhost:7337/api/claude/execute`.
+1. The slash-command endpoint listens on `http://localhost:7337/api/claude/execute`.
 2. Launch an interview by POSTing JSON containing the desired slash command. For example:
    ```bash
    curl -s http://localhost:7337/api/claude/execute \
@@ -65,6 +84,7 @@ Commands such as `/plan` or `/tasks` are not implemented; keep docs and CLI help
    Wrap multi-word answers in quotes or escape spaces just as you would in a shell.
 4. Inspect progress at any time with `/sessions` (summary) or `/help` (supported commands). Completed sessions list generated artefacts so they can be piped into further automation.
 5. Artefacts live in the workspace: JSON transcripts in `data/cli-sessions/`, Markdown transcripts in `spec/cli-sessions/`, and runbook exports in `spec/runbooks/`. The Vue Questions tab reflects these updates in real time.
+6. Use `/plan` to compile a delivery plan after the interview and `/tasks` to surface the current follow-up queue in Markdown form.
 
 ## Alignment Gates
 - Planning commands (`/spec`, `/new-feature`, `/new-module`, `/new-diagram`, `/new-api`, `/runbook`) require the DAIC state to be `Discussion`. If you are mid-implementation, call `POST /api/context/update` with `{"daicState":"Discussion"}` once alignment questions are answered.
@@ -73,6 +93,8 @@ Commands such as `/plan` or `/tasks` are not implemented; keep docs and CLI help
 - `/sessions` surfaces the most recent alignment gate events (and the `/api/cli/sessions` endpoint returns them under `gates`) so you can confirm when gating has been resolved.
 
 ## Architecture Snapshot
+
+For a visual of how CLI routes mount alongside the rest of the API surface, see `docs/server-routing-map.md` which includes a Mermaid diagram showing each router and its backing service.
 1. **Command Dispatcher** — implemented inside `/api/claude/execute`, routing slash commands through `services/cliInterviewManager.js`.
 2. **CLI Router Module** — `routes/cli.js` exposes `createCliRoutes` plus reusable handlers for terminal history and CLI session APIs; server wiring is migrating here so tests and future route extractions can import the same handlers.
 3. **Question Catalogue Enhancements** — sections in `public/data/interview-sections.json` now include a `category` field (`spec`, `feature`, `module`, `bug`, `diagram`, `api`, `docs`, `runbook`).

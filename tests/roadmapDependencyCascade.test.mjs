@@ -34,7 +34,7 @@ const STATE_PATH = path.join(ROOT_DIR, 'data', 'roadmap-state.json');
     await writeRoadmapState(seedState, { immediate: true });
     await roadmapStateManager.load();
 
-    const progressResult = await updateRoadmapMilestone('ms-a', { progress: 80 });
+    const progressResult = await updateRoadmapMilestone('ms-a', { progress: 80 }, { skipGit: true });
     const cascadeIds = (progressResult.cascadedChanges || []).map(change => String(change.id));
     assert.ok(cascadeIds.includes('ms-b'), 'dependent milestone should appear in cascaded changes');
 
@@ -45,7 +45,7 @@ const STATE_PATH = path.join(ROOT_DIR, 'data', 'roadmap-state.json');
     assert.equal(dependentAfterProgress.dependencySummary.status, 'pending');
     assert.equal(dependentAfterProgress.dependencySummary.gatingProgress, 80);
 
-    const blockedResult = await updateRoadmapMilestone('ms-a', { status: 'blocked' });
+    const blockedResult = await updateRoadmapMilestone('ms-a', { status: 'blocked' }, { skipGit: true });
     const blockedCascadeIds = (blockedResult.cascadedChanges || []).map(change => String(change.id));
     assert.ok(blockedCascadeIds.includes('ms-b'), 'dependent cascade should fire when dependency becomes blocked');
 
@@ -57,6 +57,7 @@ const STATE_PATH = path.join(ROOT_DIR, 'data', 'roadmap-state.json');
     assert.equal(dependentAfterBlocked.dependencySummary.status, 'blocked');
 
     console.log('roadmap dependency cascade tests passed');
+process.exit(0);
   } finally {
     await writeFile(STATE_PATH, backup, 'utf8');
     await roadmapStateManager.load();

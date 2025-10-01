@@ -1,8 +1,8 @@
 <template>
-  <div class="modal" :class="{ active }">
-    <div class="modal-content" style="position: relative;">
+  <div class="modal bug-modal ticket-modal" :class="{ active }" role="dialog" aria-labelledby="bug-modal-title">
+    <div class="modal-content">
       <button class="close-modal" type="button" @click="$emit('close')">×</button>
-      <h2 style="color: var(--danger); margin-bottom: 1rem;">Report New Bug</h2>
+      <h2 id="bug-modal-title" class="bug-modal-title">Report New Bug</h2>
 
       <div class="form-group">
         <label>Title</label>
@@ -35,17 +35,17 @@
 
       <div class="form-group">
         <label>Modules (select multiple)</label>
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        <div class="bug-modules-list">
           <label
             v-for="module in modules"
             :key="module.id"
-            style="display: flex; align-items: center;"
+            class="bug-module-option"
           >
             <input
               type="checkbox"
               :value="module.id"
               :checked="bug.modules.includes(module.id)"
-              style="margin-right: 0.5rem; width: auto;"
+              class="bug-module-checkbox"
               @change="toggleModule(module.id, $event.target.checked)"
             >
             {{ module.name }}

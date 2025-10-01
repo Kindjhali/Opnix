@@ -1,0 +1,764 @@
+{
+  "generatedAt": "2025-10-01T08:51:59.220Z",
+  "package": {
+    "name": "opnix",
+    "version": "1.0.0",
+    "packageManager": "npm"
+  },
+  "dependencies": {
+    "total": 13,
+    "items": [
+      {
+        "name": "@xterm/addon-fit",
+        "version": "^0.10.0"
+      },
+      {
+        "name": "@xterm/addon-web-links",
+        "version": "^0.11.0"
+      },
+      {
+        "name": "@xterm/xterm",
+        "version": "^5.5.0"
+      },
+      {
+        "name": "ansi_up",
+        "version": "^5.1.0"
+      },
+      {
+        "name": "compression",
+        "version": "^1.8.1"
+      },
+      {
+        "name": "cors",
+        "version": "^2.8.5"
+      },
+      {
+        "name": "cytoscape",
+        "version": "^3.28.1"
+      },
+      {
+        "name": "cytoscape-edgehandles",
+        "version": "^4.0.1"
+      },
+      {
+        "name": "express",
+        "version": "^5.1.0"
+      },
+      {
+        "name": "marked",
+        "version": "^12.0.2"
+      },
+      {
+        "name": "mermaid",
+        "version": "^10.6.1"
+      },
+      {
+        "name": "vue",
+        "version": "^3.4.38"
+      },
+      {
+        "name": "ws",
+        "version": "^8.18.3"
+      }
+    ]
+  },
+  "devDependencies": {
+    "total": 24,
+    "items": [
+      {
+        "name": "@eslint/js",
+        "version": "^9.36.0"
+      },
+      {
+        "name": "@playwright/test",
+        "version": "^1.55.1"
+      },
+      {
+        "name": "@storybook/addon-a11y",
+        "version": "^8.2.6"
+      },
+      {
+        "name": "@storybook/addon-essentials",
+        "version": "^8.2.6"
+      },
+      {
+        "name": "@storybook/addon-interactions",
+        "version": "^8.2.6"
+      },
+      {
+        "name": "@storybook/addon-themes",
+        "version": "^8.2.6"
+      },
+      {
+        "name": "@storybook/test",
+        "version": "^8.2.6"
+      },
+      {
+        "name": "@storybook/vue3-vite",
+        "version": "^8.2.6"
+      },
+      {
+        "name": "@vitejs/plugin-vue",
+        "version": "^6.0.1"
+      },
+      {
+        "name": "@vue/server-renderer",
+        "version": "^3.5.22"
+      },
+      {
+        "name": "eslint",
+        "version": "^9.36.0"
+      },
+      {
+        "name": "eslint-plugin-vue",
+        "version": "^10.5.0"
+      },
+      {
+        "name": "husky",
+        "version": "^9.1.7"
+      },
+      {
+        "name": "lint-staged",
+        "version": "^16.2.1"
+      },
+      {
+        "name": "node-pty",
+        "version": "^1.0.0"
+      },
+      {
+        "name": "nodemon",
+        "version": "^3.0.1"
+      },
+      {
+        "name": "playwright",
+        "version": "^1.55.1"
+      },
+      {
+        "name": "storybook",
+        "version": "^8.2.6"
+      },
+      {
+        "name": "stylelint",
+        "version": "^16.24.0"
+      },
+      {
+        "name": "stylelint-config-standard",
+        "version": "^39.0.0"
+      },
+      {
+        "name": "stylelint-config-standard-scss",
+        "version": "^16.0.0"
+      },
+      {
+        "name": "stylelint-scss",
+        "version": "^6.12.1"
+      },
+      {
+        "name": "vite",
+        "version": "^6.3.6"
+      },
+      {
+        "name": "vue-eslint-parser",
+        "version": "^10.2.0"
+      }
+    ]
+  },
+  "frameworks": [
+    "@eslint/js",
+    "@playwright/test",
+    "@storybook/addon-a11y",
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions",
+    "@storybook/addon-themes",
+    "@storybook/test",
+    "@storybook/vue3-vite",
+    "@vitejs/plugin-vue",
+    "@vue/server-renderer",
+    "@xterm/addon-fit",
+    "@xterm/addon-web-links",
+    "@xterm/xterm",
+    "ansi_up",
+    "compression",
+    "cors",
+    "cytoscape",
+    "cytoscape-edgehandles",
+    "eslint",
+    "eslint-plugin-vue",
+    "express",
+    "husky",
+    "lint-staged",
+    "marked",
+    "mermaid",
+    "node-pty",
+    "nodemon",
+    "playwright",
+    "storybook",
+    "stylelint",
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss",
+    "stylelint-scss",
+    "vite",
+    "vue",
+    "vue-eslint-parser",
+    "ws"
+  ],
+  "moduleSummary": {
+    "total": 15,
+    "detectedCount": 15,
+    "manualCount": 0,
+    "byType": {
+      "backend": 1,
+      "knowledge": 1,
+      "storage": 1,
+      "documentation": 1,
+      "artifacts": 2,
+      "code": 6,
+      "frontend": 1,
+      "automation": 1,
+      "workspace": 1
+    },
+    "externalDependencyCount": 36,
+    "details": [
+      {
+        "id": "backend",
+        "name": "Backend API",
+        "type": "backend",
+        "source": "auto",
+        "manual": false,
+        "health": 69,
+        "coverage": null,
+        "dependencies": [
+          "middleware",
+          "routes",
+          "services"
+        ],
+        "externalDependencies": [
+          "compression",
+          "cors",
+          "express",
+          "ws"
+        ],
+        "frameworks": [
+          "express"
+        ],
+        "pathHints": [
+          "server.js"
+        ]
+      },
+      {
+        "id": "agents",
+        "name": "Agent Library",
+        "type": "knowledge",
+        "source": "directory",
+        "manual": false,
+        "health": 75,
+        "coverage": null,
+        "dependencies": [],
+        "externalDependencies": [],
+        "frameworks": [],
+        "pathHints": [
+          "agents"
+        ]
+      },
+      {
+        "id": "data",
+        "name": "Workspace Data",
+        "type": "storage",
+        "source": "directory",
+        "manual": false,
+        "health": 20,
+        "coverage": null,
+        "dependencies": [],
+        "externalDependencies": [],
+        "frameworks": [],
+        "pathHints": [
+          "data"
+        ]
+      },
+      {
+        "id": "docs",
+        "name": "Documentation",
+        "type": "documentation",
+        "source": "directory",
+        "manual": false,
+        "health": 75,
+        "coverage": null,
+        "dependencies": [],
+        "externalDependencies": [],
+        "frameworks": [],
+        "pathHints": [
+          "docs"
+        ]
+      },
+      {
+        "id": "legacy-exports",
+        "name": "Legacy Exports",
+        "type": "artifacts",
+        "source": "directory",
+        "manual": false,
+        "health": 20,
+        "coverage": null,
+        "dependencies": [],
+        "externalDependencies": [],
+        "frameworks": [],
+        "pathHints": [
+          "exports"
+        ]
+      },
+      {
+        "id": "middleware",
+        "name": "Middleware",
+        "type": "code",
+        "source": "directory",
+        "manual": false,
+        "health": 74,
+        "coverage": null,
+        "dependencies": [
+          "services"
+        ],
+        "externalDependencies": [
+          "chokidar"
+        ],
+        "frameworks": [],
+        "pathHints": [
+          "middleware"
+        ]
+      },
+      {
+        "id": "playwright-report",
+        "name": "Playwright Report",
+        "type": "code",
+        "source": "directory",
+        "manual": false,
+        "health": 75,
+        "coverage": null,
+        "dependencies": [],
+        "externalDependencies": [],
+        "frameworks": [],
+        "pathHints": [
+          "playwright-report"
+        ]
+      },
+      {
+        "id": "frontend",
+        "name": "Frontend Interface",
+        "type": "frontend",
+        "source": "directory",
+        "manual": false,
+        "health": 35,
+        "coverage": null,
+        "dependencies": [],
+        "externalDependencies": [],
+        "frameworks": [
+          "vue"
+        ],
+        "pathHints": [
+          "public"
+        ]
+      },
+      {
+        "id": "routes",
+        "name": "Routes",
+        "type": "code",
+        "source": "directory",
+        "manual": false,
+        "health": 74,
+        "coverage": 4,
+        "dependencies": [
+          "services"
+        ],
+        "externalDependencies": [
+          "express",
+          "glob"
+        ],
+        "frameworks": [],
+        "pathHints": [
+          "routes"
+        ]
+      },
+      {
+        "id": "scripts",
+        "name": "Automation Scripts",
+        "type": "automation",
+        "source": "directory",
+        "manual": false,
+        "health": 61,
+        "coverage": 13,
+        "dependencies": [
+          "backend",
+          "services"
+        ],
+        "externalDependencies": [
+          "@storybook",
+          "${consoleImport}",
+          "${specArchiveImport}",
+          "${ticketListImport}"
+        ],
+        "frameworks": [],
+        "pathHints": [
+          "scripts"
+        ]
+      },
+      {
+        "id": "services",
+        "name": "Services",
+        "type": "workspace",
+        "source": "directory",
+        "manual": false,
+        "health": 20,
+        "coverage": 4,
+        "dependencies": [],
+        "externalDependencies": [
+          "chokidar",
+          "cors",
+          "express",
+          "node-pty",
+          "react",
+          "vue"
+        ],
+        "frameworks": [],
+        "pathHints": [
+          "services"
+        ]
+      },
+      {
+        "id": "spec",
+        "name": "Spec Archive",
+        "type": "artifacts",
+        "source": "directory",
+        "manual": false,
+        "health": 75,
+        "coverage": null,
+        "dependencies": [],
+        "externalDependencies": [],
+        "frameworks": [],
+        "pathHints": [
+          "spec"
+        ]
+      },
+      {
+        "id": "src",
+        "name": "Application Source",
+        "type": "code",
+        "source": "directory",
+        "manual": false,
+        "health": 69,
+        "coverage": 5,
+        "dependencies": [],
+        "externalDependencies": [
+          "@xterm",
+          "cytoscape",
+          "cytoscape-edgehandles",
+          "marked",
+          "mermaid",
+          "vue"
+        ],
+        "frameworks": [],
+        "pathHints": [
+          "src"
+        ]
+      },
+      {
+        "id": "test-results",
+        "name": "Test Results",
+        "type": "code",
+        "source": "directory",
+        "manual": false,
+        "health": 20,
+        "coverage": 100,
+        "dependencies": [],
+        "externalDependencies": [],
+        "frameworks": [],
+        "pathHints": [
+          "test-results"
+        ]
+      },
+      {
+        "id": "tests",
+        "name": "Tests",
+        "type": "code",
+        "source": "directory",
+        "manual": false,
+        "health": 61,
+        "coverage": 100,
+        "dependencies": [
+          "backend",
+          "routes",
+          "services",
+          "src"
+        ],
+        "externalDependencies": [
+          "@playwright",
+          "@vue",
+          "express",
+          "node:assert",
+          "node:child_process",
+          "node:fs",
+          "node:http",
+          "node:os",
+          "node:path",
+          "node:test",
+          "node:url",
+          "node:util",
+          "vue"
+        ],
+        "frameworks": [],
+        "pathHints": [
+          "tests"
+        ]
+      }
+    ]
+  },
+  "dependencyCategories": {
+    "frontend": {
+      "label": "Frontend",
+      "items": [
+        {
+          "name": "@storybook/addon-a11y",
+          "version": "^8.2.6",
+          "source": "dev"
+        },
+        {
+          "name": "@storybook/addon-essentials",
+          "version": "^8.2.6",
+          "source": "dev"
+        },
+        {
+          "name": "@storybook/addon-interactions",
+          "version": "^8.2.6",
+          "source": "dev"
+        },
+        {
+          "name": "@storybook/addon-themes",
+          "version": "^8.2.6",
+          "source": "dev"
+        },
+        {
+          "name": "@storybook/test",
+          "version": "^8.2.6",
+          "source": "dev"
+        },
+        {
+          "name": "@storybook/vue3-vite",
+          "version": "^8.2.6",
+          "source": "dev"
+        },
+        {
+          "name": "@vitejs/plugin-vue",
+          "version": "^6.0.1",
+          "source": "dev"
+        },
+        {
+          "name": "@vue/server-renderer",
+          "version": "^3.5.22",
+          "source": "dev"
+        },
+        {
+          "name": "eslint-plugin-vue",
+          "version": "^10.5.0",
+          "source": "dev"
+        },
+        {
+          "name": "storybook",
+          "version": "^8.2.6",
+          "source": "dev"
+        },
+        {
+          "name": "vite",
+          "version": "^6.3.6",
+          "source": "dev"
+        },
+        {
+          "name": "vue",
+          "version": "^3.4.38",
+          "source": "runtime"
+        },
+        {
+          "name": "vue",
+          "version": null,
+          "source": "module:frontend"
+        },
+        {
+          "name": "vue-eslint-parser",
+          "version": "^10.2.0",
+          "source": "dev"
+        }
+      ]
+    },
+    "backend": {
+      "label": "Backend",
+      "items": [
+        {
+          "name": "express",
+          "version": "^5.1.0",
+          "source": "runtime"
+        },
+        {
+          "name": "express",
+          "version": null,
+          "source": "module:backend"
+        }
+      ]
+    },
+    "api": {
+      "label": "API & Clients",
+      "items": [
+        {
+          "name": "husky",
+          "version": "^9.1.7",
+          "source": "dev"
+        }
+      ]
+    },
+    "data": {
+      "label": "Data & Storage",
+      "items": []
+    },
+    "testing": {
+      "label": "Testing",
+      "items": [
+        {
+          "name": "@playwright/test",
+          "version": "^1.55.1",
+          "source": "dev"
+        },
+        {
+          "name": "playwright",
+          "version": "^1.55.1",
+          "source": "dev"
+        }
+      ]
+    },
+    "build": {
+      "label": "Build & Tooling",
+      "items": []
+    },
+    "devops": {
+      "label": "DevOps & Deploy",
+      "items": []
+    },
+    "security": {
+      "label": "Security & Auth",
+      "items": []
+    },
+    "other": {
+      "label": "Other",
+      "items": [
+        {
+          "name": "@eslint/js",
+          "version": "^9.36.0",
+          "source": "dev"
+        },
+        {
+          "name": "@xterm/addon-fit",
+          "version": "^0.10.0",
+          "source": "runtime"
+        },
+        {
+          "name": "@xterm/addon-web-links",
+          "version": "^0.11.0",
+          "source": "runtime"
+        },
+        {
+          "name": "@xterm/xterm",
+          "version": "^5.5.0",
+          "source": "runtime"
+        },
+        {
+          "name": "ansi_up",
+          "version": "^5.1.0",
+          "source": "runtime"
+        },
+        {
+          "name": "compression",
+          "version": "^1.8.1",
+          "source": "runtime"
+        },
+        {
+          "name": "cors",
+          "version": "^2.8.5",
+          "source": "runtime"
+        },
+        {
+          "name": "cytoscape",
+          "version": "^3.28.1",
+          "source": "runtime"
+        },
+        {
+          "name": "cytoscape-edgehandles",
+          "version": "^4.0.1",
+          "source": "runtime"
+        },
+        {
+          "name": "eslint",
+          "version": "^9.36.0",
+          "source": "dev"
+        },
+        {
+          "name": "lint-staged",
+          "version": "^16.2.1",
+          "source": "dev"
+        },
+        {
+          "name": "marked",
+          "version": "^12.0.2",
+          "source": "runtime"
+        },
+        {
+          "name": "mermaid",
+          "version": "^10.6.1",
+          "source": "runtime"
+        },
+        {
+          "name": "node-pty",
+          "version": "^1.0.0",
+          "source": "dev"
+        },
+        {
+          "name": "nodemon",
+          "version": "^3.0.1",
+          "source": "dev"
+        },
+        {
+          "name": "stylelint",
+          "version": "^16.24.0",
+          "source": "dev"
+        },
+        {
+          "name": "stylelint-config-standard",
+          "version": "^39.0.0",
+          "source": "dev"
+        },
+        {
+          "name": "stylelint-config-standard-scss",
+          "version": "^16.0.0",
+          "source": "dev"
+        },
+        {
+          "name": "stylelint-scss",
+          "version": "^6.12.1",
+          "source": "dev"
+        },
+        {
+          "name": "ws",
+          "version": "^8.18.3",
+          "source": "runtime"
+        }
+      ]
+    }
+  },
+  "cliInsights": {
+    "project": [],
+    "module": [],
+    "sessionsAnalyzed": 0
+  },
+  "cacheInfo": {
+    "generatedAt": "2025-10-01T08:51:59.220Z",
+    "ageSeconds": 0,
+    "staleThresholdSeconds": 21600,
+    "isStale": false,
+    "refreshedAt": "2025-10-01T08:51:59.220Z"
+  },
+  "isStale": false,
+  "ageSeconds": 0
+}

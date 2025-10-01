@@ -64,6 +64,79 @@ class InterviewLoader extends EventEmitter {
         
         return 0;
     }
+
+    async getSectionsByContext(requestedContext, { includeQuestions = true } = {}) {
+        const blueprint = await this.loadInterviewBlueprint();
+        const sections = blueprint.sections || {};
+        const sectionContexts = blueprint.sectionContexts || {};
+        const order = Array.isArray(blueprint.baseOrder) ? blueprint.baseOrder : Object.keys(sections);
+
+        const seen = new Set();
+        const orderedIds = [];
+
+        order.forEach(sectionId => {
+            if (sections[sectionId] && !seen.has(sectionId)) {
+                orderedIds.push(sectionId);
+                seen.add(sectionId);
+            }
+        });
+
+        Object.keys(sections).forEach(sectionId => {
+            if (!seen.has(sectionId)) {
+                orderedIds.push(sectionId);
+                seen.add(sectionId);
+            }
+        });
+
+        const targetContext = requestedContext ? String(requestedContext).toLowerCase() : null;
+        const result = [];
+
+        orderedIds.forEach(sectionId => {
+            const section = sections[sectionId];
+            if (!section || !Array.isArray(section.questions)) return;
+
+            const context = (section.context || sectionContexts[sectionId] || 'project').toLowerCase();
+            if (targetContext && context != targetContext) {
+                return;
+            }
+
+            const entry = {
+                sectionId,
+                title: section.title,
+                description: section.description || '',
+                context
+            };
+
+            if (includeQuestions) {
+                entry.questions = section.questions.map(question => ({
+                    ...question,
+                    context: question.context || context
+                }));
+            }
+
+            result.push(entry);
+        });
+
+        return result;
+    }
+
+    async getQuestionsByContext(requestedContext) {
+        const sections = await this.getSectionsByContext(requestedContext, { includeQuestions: true });
+        const questions = [];
+
+        sections.forEach(section => {
+            (section.questions || []).forEach(question => {
+                questions.push({
+                    ...question,
+                    sectionId: section.sectionId,
+                    sectionTitle: section.title,
+                    context: question.context || section.context
+                });
+            });
+        });
+
+        return questions;
+    }
 }
 
 // Create singleton instance
@@ -75,25 +148,13 @@ async function loadInterviewBlueprint() {
 }
 
 async function getNewProjectQuestionnaire() {
-    const blueprint = await loadInterviewBlueprint();
-    const sections = blueprint.sections || {};
-    const order = blueprint.baseOrder || Object.keys(sections);
-    const result = [];
-    order.forEach(sectionId => {
-        const section = sections[sectionId];
-        if (!section || !Array.isArray(section.questions)) return;
-        result.push({
-            sectionId,
-            title: section.title,
-            description: section.description || '',
-            questions: section.questions
-        });
-    });
-    return result;
+    return interviewLoader.getSectionsByContext('project');
 }
 
 module.exports = {
     loadInterviewBlueprint,
     getNewProjectQuestionnaire,
+    getSectionsByContext: (...args) => interviewLoader.getSectionsByContext(...args),
+    getQuestionsByContext: (...args) => interviewLoader.getQuestionsByContext(...args),
     interviewLoader
 };

@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const { ArtifactGenerator } = require('./artifactGenerator');
 const { buildSpecKitMarkdown } = require('./specGenerator');
+const runbookTemplates = require('./runbookTemplates');
 
 const artifactGenerator = new ArtifactGenerator(process.cwd());
 
@@ -251,6 +252,51 @@ function buildTechStackSummary(techStack) {
   return lines.join('\n');
 }
 
+function buildContextHistorySection(sessionId, contextHistory = []) {
+  if (!Array.isArray(contextHistory) || !contextHistory.length) {
+    return '## Session Context History\n\n- No context snapshots recorded.\n\n';
+  }
+
+  const relevant = sessionId
+    ? contextHistory.filter(entry => entry.sessionId === sessionId)
+    : contextHistory;
+
+  if (!relevant.length) {
+    return '## Session Context History\n\n- No matching context snapshots found for this session.\n\n';
+  }
+
+  const lines = ['## Session Context History', ''];
+  relevant.slice(0, 5).forEach(snapshot => {
+    const timestamp = snapshot.timestamp || snapshot.lastUpdated || 'unknown';
+    const forms = Array.isArray(snapshot.forms) && snapshot.forms.length
+      ? snapshot.forms.join(', ')
+      : 'none';
+    const selected = Array.isArray(snapshot.selectedItems) && snapshot.selectedItems.length
+      ? snapshot.selectedItems.join(', ')
+      : 'none';
+    const filterKeys = snapshot.filters && typeof snapshot.filters === 'object'
+      ? Object.keys(snapshot.filters)
+      : [];
+    const filters = filterKeys.length ? filterKeys.join(', ') : 'none';
+
+    lines.push(`- **${timestamp}:** forms → ${forms}; selected → ${selected}; filters → ${filters}`);
+  });
+
+  if (relevant.length > 5) {
+    lines.push('- _Additional snapshots available in `data/context-history.json`_.');
+  }
+
+  lines.push('');
+  return lines.join('\n');
+}
+
+async function resolveTemplates(templateIds = []) {
+  const ids = Array.isArray(templateIds) && templateIds.length
+    ? templateIds
+    : runbookTemplates.defaultTemplates();
+  return runbookTemplates.loadTemplatesById(ids);
+}
+
 async function generateRunbook({
   projectName,
   session,
@@ -258,7 +304,9 @@ async function generateRunbook({
   modulesResult,
   tickets,
   techStack,
-  exportsDir
+  exportsDir,
+  templates = [],
+  contextHistory = []
 }) {
   const responseMap = toResponseMap(session?.responses, responses);
 
@@ -326,6 +374,15 @@ async function generateRunbook({
   const moduleSummary = buildModuleSummary(modulesResult);
   const ticketSummary = buildTicketSummary(tickets);
   const techStackSummary = buildTechStackSummary(techStack);
+  const memoisedTemplates = await resolveTemplates(templates);
+  const templateSegments = memoisedTemplates.map(template => {
+    const heading = `## ${template.name}`;
+    const descriptionLine = template.description ? `> ${template.description}\n\n` : '';
+    const content = template.content ? `${template.content}\n\n` : '';
+    return `${heading}\n\n${descriptionLine}${content}`;
+  });
+
+  const contextSection = buildContextHistorySection(session?.sessionId, contextHistory);
 
   const bodySegments = [
     '## Module Summary',
@@ -338,7 +395,9 @@ async function generateRunbook({
     formatTestingQuickWins(quickWins),
     '## Specification Snapshot',
     specMarkdown ? `${specMarkdown}` + '\n' : '- Specification snapshot currently unavailable.\n',
-    sections
+    contextSection,
+    sections,
+    ...templateSegments
   ];
 
   const body = bodySegments.join('\n');

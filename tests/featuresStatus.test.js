@@ -24,6 +24,7 @@ function main() {
   shouldAllowWithCriteria();
   shouldRejectUnsupportedStatus();
   console.log('✓ feature status validation tests passed');
+  process.exit(0);
 }
 
 main();

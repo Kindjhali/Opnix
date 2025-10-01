@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const statusDashboardManager = require('../services/statusDashboardManager');
 
 let cliDeps = null;
 
@@ -144,8 +145,14 @@ function createCliRoutes(deps) {
     router.get('/api/terminal/status', async (_req, res) => {
         const { readBranchStatus, logServerError } = getDeps();
         try {
-            const status = await readBranchStatus();
-            res.json(status);
+            const [branchStatus, workspaceSummary] = await Promise.all([
+                readBranchStatus(),
+                statusDashboardManager.getWorkspaceSummary(3)
+            ]);
+            res.json({
+                ...branchStatus,
+                workspaces: workspaceSummary
+            });
         } catch (error) {
             logServerError('terminal:branch-status', error);
             res.status(500).json({ error: 'Failed to read git branch status' });

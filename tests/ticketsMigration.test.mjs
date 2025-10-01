@@ -130,4 +130,5 @@ async function removeIfExists(filePath) {
   }
 
   console.log('tickets migration tests passed');
+process.exit(0);
 })();

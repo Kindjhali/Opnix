@@ -1,14 +1,14 @@
 <template>
   <div class="modal" :class="{ active }">
-    <div class="modal-content runbook-modal" style="position: relative;">
+    <div class="modal-content runbook-modal">
       <button class="close-modal" type="button" @click="$emit('close')">×</button>
-      <h2 style="color: var(--doc); margin-bottom: 1rem;">Operational Runbook Interview</h2>
-      <p style="margin-bottom: 1rem; color: var(--text-muted);">
+      <h2 class="runbook-modal-title">Operational Runbook Interview</h2>
+      <p class="runbook-modal-lead">
         Answer the targeted operational questions or skip directly to generation. Responses feed the shared runbook generator.
       </p>
       <div v-if="interviewError" class="form-error">{{ interviewError }}</div>
       <div v-if="generating" class="form-success">Generating runbook artefact...</div>
-      <div v-if="loading" style="color: var(--text-muted);">Loading runbook question bank…</div>
+      <div v-if="loading" class="runbook-loading">Loading runbook question bank…</div>
       <div v-else>
         <div v-if="history && history.length" class="runbook-history">
           <h4>Answered</h4>
@@ -65,10 +65,10 @@
             </button>
           </div>
         </div>
-        <div v-else-if="generating" style="color: var(--accent-cyan); font-weight: 600;">
+        <div v-else-if="generating" class="runbook-generating">
           Generating runbook from collected data…
         </div>
-        <div v-else-if="latestRunbook" style="color: var(--success);">
+        <div v-else-if="latestRunbook" class="runbook-latest">
           Latest runbook saved as {{ latestRunbook.filename }}.
         </div>
       </div>

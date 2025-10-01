@@ -1,8 +1,8 @@
 <template>
   <div class="modal" :class="{ active }">
-    <div class="modal-content" style="position: relative;">
+    <div class="modal-content">
       <button class="close-modal" type="button" @click="$emit('close')">×</button>
-      <h2 style="color: var(--accent-orange); margin-bottom: 1rem;">Add New Module</h2>
+      <h2 class="add-module-modal-title">Add New Module</h2>
 
       <div class="form-group">
         <label>Module Name</label>

@@ -8,17 +8,17 @@
 
     <div
       v-if="summary && summary.moduleCount"
-      class="card" style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 2rem; align-items: center;"
+      class="card modules-summary-card"
     >
       <div>
-        <h3 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">Detection Summary</h3>
-        <div style="color: var(--text-muted); font-size: 0.9rem;">Based on live filesystem scan</div>
+        <h3 class="modules-summary-heading">Detection Summary</h3>
+        <div class="modules-summary-subtitle">Based on live filesystem scan</div>
       </div>
-      <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-        <SummaryMetric label="Modules" :value="summary.moduleCount" color="var(--accent-blue)" />
-        <SummaryMetric label="Links" :value="summary.dependencyCount" color="var(--accent-orange)" />
-        <SummaryMetric label="External" :value="summary.externalDependencyCount" color="var(--accent-cyan)" />
-        <SummaryMetric label="Lines" :value="summary.totalLines" color="var(--accent-pink)" />
+      <div class="modules-summary-metrics">
+        <SummaryMetric label="Modules" :value="summary.moduleCount" variant="accent-blue" />
+        <SummaryMetric label="Links" :value="summary.dependencyCount" variant="accent-orange" />
+        <SummaryMetric label="External" :value="summary.externalDependencyCount" variant="accent-cyan" />
+        <SummaryMetric label="Lines" :value="summary.totalLines" variant="accent-pink" />
       </div>
     </div>
 
@@ -26,7 +26,7 @@
       <article v-for="module in modules" :key="module.id" class="module-card">
         <header class="module-header">
           <div class="module-name">{{ module.name }}</div>
-          <div class="module-health" :style="{ background: getHealthColor(module.health) }"></div>
+          <div class="module-health" :class="moduleHealthClass(module.health)"></div>
         </header>
 
         <section class="module-stats">
@@ -51,8 +51,8 @@
           item-class="path"
         />
 
-        <footer style="margin-top: 1rem;">
-          <button class="btn" style="width: 100%; padding: 0.5rem;" type="button" @click="$emit('analyze', module)">
+        <footer class="module-action-footer">
+          <button class="btn module-action-button" type="button" @click="$emit('analyze', module)">
             Analyze Module
           </button>
         </footer>
@@ -73,15 +73,20 @@ const SummaryMetric = {
       type: [String, Number],
       required: true
     },
-    color: {
+    variant: {
       type: String,
-      default: 'var(--text-bright)'
+      default: 'default'
+    }
+  },
+  computed: {
+    variantClass() {
+      return this.variant ? `summary-metric--${this.variant}` : 'summary-metric--default';
     }
   },
   template: `
-    <div>
-      <div :style="{ fontSize: '1.8rem', color, fontWeight: 'bold' }">{{ value }}</div>
-      <div style="text-transform: uppercase; font-size: 0.75rem; color: var(--text-muted);">{{ label }}</div>
+    <div :class="['summary-metric', variantClass]">
+      <div class="summary-metric-value">{{ value }}</div>
+      <div class="summary-metric-label">{{ label }}</div>
     </div>
   `
 };
@@ -104,7 +109,7 @@ const ModuleListSection = {
   },
   template: `
     <section class="module-dependencies">
-      <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+      <div class="module-section-heading">
         {{ title }} ({{ (items || []).length }}):
       </div>
       <div>
@@ -147,10 +152,25 @@ export default {
     getModuleFeatureCount: {
       type: Function,
       required: true
-    },
-    getHealthColor: {
-      type: Function,
-      required: true
+    }
+  },
+  methods: {
+    moduleHealthClass(value) {
+      const numeric = Number(value);
+
+      if (!Number.isFinite(numeric)) {
+        return 'module-health--warning';
+      }
+
+      if (numeric >= 80) {
+        return 'module-health--strong';
+      }
+
+      if (numeric >= 60) {
+        return 'module-health--warning';
+      }
+
+      return 'module-health--critical';
     }
   },
   emits: ['create', 'detect', 'analyze', 'analyze-dependencies']

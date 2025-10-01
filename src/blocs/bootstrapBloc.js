@@ -10,6 +10,7 @@ function createBootstrapBloc() {
         this.fetchModulesGraph(),
         this.fetchExports(),
         this.fetchStats(),
+        this.fetchTechStackSummary({ background: true, force: true }),
         this.refreshRoadmapState({ background: true }),
         this.loadTerminalHistory(),
         this.refreshBranchStatus(),

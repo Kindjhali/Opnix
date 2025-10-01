@@ -3,6 +3,9 @@ const fs = require('fs').promises;
 const { loadInterviewBlueprint } = require('./interviewLoader');
 const { ProgressiveQuestionEngine } = require('./progressiveQuestionEngine');
 const questionFileWatcher = require('./questionFileWatcher');
+const techStackManager = require('./techStackManager');
+const checkpointManager = require('./checkpointManager');
+const gracefulFailureHandler = require('./gracefulFailureHandler');
 
 const CLI_SESSIONS_DIR = path.join(__dirname, '..', 'data', 'cli-sessions');
 const CLI_ARTIFACTS_DIR = path.join(__dirname, '..', 'spec', 'cli-sessions');
@@ -67,11 +70,14 @@ async function loadCategoryQuestions(category) {
     if (sectionCategory !== category) return;
 
     matchingSections.add(sectionId);
+    const rawContext = (section && section.context) || (blueprint.sectionContexts || {})[sectionId] || 'project';
+    const sectionContext = typeof rawContext === 'string' ? rawContext.toLowerCase() : rawContext;
     const questions = section.questions.map(question => ({
       ...question,
       sectionId,
       sectionTitle: section.title || sectionId,
-      category: sectionCategory || category
+      category: sectionCategory || category,
+      context: question.context || sectionContext
     }));
     sectionQuestions.set(sectionId, questions);
   });
@@ -260,6 +266,32 @@ async function startSession({ category, command }) {
 
   await writeSession(session);
 
+  // Create initial checkpoint for session recovery
+  try {
+    await checkpointManager.createCheckpoint(session.sessionId, session, {
+      type: 'session-start',
+      description: `CLI interview session started (${category})`,
+      critical: true,
+      context: { category, command, interviewType: 'cli' }
+    });
+
+    // Start auto-checkpointing for this session
+    await checkpointManager.startAutoCheckpointing(session.sessionId, async () => {
+      try {
+        const currentSession = await readSession(session.sessionId);
+        return currentSession;
+      } catch (error) {
+        console.warn(`Failed to get session data for checkpointing: ${error.message}`);
+        return null;
+      }
+    }, {
+      interval: 30000, // 30 seconds
+      description: 'CLI interview auto-checkpoint'
+    });
+  } catch (error) {
+    console.warn(`Failed to create checkpoint for session ${session.sessionId}: ${error.message}`);
+  }
+
   // Register session with question file watcher for hot-reload support
   const sessionHandler = {
     sessionId: session.sessionId,
@@ -307,7 +339,8 @@ async function submitAnswer({ sessionId, questionId, answer }) {
     throw new Error('Answer cannot be empty.');
   }
 
-  const session = await readSession(sessionId);
+  try {
+    const session = await readSession(sessionId);
   const existingResponses = Array.isArray(session.responses) ? session.responses : [];
   const question = session.questions[session.currentIndex];
 
@@ -358,15 +391,54 @@ async function submitAnswer({ sessionId, questionId, answer }) {
     questionFileWatcher.unregisterSession(sessionId);
   }
 
-  await writeSession(session);
+    await writeSession(session);
 
-  return {
-    session,
-    nextQuestion,
-    completed,
-    summary,
-    artifacts
-  };
+    // Create checkpoint after successful answer submission
+    if (completed) {
+      // Final checkpoint when session completes
+      await checkpointManager.createCheckpoint(sessionId, session, {
+        type: 'session-complete',
+        description: 'CLI interview session completed',
+        critical: true,
+        context: { completed: true, totalResponses: session.responses.length }
+      });
+
+      // Stop auto-checkpointing
+      checkpointManager.stopAutoCheckpointing(sessionId);
+    }
+
+    if (completed && techStackManager && typeof techStackManager.recordCliSessionImpact === 'function') {
+      try {
+        await techStackManager.recordCliSessionImpact();
+      } catch (error) {
+        console.warn('cliInterviewManager: tech stack refresh failed', error.message);
+      }
+    }
+
+    return {
+      session,
+      nextQuestion,
+      completed,
+      summary,
+      artifacts
+    };
+
+  } catch (error) {
+    // Handle CLI interview failure gracefully
+    try {
+      const session = await readSession(sessionId).catch(() => null);
+      await gracefulFailureHandler.handleSessionFailure(sessionId, error, {
+        sessionState: session,
+        lastKnownStep: 'answer-submission',
+        questionId,
+        answer: trimmedAnswer
+      });
+    } catch (recoveryError) {
+      console.error(`Failed to handle CLI interview failure for session ${sessionId}:`, recoveryError);
+    }
+
+    throw error;
+  }
 }
 
 async function getSession(sessionId) {

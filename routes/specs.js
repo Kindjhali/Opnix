@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const fsPromises = require('fs').promises;
+const SessionManager = require('../services/sessionManager');
+const runbookTemplates = require('../services/runbookTemplates');
 
 function serializeCliQuestion(question) {
     if (!question) return null;
@@ -33,9 +35,11 @@ function createSpecRoutes({
     toPosixPath,
     withRelativePath,
     cliInterviewManager,
-    generateCliCategoryArtifacts
+    generateCliCategoryArtifacts,
+    cliExtraCommands
 }) {
     const router = express.Router();
+    const sessionManager = new SessionManager();
 
     router.post('/api/api-spec/generate', async (req, res) => {
         try {
@@ -140,6 +144,80 @@ function createSpecRoutes({
         }
     });
 
+    if (cliExtraCommands && typeof cliExtraCommands.generateScopedSpecExport === 'function') {
+        router.post('/api/specs/export/scoped', async (req, res) => {
+            try {
+                const payload = req.body || {};
+                const includeSections = payload.includeSections ?? payload.include ?? [];
+                const excludeSections = payload.excludeSections ?? payload.exclude ?? [];
+                const moduleFilters = payload.moduleFilters ?? payload.modules ?? payload.module;
+                const featureFilters = payload.featureFilters ?? payload.features ?? payload.feature;
+                const ticketFilters = payload.ticketFilters ?? payload.tickets ?? payload.ticket ?? payload.issues;
+                const ticketStatuses = payload.ticketStatuses ?? payload.statuses ?? payload.status;
+
+                const result = await cliExtraCommands.generateScopedSpecExport({
+                    includeSections,
+                    excludeSections,
+                    moduleFilters,
+                    featureFilters,
+                    ticketFilters,
+                    ticketStatuses,
+                    format: payload.format
+                });
+
+                if (!result.success) {
+                    return res.status(400).json({
+                        success: false,
+                        messages: result.messages || ['Failed to generate scoped specification']
+                    });
+                }
+
+                res.json({
+                    success: true,
+                    artifact: result.artifact,
+                    metadata: result.metadata,
+                    messages: result.messages
+                });
+            } catch (error) {
+                console.error('Scoped spec export failed:', error);
+                res.status(500).json({ success: false, error: 'Failed to generate scoped specification' });
+            }
+        });
+    }
+
+    if (cliExtraCommands && typeof cliExtraCommands.generateGovernanceDigest === 'function') {
+        router.post('/api/runbooks/constitution', async (req, res) => {
+            try {
+                const { docs, docKeys, excerptLines, full } = req.body || {};
+                const digest = await cliExtraCommands.generateGovernanceDigest({
+                    docKeys: docs ?? docKeys,
+                    excerptLines,
+                    full
+                });
+
+                if (!digest.success) {
+                    return res.status(404).json({
+                        success: false,
+                        messages: digest.messages || ['No governance documents available'],
+                        missingDocs: digest.missingDocs
+                    });
+                }
+
+                res.json({
+                    success: true,
+                    artifact: digest.artifact,
+                    includedDocs: digest.includedDocs,
+                    missingDocs: digest.missingDocs,
+                    excerptLines: digest.excerptLines,
+                    messages: digest.messages
+                });
+            } catch (error) {
+                console.error('Constitution digest generation failed:', error);
+                res.status(500).json({ success: false, error: 'Failed to prepare governance digest' });
+            }
+        });
+    }
+
     router.post('/api/runbooks/interview/start', async (_req, res) => {
         try {
             const { session, question } = await cliInterviewManager.startSession({
@@ -205,9 +283,19 @@ function createSpecRoutes({
         }
     });
 
+    router.get('/api/runbooks/templates', async (_req, res) => {
+        try {
+            const templates = await runbookTemplates.listTemplates();
+            res.json({ success: true, templates });
+        } catch (error) {
+            console.error('Failed to list runbook templates:', error);
+            res.status(500).json({ success: false, error: error.message || 'Failed to list templates' });
+        }
+    });
+
     router.post('/api/runbooks/generate', async (req, res) => {
         try {
-            const { sessionId, projectName, responses } = req.body || {};
+            const { sessionId, projectName, responses, templates, includeContextHistory = true } = req.body || {};
             await ensureExportStructure();
 
             let session = null;
@@ -237,6 +325,16 @@ function createSpecRoutes({
                 || packageJson?.name
                 || 'Opnix Project';
 
+            let contextHistory = [];
+            if (includeContextHistory) {
+                try {
+                    const history = await sessionManager.readContextHistory();
+                    contextHistory = Array.isArray(history?.history) ? history.history : [];
+                } catch (error) {
+                    console.warn('[Opnix][runbook] Failed to read context history:', error.message || error);
+                }
+            }
+
             const runbookMeta = await runbookGenerator.generateRunbook({
                 projectName: resolvedProjectName,
                 session,
@@ -244,7 +342,9 @@ function createSpecRoutes({
                 modulesResult,
                 tickets,
                 techStack,
-                exportsDir: EXPORT_SUBDIRS.runbooks
+                exportsDir: EXPORT_SUBDIRS.runbooks,
+                templates,
+                contextHistory
             });
 
             const content = await fsPromises.readFile(runbookMeta.path, 'utf8');

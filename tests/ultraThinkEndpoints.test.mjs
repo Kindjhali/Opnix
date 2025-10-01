@@ -90,4 +90,5 @@ function invokeRoute(handler, { method = 'GET', body = {}, query = {} } = {}) {
   await invokeRoute(ultraThinkModeRoute, { method: 'post', body: { mode: 'api' } });
 
   console.log('ultrathink endpoint tests passed');
+process.exit(0);
 })();

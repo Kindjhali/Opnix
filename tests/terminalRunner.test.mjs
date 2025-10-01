@@ -88,4 +88,5 @@ async function invokeHandler(handler, { method = 'GET', body = {}, query = {} } 
   }
 
   console.log('terminal runner tests passed');
+process.exit(0);
 })();

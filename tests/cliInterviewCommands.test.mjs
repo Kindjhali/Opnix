@@ -42,9 +42,10 @@ async function main() {
   await unlink(sessionPath);
 
   console.log('cli interview commands tests passed');
+  process.exit(0);
 }
 
 main().catch(error => {
   console.error(error);
-  process.exitCode = 1;
+  process.exit(1);
 });

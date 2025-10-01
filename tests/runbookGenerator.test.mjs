@@ -111,6 +111,9 @@ async function testBasicRunbookGeneration() {
   assert(content.includes('## Runtime Decisions'));
   assert(content.includes('Primary Language:** JavaScript'));
   assert(content.includes('Preferred Framework:** Express'));
+  assert(content.includes('Operational Readiness Checklist'));
+  assert(content.includes('## Session Context History'));
+  assert(content.includes('No context snapshots recorded'));
   
   console.log('✓ Basic runbook generation passed');
 }
@@ -235,6 +238,15 @@ async function testAISafeguardsRunbooks() {
 async function testTemplateSubstitution() {
   console.log('TEST: Template substitution');
   
+  const contextHistory = [{
+    sessionId: 'test-session-123',
+    sessionType: 'runbook',
+    timestamp: '2025-01-01T00:00:00Z',
+    forms: ['spec-form'],
+    selectedItems: ['module-a'],
+    filters: { status: 'draft' }
+  }];
+
   const result = await generateRunbook({
     projectName: 'Template {{Test}} Project',
     session: createMockSession(),
@@ -244,12 +256,19 @@ async function testTemplateSubstitution() {
     modulesResult: createMockModulesResult(),
     tickets: [],
     techStack: createMockTechStack(),
-    exportsDir: testExportsDir
+    exportsDir: testExportsDir,
+    templates: ['incident-response'],
+    contextHistory
   });
 
   const content = await readFile(result.path, 'utf8');
   // Should handle special characters in project name
   assert(content.includes('Template {{Test}} Project'));
+  assert(content.includes('Incident Response Playbook'));
+  assert(content.includes('Detection'));
+  assert(!content.includes('Operational Readiness Checklist')); // default template overridden
+  assert(content.includes('forms → spec-form'));
+  assert(content.includes('selected → module-a'));
   
   console.log('✓ Template substitution passed');
 }

@@ -19,7 +19,7 @@
 
     <textarea
       :value="mermaidCode"
-      style="width: 100%; min-height: 200px; margin-top: 1rem;"
+      class="diagram-editor"
       placeholder="Mermaid code..."
       @input="onMermaidInput($event.target.value)"
     ></textarea>

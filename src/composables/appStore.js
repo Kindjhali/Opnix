@@ -12,6 +12,8 @@ function createInitialState() {
     currentTheme: 'mole',
     themeLoading: false,
     themeError: '',
+    themeMode: 'system',
+    themeMediaCleanup: null,
     activeTab: 'canvas',
     mainTabs: [...MAIN_TABS],
     claudeCommand: '',
@@ -164,7 +166,13 @@ function createInitialState() {
     branchStatusRefreshHandle: null,
     contextStatusRefreshHandle: null,
     storybookStatus: '',
-    storybookFrameVersion: 0
+    storybookFrameVersion: 0,
+    techStackSummary: null,
+    techStackLoading: false,
+    techStackError: '',
+    techStackExporting: false,
+    techStackExportError: '',
+    techStackExportResult: null
   };
 }
 
@@ -191,5 +199,8 @@ export function useAppStoreComputed() {
 }
 
 export function resetAppStore() {
+  if (typeof state.themeMediaCleanup === 'function') {
+    state.themeMediaCleanup();
+  }
   Object.assign(state, createInitialState());
 }

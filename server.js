@@ -7,6 +7,9 @@ const fsPromises = fs.promises;
 const path = require('path');
 const { exec } = require('child_process');
 const util = require('util');
+const WebSocket = require('ws');
+const http = require('http');
+const terminalManager = require('./services/terminalPty');
 const moduleDetector = require('./services/moduleDetector');
 const specGenerator = require('./services/specGenerator');
 const docsGenerator = require('./services/docsGenerator');
@@ -17,6 +20,17 @@ const apiSpecGenerator = require('./services/apiSpecGenerator');
 const { ProgressiveDocumentSystem } = require('./services/progressiveDocumentSystem');
 const cliInterviewManager = require('./services/cliInterviewManager');
 const runbookGenerator = require('./services/runbookGenerator');
+const { createCliStagedFlow } = require('./services/cliStagedFlow');
+const { createCliExtraCommands } = require('./services/cliExtraCommands');
+const { createPlanTaskChainer } = require('./services/planTaskChainer');
+const { createImplementationChainer } = require('./services/implementationChainer');
+const { createPreImplementationDiscussionManager } = require('./services/preImplementationDiscussionManager');
+const ApprovalGatesManager = require('./services/approvalGatesManager');
+const SessionManager = require('./services/sessionManager');
+const runbookTemplates = require('./services/runbookTemplates');
+const { createCliBranchHandler } = require('./services/cliBranchHandler');
+const techStackManager = require('./services/techStackManager');
+const agentHandoffManager = require('./services/agentHandoffManager');
 const { ensureRoadmapStateFile, readRoadmapState, writeRoadmapState, syncRoadmapState, listRoadmapVersions, rollbackRoadmapState, updateRoadmapMilestone } = require('./services/roadmapState');
 const { startRoadmapSyncWatchers, stopRoadmapSyncWatchers } = require('./services/roadmapSyncWatcher');
 require('./services/roadmapEventAggregator');
@@ -25,6 +39,7 @@ const { createFeatureUtils } = require('./services/featureUtils');
 const { createChecklistUtils } = require('./services/checklistUtils');
 const execAsync = util.promisify(exec);
 const runtimeBundler = require('./services/runtimeBundler');
+const createPreImplementationDiscussionRoutes = require('./routes/preImplementationDiscussions');
 const { createAuditManager } = require('./services/auditManager');
 const createSpecRoutes = require('./routes/specs');
 const createTicketRoutes = require('./routes/tickets');
@@ -40,10 +55,28 @@ const { createRootRoutes } = require('./routes/root');
 const { createStaticRoutes } = require('./routes/static');
 
 const { createDocsRoutes } = require('./routes/docs');
+const { createTechStackRoutes } = require('./routes/techStack');
 const createProgressiveRoutes = require('./routes/progressive');
 const { createCliRoutes, terminalHistoryRoute, terminalExecuteRoute } = require('./routes/cli');
 const { createAgentsRoutes } = require('./routes/agents');
 const { createInterviewsRoutes } = require('./routes/interviews');
+const recoveryRoutes = require('./routes/recovery');
+const sessionsRoutes = require('./routes/sessions');
+const preferencesRoutes = require('./routes/preferences');
+const checkpointManager = require('./services/checkpointManager');
+const sessionRestoration = require('./services/sessionRestoration');
+const taskLogsRoutes = require('./routes/taskLogs');
+const statusDashboardRoutes = require('./routes/statusDashboard');
+const bulkOperationsRoutes = require('./routes/bulkOperations');
+const progressRoutes = require('./routes/progress');
+const branchesRoutes = require('./routes/branches');
+const createApprovalGatesRoutes = require('./routes/approvalGates');
+const {
+    initializeStatusTracking,
+    trackTokenUsage,
+    addStatusContext,
+    healthCheckMiddleware
+} = require('./middleware/statusTracking');
 const {
     createExportsRoutes,
     markdownListRoute,
@@ -61,6 +94,7 @@ const LEGACY_TICKETS_FILE = path.join(__dirname, 'tickets.json');
 const LEGACY_IMPORT_DIR = path.join(DATA_DIR, 'legacy-imports');
 const AGENTS_DIR = path.join(__dirname, 'agents');
 const EXPORTS_DIR = path.join(__dirname, 'spec');
+const SCAFFOLD_ROOT = path.join(__dirname, '.opnix', 'scaffold');
 const EXPORT_SUBDIRS = {
     blueprints: path.join(EXPORTS_DIR, 'blueprints'),
     docs: path.join(EXPORTS_DIR, 'docs'),
@@ -82,6 +116,7 @@ const MANUAL_MODULES_FILE = path.join(DATA_DIR, 'modules.json');
 const TERMINAL_HISTORY_FILE = path.join(DATA_DIR, 'terminal-history.json');
 const CLI_GATE_LOG_FILE = path.join(DATA_DIR, 'cli-gating-log.json');
 const ULTRATHINK_COMPACTION_LOG_FILE = path.join(DATA_DIR, 'ultrathink-compaction-log.json');
+const APPROVAL_GATES_FILE = path.join(DATA_DIR, 'approval-gates.json');
 const MAX_GATING_LOG_ENTRIES = 50;
 const PACKAGE_JSON_FILE = path.join(__dirname, 'package.json');
 const MARKDOWN_ARCHIVE_ROOTS = [
@@ -127,6 +162,20 @@ const TICKET_STATUS_TRANSITIONS = {
     },
     [statusFinished]: {}
 };
+
+let planTaskChainer = null;
+let implementationChainer = null;
+let cliBranchHandler = null;
+const sessionManager = new SessionManager();
+const approvalGatesManager = new ApprovalGatesManager({
+    dataFile: APPROVAL_GATES_FILE,
+    logger: console
+});
+const preImplementationDiscussionManager = createPreImplementationDiscussionManager({
+    filePath: path.join(DATA_DIR, 'pre-implementation-discussions.json'),
+    logger: console,
+    approvalGatesManager
+});
 
 const {
     normaliseStatusHook,
@@ -261,6 +310,7 @@ const {
     inferPrimaryLanguage,
     normaliseTicketStatus,
     withRelativePath,
+    techStackManager,
     statusConstants: {
         statusReported,
         statusInProgress,
@@ -272,13 +322,18 @@ const {
 });
 
 const CLI_COMMANDS = {
-    '/spec': { category: 'spec', label: 'Specification Interview' },
-    '/new-feature': { category: 'feature', label: 'Feature Interview' },
-    '/new-module': { category: 'module', label: 'Module Interview' },
-    '/new-bug': { category: 'bug', label: 'Bug Interview' },
-    '/new-diagram': { category: 'diagram', label: 'Diagram Interview' },
-    '/new-api': { category: 'api', label: 'API Interview' },
-    '/runbook': { category: 'runbook', label: 'Runbook Interview' }
+    '/spec': { mode: 'interview', category: 'spec', label: 'Specification Interview' },
+    '/new-feature': { mode: 'interview', category: 'feature', label: 'Feature Interview' },
+    '/new-module': { mode: 'interview', category: 'module', label: 'Module Interview' },
+    '/new-bug': { mode: 'interview', category: 'bug', label: 'Bug Interview' },
+    '/new-diagram': { mode: 'interview', category: 'diagram', label: 'Diagram Interview' },
+    '/new-api': { mode: 'interview', category: 'api', label: 'API Interview' },
+    '/runbook': { mode: 'interview', category: 'runbook', label: 'Runbook Interview' },
+    '/constitution': { mode: 'utility', handler: 'constitution', label: 'Governance Constitution Digest' },
+    '/specify': { mode: 'utility', handler: 'specify', label: 'Scoped Spec Export' },
+    '/branch': { mode: 'utility', handler: 'branch', label: 'Create Feature Branch' },
+    '/plan': { mode: 'staged', stage: 'plan', label: 'Delivery Plan Summary' },
+    '/tasks': { mode: 'staged', stage: 'tasks', label: 'Task Queue Summary' }
 };
 
 const CLI_ALIGNMENT_RULES = {
@@ -287,7 +342,10 @@ const CLI_ALIGNMENT_RULES = {
     '/new-module': { requireDiscussion: true, requireUltraThink: true },
     '/new-diagram': { requireDiscussion: true, requireUltraThink: true },
     '/new-api': { requireDiscussion: true, requireUltraThink: true },
-    '/runbook': { requireDiscussion: true, requireUltraThink: true }
+    '/runbook': { requireDiscussion: true, requireUltraThink: true },
+    '/specify': { requireDiscussion: true, requireUltraThink: true },
+    '/plan': { requireDiscussion: true, requireUltraThink: true },
+    '/tasks': { requireDiscussion: true, requireUltraThink: true }
 };
 
 const CLI_COMMAND_LIST = Object.entries(CLI_COMMANDS)
@@ -299,6 +357,72 @@ const PLANNING_COMMAND_LIST = Object.keys(CLI_ALIGNMENT_RULES).join(', ');
 const ULTRATHINK_TRIGGER_REGEX = /\[\[\s*ultrathink\s*\]\]/i;
 const CONTEXT_GATING_THRESHOLD = 0.9;
 
+function extractCategoryCounts(summary) {
+    if (!summary || !summary.dependencyCategories) {
+        return {};
+    }
+    const entries = {};
+    Object.entries(summary.dependencyCategories).forEach(([key, bucket]) => {
+        const label = bucket && bucket.label ? bucket.label : key;
+        const items = Array.isArray(bucket && bucket.items) ? bucket.items : [];
+        entries[key] = { label, count: items.length };
+    });
+    return entries;
+}
+
+function buildTechStackDeltaMessages(previousSummary, currentSummary) {
+    if (!currentSummary) {
+        return [];
+    }
+
+    const messages = [];
+
+    if (!previousSummary) {
+        const runtimeTotal = currentSummary.dependencies?.total ?? 0;
+        const toolingTotal = currentSummary.devDependencies?.total ?? 0;
+        messages.push(`Tech stack snapshot generated (${runtimeTotal} runtime / ${toolingTotal} tooling packages).`);
+        return messages;
+    }
+
+    const prevRuntime = previousSummary.dependencies?.total ?? 0;
+    const prevTooling = previousSummary.devDependencies?.total ?? 0;
+    const nextRuntime = currentSummary.dependencies?.total ?? 0;
+    const nextTooling = currentSummary.devDependencies?.total ?? 0;
+
+    const runtimeDelta = nextRuntime - prevRuntime;
+    const toolingDelta = nextTooling - prevTooling;
+
+    if (runtimeDelta > 0) {
+        messages.push(`Runtime package count increased by ${runtimeDelta} (now ${nextRuntime}).`);
+    }
+    if (toolingDelta > 0) {
+        messages.push(`Tooling package count increased by ${toolingDelta} (now ${nextTooling}).`);
+    }
+
+    const prevCategories = extractCategoryCounts(previousSummary);
+    const nextCategories = extractCategoryCounts(currentSummary);
+    const categoryDiffs = [];
+    Object.entries(nextCategories).forEach(([key, value]) => {
+        const prevCount = prevCategories[key]?.count ?? 0;
+        const diff = value.count - prevCount;
+        if (diff > 0) {
+            categoryDiffs.push(`${value.label}: +${diff}`);
+        }
+    });
+    if (categoryDiffs.length) {
+        messages.push(`New dependencies detected → ${categoryDiffs.slice(0, 3).join(', ')}`);
+    }
+
+    const prevFrameworks = new Set(previousSummary.frameworks || []);
+    const nextFrameworks = new Set(currentSummary.frameworks || []);
+    const newFrameworks = [...nextFrameworks].filter(framework => !prevFrameworks.has(framework));
+    if (newFrameworks.length) {
+        messages.push(`New frameworks recorded: ${newFrameworks.slice(0, 5).join(', ')}.`);
+    }
+
+    return messages;
+}
+
 let getContextTelemetry = () => ({
     contextUsed: 0,
     contextLimit: 160000,
@@ -308,7 +432,7 @@ let getContextTelemetry = () => ({
     ultraThinkMode: 'api'
 });
 
-function evaluateAlignmentGate(slashCommand, originalCommand) {
+async function evaluateAlignmentGate(slashCommand, originalCommand) {
     const rules = CLI_ALIGNMENT_RULES[slashCommand];
     if (!rules) {
         return null;
@@ -334,6 +458,22 @@ function evaluateAlignmentGate(slashCommand, originalCommand) {
 
     if (rules.requireUltraThink && ultraThinkMode === 'api' && !ULTRATHINK_TRIGGER_REGEX.test(originalCommand)) {
         issues.push('UltraThink gating: append [[ ultrathink ]] to the command (e.g. `/spec [[ ultrathink ]]`) or switch modes via POST /api/ultrathink/mode {"mode":"max"} before retrying.');
+    }
+
+    if (approvalGatesManager) {
+        try {
+            const gateStatus = await approvalGatesManager.checkCommand(slashCommand);
+            if (!gateStatus.passed && gateStatus.missing.length) {
+                issues.push(
+                    'Approval gate(s) pending: ' +
+                    gateStatus.missing
+                        .map(entry => `${entry.label}${entry.description ? ` — ${entry.description}` : ''}`)
+                        .join('; ')
+                );
+            }
+        } catch (error) {
+            console.warn('[Opnix][approval-gates] command check failed:', error.message || error);
+        }
     }
 
     if (!issues.length) {
@@ -462,6 +602,37 @@ function toPosixPath(value) {
 }
 
 
+function deriveRunbookTemplateSelection(session) {
+    if (!session || !Array.isArray(session.responses)) {
+        return null;
+    }
+    const templateResponse = session.responses.find(entry => {
+        if (!entry || !entry.questionId) {
+            return false;
+        }
+        return /template/i.test(entry.questionId);
+    });
+    if (!templateResponse || !templateResponse.answer) {
+        return null;
+    }
+    return String(templateResponse.answer)
+        .split(/[,\n]/)
+        .map(value => value.trim())
+        .filter(Boolean)
+        .map(value => value.toLowerCase());
+}
+
+async function readContextHistorySnapshots() {
+    try {
+        const history = await sessionManager.readContextHistory();
+        return Array.isArray(history?.history) ? history.history : [];
+    } catch (error) {
+        console.warn('[Opnix][runbook] Unable to read context history:', error.message || error);
+        return [];
+    }
+}
+
+
 function logServerError(scope, error) {
     if (!error) {
         console.error(`[Opnix][${scope}] Unknown server error`);
@@ -536,6 +707,15 @@ async function handleSlashCommand(command) {
     }
 
     if (slash.toLowerCase() === '/answer') {
+        let previousTechStackSummary = null;
+        if (techStackManager && typeof techStackManager.getTechStackSummary === 'function') {
+            try {
+                previousTechStackSummary = await techStackManager.getTechStackSummary({ refresh: false });
+            } catch (error) {
+                console.warn('CLI tech stack summary baseline failed', error.message);
+            }
+        }
+
         const answerMatch = trimmed.match(/^\/answer\s+(\S+)\s+(\S+)\s+([\s\S]+)$/i);
         if (!answerMatch) {
             return {
@@ -571,6 +751,18 @@ async function handleSlashCommand(command) {
                 combinedArtifacts = [...combinedArtifacts, ...followUp.artifacts];
             }
 
+            if (techStackManager && ['spec', 'module'].includes(submission.session.category)) {
+                try {
+                    const refreshedSummary = await techStackManager.getTechStackSummary({ refresh: true });
+                    const deltaMessages = buildTechStackDeltaMessages(previousTechStackSummary, refreshedSummary);
+                    if (deltaMessages.length) {
+                        messages.push(...deltaMessages);
+                    }
+                } catch (error) {
+                    console.warn('CLI tech stack delta failed', error.message);
+                }
+            }
+
             const refreshedSession = await cliInterviewManager.getSession(submission.session.sessionId);
 
             return {
@@ -602,7 +794,7 @@ async function handleSlashCommand(command) {
         return { error: `Unknown slash command: ${slash}` };
     }
 
-    const alignmentGate = evaluateAlignmentGate(slash, trimmed);
+    const alignmentGate = await evaluateAlignmentGate(slash, trimmed);
     if (alignmentGate && alignmentGate.blocked) {
         await logCliAlignmentGate(slash, trimmed, alignmentGate);
         return {
@@ -610,6 +802,69 @@ async function handleSlashCommand(command) {
             gated: true,
             messages: alignmentGate.messages,
             diagnostics: alignmentGate.diagnostics
+        };
+    }
+
+    if (commandMeta.handler === 'constitution') {
+        try {
+            return await cliExtraCommands.handleConstitutionCommand(trimmed);
+        } catch (error) {
+            logServerError('cli:constitution', error);
+            return { error: 'Failed to prepare governance digest' };
+        }
+    }
+
+    if (commandMeta.handler === 'specify') {
+        try {
+            return await cliExtraCommands.handleSpecifyCommand(trimmed);
+        } catch (error) {
+            logServerError('cli:specify', error);
+            return { error: 'Failed to generate scoped specification' };
+        }
+    }
+
+    if (commandMeta.handler === 'branch') {
+        if (!cliBranchHandler) {
+            return { error: 'Branch handler not initialised' };
+        }
+        try {
+            const branchResponse = await cliBranchHandler.handleCommand(trimmed);
+            if (!branchResponse) {
+                return {
+                    result: 'Branch command',
+                    messages: ['Branch handler returned no response.']
+                };
+            }
+            if (!Array.isArray(branchResponse.messages)) {
+                branchResponse.messages = branchResponse.messages ? [branchResponse.messages] : [];
+            }
+            return branchResponse;
+        } catch (error) {
+            logServerError('cli:branch', error);
+            return { error: error.message || 'Failed to execute branch command' };
+        }
+    }
+
+    if (commandMeta.mode === 'staged') {
+        if (!cliStagedFlow) {
+            return { error: 'CLI staged flow not initialised' };
+        }
+
+        let stagedResponse;
+        if (commandMeta.stage === 'plan') {
+            stagedResponse = await cliStagedFlow.generatePlanStage();
+        } else if (commandMeta.stage === 'tasks') {
+            stagedResponse = await cliStagedFlow.generateTasksStage();
+        } else {
+            return { error: `Unsupported staged command: ${slash}` };
+        }
+
+        return {
+            result: stagedResponse.result,
+            messages: stagedResponse.messages,
+            artifacts: stagedResponse.artifacts,
+            staged: true,
+            metadata: stagedResponse.metadata || null
         };
     }
 
@@ -647,6 +902,41 @@ async function ensureCliArtifactsDirectory() {
         }
     }
 }
+
+const cliStagedFlow = createCliStagedFlow({
+    auditManager: {
+        runInitialAudit
+    },
+    cliInterviewManager,
+    ensureArtifactsDirectory: ensureCliArtifactsDirectory,
+    readData,
+    normaliseTicketStatus,
+    statusConstants: {
+        statusReported,
+        statusInProgress,
+        statusFinished,
+        priorityHigh,
+        priorityMedium,
+        priorityLow
+    },
+    rootDir: ROOT_DIR
+});
+
+const cliExtraCommands = createCliExtraCommands({
+    rootDir: ROOT_DIR,
+    cliArtifactsDir: cliInterviewManager.CLI_ARTIFACTS_DIR,
+    ensureCliArtifactsDirectory,
+    moduleDetector,
+    readData,
+    readFeaturesFile,
+    loadPackageJson,
+    ensureExportStructure,
+    EXPORT_SUBDIRS,
+    deriveTechStack,
+    inferProjectType,
+    inferPrimaryLanguage,
+    specGenerator
+});
 
 async function writeCliMarkdownArtifact(prefix, title, session) {
     await ensureCliArtifactsDirectory();
@@ -701,6 +991,42 @@ async function writeCliModuleSummary(session) {
     };
 }
 
+async function appendPlanStageIfAvailable({ collector = { messages: [], artifacts: [] }, flow = cliStagedFlow } = {}) {
+    if (!flow || typeof flow.generatePlanStage !== 'function') {
+        return null;
+    }
+    const planResult = await flow.generatePlanStage();
+    if (!planResult) {
+        return null;
+    }
+
+    if (planResult.messages && Array.isArray(planResult.messages) && planResult.messages.length) {
+        collector.messages.push(...planResult.messages);
+    }
+    if (planResult.artifacts && Array.isArray(planResult.artifacts) && planResult.artifacts.length) {
+        collector.artifacts.push(...planResult.artifacts);
+    }
+    return planResult;
+}
+
+async function appendTasksStageIfAvailable({ collector = { messages: [], artifacts: [] }, flow = cliStagedFlow } = {}) {
+    if (!flow || typeof flow.generateTasksStage !== 'function') {
+        return null;
+    }
+    const tasksResult = await flow.generateTasksStage();
+    if (!tasksResult) {
+        return null;
+    }
+
+    if (tasksResult.messages && Array.isArray(tasksResult.messages) && tasksResult.messages.length) {
+        collector.messages.push(...tasksResult.messages);
+    }
+    if (tasksResult.artifacts && Array.isArray(tasksResult.artifacts) && tasksResult.artifacts.length) {
+        collector.artifacts.push(...tasksResult.artifacts);
+    }
+    return tasksResult;
+}
+
 async function generateCliCategoryArtifacts(session) {
     if (!session || !session.category) {
         return { artifacts: [], messages: [] };
@@ -725,6 +1051,222 @@ async function generateCliCategoryArtifacts(session) {
             exportsList.forEach(item => {
                 messages.push(`Generated ${item.relativePath || item.path}`);
             });
+            const stagedCollector = { messages: [], artifacts: [] };
+            const sessionId = session?.sessionId || null;
+            const checkpointSessionId = sessionId || 'system';
+            let planResult = null;
+            let planChainRollback = null;
+            try {
+                planResult = await appendPlanStageIfAvailable({ collector: stagedCollector });
+            } catch (error) {
+                logServerError('cli:plan-stage', error);
+                stagedCollector.messages.push(`Plan stage failed: ${error.message || error}`);
+            }
+
+            if (planResult && planTaskChainer && typeof planTaskChainer.chainPlanToTasks === 'function') {
+                let preChainDataSnapshot = null;
+                try {
+                    try {
+                        const existing = await readData();
+                        preChainDataSnapshot = existing ? JSON.parse(JSON.stringify(existing)) : { tickets: [], nextId: null };
+                    } catch (snapshotError) {
+                        logServerError('cli:plan-chain-snapshot', snapshotError);
+                    }
+
+                    const planArtifact = Array.isArray(planResult.artifacts) && planResult.artifacts.length
+                        ? planResult.artifacts[0]
+                        : null;
+                    const planArtifactRelativePath = planArtifact?.relativePath
+                        || (planArtifact?.path ? path.relative(ROOT_DIR, planArtifact.path) : null);
+                    const chainResult = await planTaskChainer.chainPlanToTasks({
+                        planResult,
+                        sessionId,
+                        planArtifactRelativePath
+                    });
+                    if (chainResult) {
+                        const createdTicketIds = Array.isArray(chainResult.createdTickets)
+                            ? chainResult.createdTickets
+                                .map(ticket => ticket?.id)
+                                .filter(id => id !== undefined && id !== null)
+                            : [];
+                        if (preChainDataSnapshot && (createdTicketIds.length || chainResult.scaffold)) {
+                            planChainRollback = {
+                                checkpointId: null,
+                                snapshot: preChainDataSnapshot,
+                                createdTicketIds,
+                                scaffoldPath: chainResult.scaffold?.path || null,
+                                scaffoldRelativePath: chainResult.scaffold?.relativePath || null,
+                                planArtifactRelativePath
+                            };
+                            try {
+                                const checkpointPayload = {
+                                    stage: 'plan-chain',
+                                    ticketsBefore: Array.isArray(preChainDataSnapshot.tickets) ? preChainDataSnapshot.tickets : [],
+                                    nextIdBefore: preChainDataSnapshot.nextId ?? null,
+                                    createdTicketIds,
+                                    scaffoldRelativePath: chainResult.scaffold?.relativePath || null,
+                                    planArtifactRelativePath
+                                };
+                                planChainRollback.checkpointId = await checkpointManager.createCheckpoint(
+                                    checkpointSessionId,
+                                    checkpointPayload,
+                                    {
+                                        type: 'plan-chain',
+                                        description: 'Pre-implementation plan->task checkpoint',
+                                        critical: true,
+                                        context: {
+                                            sessionId,
+                                            planArtifactRelativePath,
+                                            createdTicketCount: createdTicketIds.length
+                                        }
+                                    }
+                                );
+                            } catch (checkpointError) {
+                                logServerError('cli:plan-chain-checkpoint', checkpointError);
+                            }
+                        }
+                        if (preImplementationDiscussionManager && typeof preImplementationDiscussionManager.ensureDiscussion === 'function') {
+                            try {
+                                const discussionResult = await preImplementationDiscussionManager.ensureDiscussion({
+                                    sessionId,
+                                    planArtifactRelativePath,
+                                    tasks: chainResult.tasks,
+                                    createdTicketIds,
+                                    planSummary: planResult?.summary || planResult?.metadata?.summary || null,
+                                    checkpointId: planChainRollback?.checkpointId || null
+                                });
+                                if (discussionResult?.created) {
+                                    stagedCollector.messages.push('Pre-implementation discussion checkpoint created — capture review notes via /api/pre-implementation-discussions.');
+                                }
+                            } catch (discussionError) {
+                                logServerError('cli:pre-implementation-discussion', discussionError);
+                            }
+                        }
+                        if (Array.isArray(chainResult.createdTickets) && chainResult.createdTickets.length) {
+                            const createdCount = chainResult.createdTickets.length;
+                            stagedCollector.messages.push(`${createdCount} ticket${createdCount === 1 ? '' : 's'} created from plan chaining.`);
+                        }
+                        if (chainResult.scaffold) {
+                            stagedCollector.artifacts.push({
+                                type: 'plan-task-scaffold',
+                                path: chainResult.scaffold.path,
+                                relativePath: chainResult.scaffold.relativePath,
+                                description: 'Plan-derived task queue'
+                            });
+                            stagedCollector.messages.push(`Plan tasks saved to ${chainResult.scaffold.relativePath}`);
+                        }
+                        if (implementationChainer && typeof implementationChainer.chainTasksToImplementation === 'function' && Array.isArray(chainResult.tasks) && chainResult.tasks.length) {
+                            try {
+                                const implementationResult = await implementationChainer.chainTasksToImplementation({
+                                    tasks: chainResult.tasks,
+                                    sessionId,
+                                    planArtifactRelativePath,
+                                    planTasksScaffold: chainResult.scaffold?.relativePath || null
+                                });
+
+                                if (implementationResult?.workspaces?.length) {
+                                    implementationResult.workspaces.forEach(workspace => {
+                                        if (workspace.relativePath) {
+                                            stagedCollector.artifacts.push({
+                                                type: 'workspace',
+                                                path: path.join(ROOT_DIR, workspace.relativePath),
+                                                relativePath: workspace.relativePath,
+                                                description: `Workspace for ${workspace.title || `ticket ${workspace.ticketId ?? 'N/A'}`}`
+                                            });
+                                        }
+                                        stagedCollector.messages.push(`Workspace created for ${workspace.branchName}: ${workspace.relativePath}`);
+                                        if (workspace.branchScript) {
+                                            stagedCollector.messages.push(`Branch helper script ready: ${workspace.branchScript}`);
+                                        }
+                                    });
+                                }
+
+                                if (implementationResult?.manifestPath) {
+                                    stagedCollector.messages.push(`Workspace manifest updated: ${implementationResult.manifestPath}`);
+                                }
+                            } catch (error) {
+                                logServerError('cli:implementation-chain', error);
+                                stagedCollector.messages.push(`Task-to-implementation chaining failed: ${error.message || error}`);
+                                if (planChainRollback && Array.isArray(planChainRollback.createdTicketIds) && planChainRollback.createdTicketIds.length) {
+                                    try {
+                                        if (planChainRollback.snapshot) {
+                                            await writeData(planChainRollback.snapshot);
+                                            stagedCollector.messages.push('Restored ticket store from pre-plan checkpoint after implementation failure.');
+                                        }
+                                        if (planChainRollback.scaffoldPath) {
+                                            try {
+                                                const scaffoldAbsolute = path.isAbsolute(planChainRollback.scaffoldPath)
+                                                    ? planChainRollback.scaffoldPath
+                                                    : path.join(ROOT_DIR, planChainRollback.scaffoldPath);
+                                                await fsPromises.rm(scaffoldAbsolute, { force: true });
+                                                stagedCollector.messages.push('Removed plan-task scaffold created before failure.');
+                                            } catch (scaffoldError) {
+                                                logServerError('cli:rollback-scaffold', scaffoldError);
+                                            }
+                                        }
+                                    } catch (rollbackError) {
+                                        logServerError('cli:rollback-tickets', rollbackError);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (error) {
+                    logServerError('cli:plan-chain', error);
+                    stagedCollector.messages.push(`Plan-to-task chaining failed: ${error.message || error}`);
+                    if (preChainDataSnapshot) {
+                        try {
+                            await writeData(preChainDataSnapshot);
+                            stagedCollector.messages.push('Reverted ticket store to state before plan->task chaining attempt.');
+                        } catch (rollbackError) {
+                            logServerError('cli:plan-chain-rollback', rollbackError);
+                        }
+                    }
+                }
+            }
+
+            try {
+                await appendTasksStageIfAvailable({ collector: stagedCollector });
+            } catch (error) {
+                logServerError('cli:tasks-stage', error);
+                stagedCollector.messages.push(`Task stage failed: ${error.message || error}`);
+            }
+
+            artifacts.push(...stagedCollector.artifacts);
+            messages.push(...stagedCollector.messages);
+
+            try {
+                await ensureExportStructure();
+                const [modulesResult, ticketData, packageJson] = await Promise.all([
+                    moduleDetector.detectModules(__dirname),
+                    readData(),
+                    loadPackageJson()
+                ]);
+                const tickets = Array.isArray(ticketData.tickets) ? ticketData.tickets : [];
+                const techStack = deriveTechStack(packageJson || {}, modulesResult.modules);
+                const projectName = (packageJson && packageJson.name)
+                    || (Array.isArray(session.responses)
+                        ? session.responses.find(entry => entry.questionId === 'project-name')?.answer
+                        : null)
+                    || 'Opnix Project';
+                const contextHistory = await readContextHistorySnapshots();
+                const runbookMeta = await runbookGenerator.generateRunbook({
+                    projectName,
+                    session,
+                    modulesResult,
+                    tickets,
+                    techStack,
+                    exportsDir: EXPORT_SUBDIRS.runbooks,
+                    templates: runbookTemplates.defaultTemplates(),
+                    contextHistory
+                });
+                const normalisedRunbook = withRelativePath(runbookMeta);
+                artifacts.push(normalisedRunbook);
+                messages.push(`Runbook drafted at ${normalisedRunbook.relativePath}`);
+            } catch (error) {
+                logServerError('cli:runbook-auto', error);
+                messages.push('Runbook automation warning: generation failed (see server logs).');
+            }
         } else if (category === 'feature') {
             const featureSummary = await writeCliMarkdownArtifact('feature-plan', 'Feature Interview Plan', session);
             artifacts.push(featureSummary);
@@ -747,13 +1289,17 @@ async function generateCliCategoryArtifacts(session) {
                     ? session.responses.find(entry => entry.questionId === 'project-name')?.answer
                     : null)
                 || 'Opnix Project';
+            const templateSelection = deriveRunbookTemplateSelection(session) || runbookTemplates.defaultTemplates();
+            const contextHistory = await readContextHistorySnapshots();
             const runbookMeta = await runbookGenerator.generateRunbook({
                 projectName,
                 session,
                 modulesResult,
                 tickets,
                 techStack,
-                exportsDir: EXPORT_SUBDIRS.runbooks
+                exportsDir: EXPORT_SUBDIRS.runbooks,
+                templates: templateSelection,
+                contextHistory
             });
             const normalisedRunbook = withRelativePath(runbookMeta);
             artifacts.push(normalisedRunbook);
@@ -772,6 +1318,25 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(compression({ threshold: 1024 }));
+
+// Status tracking middleware
+app.use(healthCheckMiddleware);
+app.use(addStatusContext);
+app.use(trackTokenUsage);
+
+// Bulk operations dependencies middleware
+app.use((req, res, next) => {
+    req.bulkOpsDeps = {
+        readData,
+        writeData,
+        readFeaturesFile,
+        writeFeaturesFile,
+        validateTicketStatusChange,
+        validateFeatureStatusChange,
+        syncRoadmapState
+    };
+    next();
+});
 app.use(createRootRoutes({
     rootDir: ROOT_DIR,
     port: PORT
@@ -869,7 +1434,8 @@ app.use(createAgentsRoutes({
     runInitialAudit,
     handleSlashCommand,
     logServerError,
-    AGENTS_DIR
+    AGENTS_DIR,
+    agentHandoffManager
 }));
 app.use(createInterviewsRoutes());
 app.use(createChecklistsRoutes({
@@ -881,6 +1447,23 @@ app.use(createChecklistsRoutes({
     validateChecklistStatusChange,
     normaliseStatusHook
 }));
+app.use(createTechStackRoutes({ techStackManager }));
+app.use('/api/recovery', recoveryRoutes);
+app.use('/api/sessions', sessionsRoutes);
+app.use('/api/approvals', createApprovalGatesRoutes({
+    approvalGatesManager,
+    discussionManager: preImplementationDiscussionManager
+}));
+app.use('/api/pre-implementation-discussions', createPreImplementationDiscussionRoutes({
+    discussionManager: preImplementationDiscussionManager,
+    approvalGatesManager
+}));
+app.use('/api/preferences', preferencesRoutes);
+app.use('/api/task-logs', taskLogsRoutes);
+app.use('/api/status', statusDashboardRoutes);
+app.use('/api/bulk', bulkOperationsRoutes);
+app.use('/api/progress', progressRoutes);
+app.use('/api/branches', branchesRoutes);
 app.use(createDocsRoutes({
     rootDir: ROOT_DIR,
     docsGenerator,
@@ -915,7 +1498,8 @@ app.use(createSpecRoutes({
     toPosixPath,
     withRelativePath,
     cliInterviewManager,
-    generateCliCategoryArtifacts
+    generateCliCategoryArtifacts,
+    cliExtraCommands
 }));
 app.use(createProgressiveRoutes({
     initializeProgressiveSystem,
@@ -1043,6 +1627,37 @@ async function writeData(data) {
     await fsPromises.writeFile(DATA_FILE, JSON.stringify(payload, null, 2));
     return payload;
 }
+
+planTaskChainer = createPlanTaskChainer({
+    readData,
+    writeData,
+    scaffoldRoot: SCAFFOLD_ROOT,
+    rootDir: ROOT_DIR,
+    statusConstants: {
+        statusReported,
+        statusInProgress,
+        statusFinished,
+        priorityLow,
+        priorityMedium,
+        priorityHigh
+    },
+    logger: console
+});
+
+implementationChainer = createImplementationChainer({
+    rootDir: ROOT_DIR,
+    workspaceRoot: path.join(ROOT_DIR, '.opnix', 'workspaces'),
+    logger: console,
+    approvalGatesManager
+});
+cliBranchHandler = createCliBranchHandler({
+    rootDir: ROOT_DIR,
+    workspaceRoot: path.join(ROOT_DIR, '.opnix', 'workspaces'),
+    execAsync,
+    fsImpl: fsPromises,
+    logger: console,
+    approvalGatesManager
+});
 
 async function ensureDirectory(dirPath) {
     try {
@@ -1421,6 +2036,37 @@ async function runInitialProgressiveAnalysis() {
     }
 }
 
+// Initialize auto-recovery system
+async function initializeAutoRecoverySystem() {
+    try {
+        console.log('🔄 Initializing auto-recovery system...');
+
+        // Initialize checkpoint manager
+        checkpointManager.initialize();
+
+        // Detect and restore any interrupted sessions
+        const restoredSessions = await sessionRestoration.detectAndRestoreInterruptedSessions();
+
+        if (restoredSessions.length > 0) {
+            console.log(`🔄 Auto-recovery: Restored ${restoredSessions.length} interrupted sessions`);
+            restoredSessions.forEach(session => {
+                console.log(`   ↳ Session ${session.sessionId} (${session.category || 'unknown'})`);
+            });
+        } else {
+            console.log('🔄 Auto-recovery: No interrupted sessions found');
+        }
+
+        // Start background cleanup tasks
+        checkpointManager.startPeriodicCleanup();
+
+        console.log('✅ Auto-recovery system initialized successfully');
+
+    } catch (error) {
+        console.error('⚠️  Auto-recovery system initialization failed:', error.message);
+        // Non-blocking - server should still start even if recovery fails
+    }
+}
+
 // Start server
 async function start() {
     await initDataFile();
@@ -1503,7 +2149,79 @@ async function start() {
         process.exit(0);
     });
 
-    app.listen(PORT, () => {
+    const server = http.createServer(app);
+    const wss = new WebSocket.Server({ noServer: true });
+
+    server.on('upgrade', (request, socket, head) => {
+        const pathname = new URL(request.url, `http://${request.headers.host}`).pathname;
+
+        if (pathname === '/api/terminal') {
+            wss.handleUpgrade(request, socket, head, (ws) => {
+                wss.emit('connection', ws, request);
+            });
+        } else {
+            socket.destroy();
+        }
+    });
+
+    wss.on('connection', (ws) => {
+        const terminalId = `term-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+        console.log(`Terminal ${terminalId} connected`);
+
+        try {
+            const ptyProcess = terminalManager.createTerminal(terminalId, ws, {
+                cols: 80,
+                rows: 24
+            });
+
+            ws.on('message', (data) => {
+                try {
+                    const message = JSON.parse(data);
+
+                    if (message.type === 'input') {
+                        terminalManager.writeToTerminal(terminalId, message.data);
+                    } else if (message.type === 'resize') {
+                        terminalManager.resizeTerminal(terminalId, message.cols, message.rows);
+                    }
+                } catch (error) {
+                    console.error('Error processing terminal message:', error);
+                }
+            });
+
+            ws.on('close', () => {
+                console.log(`Terminal ${terminalId} disconnected`);
+                terminalManager.killTerminal(terminalId);
+            });
+
+            ws.on('error', (error) => {
+                console.error(`Terminal ${terminalId} error:`, error);
+                terminalManager.killTerminal(terminalId);
+            });
+        } catch (error) {
+            console.error('Error creating terminal:', error);
+            ws.close();
+        }
+    });
+
+    process.on('SIGTERM', () => {
+        console.log('SIGTERM received, cleaning up terminals...');
+        terminalManager.cleanup();
+        server.close(() => {
+            console.log('Server closed');
+            process.exit(0);
+        });
+    });
+
+    process.on('SIGINT', () => {
+        console.log('SIGINT received, cleaning up terminals...');
+        terminalManager.cleanup();
+        server.close(() => {
+            console.log('Server closed');
+            process.exit(0);
+        });
+    });
+
+    server.listen(PORT, async () => {
         console.log(`
 ╔══════════════════════════════════════════╗
 ║           OPNIX v1.0 - OPERATIONAL        ║
@@ -1515,6 +2233,9 @@ async function start() {
 📦 Modules: curl http://localhost:${PORT}/api/modules/detect
 ❓ Progressive: curl http://localhost:${PORT}/api/progressive/status
 ⚡ Execute: curl http://localhost:${PORT}/api/claude/execute
+🔄 Recovery: curl http://localhost:${PORT}/api/recovery/status
+📝 Task Logs: curl http://localhost:${PORT}/api/task-logs/cli/summary
+📊 Status Dashboard: curl http://localhost:${PORT}/api/status/complete
 📄 Export: curl http://localhost:${PORT}/api/export/markdown
 📊 Context: curl http://localhost:${PORT}/api/context/status
 
@@ -1551,6 +2272,18 @@ Real Functionality:
                     console.error('🎨 Storybook: Auto-start failed:', error);
                 });
         }, 2000); // Wait 2 seconds after server starts
+
+        // Initialize auto-recovery system on server startup
+        setTimeout(() => {
+            initializeAutoRecoverySystem().catch(err => {
+                console.error('Auto-recovery system initialization failed:', err.message);
+            });
+        }, 1000); // Start recovery early, before other services
+
+        // Initialize status dashboard tracking
+        setTimeout(() => {
+            initializeStatusTracking();
+        }, 1500); // Start after recovery system
     });
 }
 
@@ -1606,3 +2339,5 @@ module.exports = {
     readRoadmapState,
     writeRoadmapState
 };
+
+module.exports.__internals = { appendPlanStageIfAvailable, appendTasksStageIfAvailable };

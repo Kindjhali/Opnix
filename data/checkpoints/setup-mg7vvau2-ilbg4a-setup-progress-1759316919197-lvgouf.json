@@ -1,0 +1,35 @@
+{
+  "id": "setup-mg7vvau2-ilbg4a-setup-progress-1759316919197-lvgouf",
+  "sessionId": "setup-mg7vvau2-ilbg4a",
+  "type": "setup-progress",
+  "description": "Setup state loaded",
+  "critical": false,
+  "timestamp": "2025-10-01T11:08:39.197Z",
+  "context": {
+    "phase": "state-loaded"
+  },
+  "data": {
+    "phase": "state-loaded",
+    "state": {
+      "lastSelectedMode": "new",
+      "history": [
+        {
+          "mode": "new",
+          "timestamp": "2025-10-01T11:08:39.052Z",
+          "output": "spec/revision/opnix-new-project-scope-2025-10-01T11-08-39-031Z.md"
+        },
+        {
+          "mode": "new",
+          "timestamp": "2025-10-01T11:08:38.791Z",
+          "output": "spec/revision/opnix-new-project-scope-2025-10-01T11-08-38-769Z.md"
+        }
+      ]
+    },
+    "cliOptions": {
+      "mode": "new",
+      "nonInteractive": true
+    },
+    "timestamp": "2025-10-01T11:08:39.197Z"
+  },
+  "version": "1.0.0"
+}

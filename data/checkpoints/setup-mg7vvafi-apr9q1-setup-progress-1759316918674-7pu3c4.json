@@ -1,0 +1,24 @@
+{
+  "id": "setup-mg7vvafi-apr9q1-setup-progress-1759316918674-7pu3c4",
+  "sessionId": "setup-mg7vvafi-apr9q1",
+  "type": "setup-progress",
+  "description": "Setup state loaded",
+  "critical": false,
+  "timestamp": "2025-10-01T11:08:38.674Z",
+  "context": {
+    "phase": "state-loaded"
+  },
+  "data": {
+    "phase": "state-loaded",
+    "state": {
+      "lastSelectedMode": null,
+      "history": []
+    },
+    "cliOptions": {
+      "mode": "new",
+      "nonInteractive": true
+    },
+    "timestamp": "2025-10-01T11:08:38.674Z"
+  },
+  "version": "1.0.0"
+}

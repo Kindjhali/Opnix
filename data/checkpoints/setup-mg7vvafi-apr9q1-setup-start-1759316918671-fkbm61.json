@@ -1,0 +1,16 @@
+{
+  "id": "setup-mg7vvafi-apr9q1-setup-start-1759316918671-fkbm61",
+  "sessionId": "setup-mg7vvafi-apr9q1",
+  "type": "setup-start",
+  "description": "Setup wizard initialization",
+  "critical": true,
+  "timestamp": "2025-10-01T11:08:38.671Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-01T11:08:38.670Z"
+  },
+  "version": "1.0.0"
+}

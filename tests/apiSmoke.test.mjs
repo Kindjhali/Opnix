@@ -7,6 +7,8 @@ import {
   listExportFiles
 } from '../server.js';
 import { invokeRoute } from './helpers/invokeRoute.mjs';
+import { stopRoadmapSyncWatchers } from '../services/roadmapSyncWatcher.js';
+import questionFileWatcher from '../services/questionFileWatcher.js';
 
 (async () => {
   await ensureDataDirectory();
@@ -87,6 +89,28 @@ import { invokeRoute } from './helpers/invokeRoute.mjs';
   assert.equal(apiSpecTest.statusCode, 200, 'api spec test should respond with 200');
   assert(Array.isArray(apiSpecTest.body.results), 'api spec test should return results array');
 
+  const scopedSpec = await invokeRoute(app, {
+    method: 'POST',
+    path: '/api/specs/export/scoped',
+    body: { includeSections: ['modules'], format: 'json' }
+  });
+  assert.equal(scopedSpec.statusCode, 200, 'scoped spec export should respond with 200');
+  assert.equal(scopedSpec.body.success, true, 'scoped spec export should indicate success');
+  assert(scopedSpec.body.artifact && scopedSpec.body.artifact.filename, 'scoped spec export should include artifact metadata');
+
+  const constitutionDigest = await invokeRoute(app, {
+    method: 'POST',
+    path: '/api/runbooks/constitution',
+    body: { docs: ['agents', 'claude'], excerptLines: 5 }
+  });
+  if (constitutionDigest.statusCode === 200) {
+    assert.equal(constitutionDigest.body.success, true, 'constitution digest should indicate success when documents exist');
+    assert(constitutionDigest.body.artifact && constitutionDigest.body.artifact.filename, 'constitution digest should include artifact metadata');
+    assert(Array.isArray(constitutionDigest.body.includedDocs), 'constitution digest should list included docs');
+  } else {
+    assert.equal(constitutionDigest.statusCode, 404, 'constitution digest should return 404 only when documents are missing');
+  }
+
   const exportsListing = await invokeRoute(app, { method: 'GET', path: '/api/exports' });
   assert(Array.isArray(exportsListing.body.files), 'exports endpoint should return file array');
 
@@ -104,5 +128,14 @@ import { invokeRoute } from './helpers/invokeRoute.mjs';
   const snapshot = await listExportFiles();
   assert(Array.isArray(snapshot), 'listExportFiles helper should return array');
 
+  // Cleanup watchers to allow process to exit
+  try {
+    await stopRoadmapSyncWatchers();
+    questionFileWatcher.stop();
+  } catch (error) {
+    console.warn('Warning: Failed to cleanup watchers:', error.message);
+  }
+
   console.log('apiSmoke tests passed');
+  process.exit(0);
 })();

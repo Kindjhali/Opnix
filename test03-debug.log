@@ -1,0 +1,50 @@
+
+Running 1 test using 1 worker
+
+Current theme: mole
+Clicking CANYON button
+Browser console error: Refused to apply style from 'http://localhost:7337/css/theme-canyon.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.
+Browser console error: Theme load failed Error: Failed to load stylesheet for theme "canyon"
+    at HTMLLinkElement.h (http://localhost:7337/assets/main.js:516:1445)
+Click result: { clicked: [33mtrue[39m, theme: [32m'mole'[39m }
+Browser console error: Refused to apply style from 'http://localhost:7337/css/theme-mole.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.
+  ✘  1 [chromium] › tests/e2e/full-user-journey.spec.js:58:7 › Opnix Complete User Journey › 03 - Theme switcher functionality (11.5s)
+[31mTesting stopped early after 1 maximum allowed failures.[39m
+
+
+  1) [chromium] › tests/e2e/full-user-journey.spec.js:58:7 › Opnix Complete User Journey › 03 - Theme switcher functionality 
+
+    TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.
+
+       95 |
+       96 |       // Wait for theme attribute to actually change (theme loading is async)
+    >  97 |       await page.waitForFunction(
+          |                  ^
+       98 |         (expectedTheme) => {
+       99 |           const currentTheme = document.body.getAttribute('data-theme');
+      100 |           return currentTheme !== expectedTheme;
+        at /home/aaron/opnix/tests/e2e/full-user-journey.spec.js:97:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/full-user-journey-Opnix-Co-ac425-heme-switcher-functionality-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests/e2e/full-user-journey.spec.js:58:7 › Opnix Complete User Journey › 03 - Theme switcher functionality 
+  1 error was not a part of any test, see above for details
+
+[36m  Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.[39m

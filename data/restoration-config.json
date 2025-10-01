@@ -1,0 +1,7 @@
+{
+  "autoRestore": true,
+  "restoreOnStartup": true,
+  "maxRecoveryAge": 86400000,
+  "requireUserConfirmation": false,
+  "preferCriticalCheckpoints": true
+}

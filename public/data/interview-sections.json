@@ -17,6 +17,7 @@
     "documentation-enablement",
     "canvas-strategy",
     "modules-governance",
+    "module-tech-stack",
     "features-grooming",
     "bugs-readiness",
     "api-readiness",
@@ -160,6 +161,19 @@
           "required": true
         },
         {
+          "id": "project-status",
+          "prompt": "Is this a new build, modernization, or ongoing enhancement?",
+          "type": "select",
+          "options": [
+            "New Build",
+            "Existing System Enhancement",
+            "Migration/Rewrite",
+            "Pilot/Experiment"
+          ],
+          "placeholder": "Select current project lifecycle",
+          "required": true
+        },
+        {
           "id": "project-purpose",
           "prompt": "What problem does this initiative solve and for which users or customers?",
           "type": "textarea",
@@ -181,7 +195,8 @@
           "required": true
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "stakeholders": {
       "title": "Stakeholders & Governance",
@@ -223,7 +238,8 @@
           "required": false
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "outcomes": {
       "title": "Success Criteria",
@@ -251,7 +267,8 @@
           "required": false
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "scope-boundaries": {
       "title": "Scope: In & Out",
@@ -279,7 +296,8 @@
           "required": true
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "constraints": {
       "title": "Constraints & Non-Negotiables",
@@ -307,7 +325,8 @@
           "required": false
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "architecture-baseline": {
       "title": "Architecture Baseline",
@@ -335,7 +354,8 @@
           "required": false
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "runtime-decisions": {
       "title": "Runtime & Framework Decisions",
@@ -375,7 +395,8 @@
           "required": false
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "data-domain": {
       "title": "Data & Domain",
@@ -410,7 +431,8 @@
           "required": false
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "integrations": {
       "title": "Integrations",
@@ -438,7 +460,8 @@
           "required": true
         }
       ],
-      "category": "api"
+      "category": "api",
+      "context": "project"
     },
     "security-compliance": {
       "title": "Security & Compliance",
@@ -473,7 +496,8 @@
           "required": false
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "quality-strategy": {
       "title": "Quality & Testing",
@@ -501,7 +525,8 @@
           "required": true
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "operations-reliability": {
       "title": "Operations & Reliability",
@@ -550,7 +575,8 @@
           "required": true
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "deployment-release": {
       "title": "Deployment & Release",
@@ -578,7 +604,8 @@
           "required": true
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "ai-recovery": {
       "title": "AI Remediation & Safeguards",
@@ -606,7 +633,8 @@
           "required": true
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "documentation-enablement": {
       "title": "Documentation & Enablement",
@@ -634,7 +662,8 @@
           "required": true
         }
       ],
-      "category": "docs"
+      "category": "docs",
+      "context": "project"
     },
     "canvas-strategy": {
       "title": "Canvas Dependency Strategy",
@@ -644,7 +673,7 @@
           "id": "canvas-ownership-model",
           "prompt": "Who is accountable for keeping the canvas accurate and how often is it reviewed?",
           "type": "textarea",
-          "placeholder": "Architecture guild reviews weekly, platform team signs off pre-release, automated checks in CI/CD…",
+          "placeholder": "Architecture guild reviews weekly, platform team signs off pre-release, automated checks in CI/CD\u2026",
           "required": true
         },
         {
@@ -655,7 +684,8 @@
           "required": true
         }
       ],
-      "category": "module"
+      "category": "module",
+      "context": "module"
     },
     "modules-governance": {
       "title": "Module Governance",
@@ -665,7 +695,7 @@
           "id": "module-ownership-matrix",
           "prompt": "Map modules to owning teams and outline escalation paths when dependencies degrade.",
           "type": "textarea",
-          "placeholder": "List module → squad, secondary contacts, escalation SLAs, and change approval requirements.",
+          "placeholder": "List module \u2192 squad, secondary contacts, escalation SLAs, and change approval requirements.",
           "required": true
         },
         {
@@ -676,7 +706,46 @@
           "required": true
         }
       ],
-      "category": "module"
+      "category": "module",
+      "context": "module"
+    },
+    "module-tech-stack": {
+      "title": "Module Tech Stack",
+      "description": "Capture language, framework, and integration expectations for individual modules.",
+      "questions": [
+        {
+          "id": "module-primary-language",
+          "prompt": "What is the primary language for this module?",
+          "type": "select",
+          "options": [
+            "JavaScript",
+            "TypeScript",
+            "Python",
+            "Java",
+            "Go",
+            "Rust",
+            "Other"
+          ],
+          "placeholder": "Choose dominant language for this module",
+          "required": true
+        },
+        {
+          "id": "module-frameworks",
+          "prompt": "List core frameworks, libraries, or SDKs the module depends on.",
+          "type": "textarea",
+          "placeholder": "e.g., NestJS, Prisma, GraphQL client, shared design system.",
+          "required": false
+        },
+        {
+          "id": "module-integration-points",
+          "prompt": "Identify critical external services or APIs this module integrates with.",
+          "type": "textarea",
+          "placeholder": "Upstream/downstream services, third-party APIs, data pipelines.",
+          "required": false
+        }
+      ],
+      "category": "module",
+      "context": "module"
     },
     "features-grooming": {
       "title": "Feature Grooming & Delivery",
@@ -686,7 +755,7 @@
           "id": "feature-intake-workflow",
           "prompt": "Describe the intake workflow from ideation to sprint-ready feature stories.",
           "type": "textarea",
-          "placeholder": "Product triage → discovery docs → design review → technical spike → sprint backlog.",
+          "placeholder": "Product triage \u2192 discovery docs \u2192 design review \u2192 technical spike \u2192 sprint backlog.",
           "required": true
         },
         {
@@ -697,7 +766,8 @@
           "required": true
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "project"
     },
     "bugs-readiness": {
       "title": "Bug Response Readiness",
@@ -718,7 +788,8 @@
           "required": true
         }
       ],
-      "category": "bug"
+      "category": "bug",
+      "context": "project"
     },
     "api-readiness": {
       "title": "API Readiness & Monitoring",
@@ -739,7 +810,8 @@
           "required": true
         }
       ],
-      "category": "api"
+      "category": "api",
+      "context": "project"
     },
     "diagrams-expectations": {
       "title": "Diagram Expectations",
@@ -760,7 +832,8 @@
           "required": true
         }
       ],
-      "category": "diagram"
+      "category": "diagram",
+      "context": "project"
     },
     "specs-distribution": {
       "title": "Spec Distribution & Review",
@@ -781,7 +854,8 @@
           "required": true
         }
       ],
-      "category": "docs"
+      "category": "docs",
+      "context": "project"
     },
     "docs-governance": {
       "title": "Docs Governance",
@@ -802,7 +876,8 @@
           "required": true
         }
       ],
-      "category": "docs"
+      "category": "docs",
+      "context": "project"
     },
     "audit-readiness": {
       "title": "Spec & Audit Readiness",
@@ -823,7 +898,8 @@
           "required": true
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "risks-assumptions": {
       "title": "Risks, Assumptions & Open Questions",
@@ -851,7 +927,8 @@
           "required": true
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "web-experience": {
       "title": "Web Experience",
@@ -879,7 +956,8 @@
           "required": true
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "project"
     },
     "accessibility-seo": {
       "title": "Accessibility & Discoverability",
@@ -900,7 +978,8 @@
           "required": false
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "project"
     },
     "content-workflow": {
       "title": "Content Workflow",
@@ -914,7 +993,8 @@
           "required": false
         }
       ],
-      "category": "spec"
+      "category": "spec",
+      "context": "project"
     },
     "api-contracts": {
       "title": "API Contracts",
@@ -942,7 +1022,8 @@
           "required": true
         }
       ],
-      "category": "api"
+      "category": "api",
+      "context": "project"
     },
     "api-observability": {
       "title": "API Observability",
@@ -963,7 +1044,8 @@
           "required": false
         }
       ],
-      "category": "api"
+      "category": "api",
+      "context": "project"
     },
     "api-governance": {
       "title": "API Governance",
@@ -984,7 +1066,8 @@
           "required": true
         }
       ],
-      "category": "api"
+      "category": "api",
+      "context": "project"
     },
     "mobile-delivery": {
       "title": "Mobile Delivery",
@@ -1005,7 +1088,8 @@
           "required": true
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "project"
     },
     "mobile-experience": {
       "title": "Mobile Experience",
@@ -1026,7 +1110,8 @@
           "required": false
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "project"
     },
     "device-support": {
       "title": "Device & OS Support",
@@ -1040,7 +1125,8 @@
           "required": true
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "project"
     },
     "desktop-distribution": {
       "title": "Desktop Distribution",
@@ -1061,7 +1147,8 @@
           "required": true
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "hardware-dependencies": {
       "title": "Hardware & Peripheral Dependencies",
@@ -1075,7 +1162,8 @@
           "required": false
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "desktop-support": {
       "title": "Support & IT Integration",
@@ -1089,7 +1177,8 @@
           "required": true
         }
       ],
-      "category": "runbook"
+      "category": "runbook",
+      "context": "project"
     },
     "package-distribution": {
       "title": "Package Distribution",
@@ -1110,7 +1199,8 @@
           "required": false
         }
       ],
-      "category": "module"
+      "category": "module",
+      "context": "module"
     },
     "versioning-governance": {
       "title": "Versioning & Backward Compatibility",
@@ -1131,7 +1221,8 @@
           "required": true
         }
       ],
-      "category": "module"
+      "category": "module",
+      "context": "module"
     },
     "adoption-readiness": {
       "title": "Adoption & Support",
@@ -1152,7 +1243,8 @@
           "required": true
         }
       ],
-      "category": "docs"
+      "category": "docs",
+      "context": "project"
     },
     "frontend-state-management": {
       "title": "Frontend State & Composition",
@@ -1173,7 +1265,8 @@
           "required": false
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "module"
     },
     "edge-rendering": {
       "title": "Edge Rendering & Caching",
@@ -1187,7 +1280,8 @@
           "required": true
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "module"
     },
     "frontend-architecture": {
       "title": "Angular Architecture Decisions",
@@ -1201,7 +1295,8 @@
           "required": true
         }
       ],
-      "category": "feature"
+      "category": "feature",
+      "context": "module"
     }
   },
   "sectionCategories": {
@@ -1222,6 +1317,7 @@
     "documentation-enablement": "docs",
     "canvas-strategy": "module",
     "modules-governance": "module",
+    "module-tech-stack": "module",
     "features-grooming": "feature",
     "bugs-readiness": "bug",
     "api-readiness": "api",
@@ -1248,5 +1344,51 @@
     "frontend-state-management": "feature",
     "edge-rendering": "feature",
     "frontend-architecture": "feature"
+  },
+  "sectionContexts": {
+    "foundation": "project",
+    "stakeholders": "project",
+    "outcomes": "project",
+    "scope-boundaries": "project",
+    "constraints": "project",
+    "architecture-baseline": "project",
+    "runtime-decisions": "project",
+    "data-domain": "project",
+    "integrations": "project",
+    "security-compliance": "project",
+    "quality-strategy": "project",
+    "operations-reliability": "project",
+    "deployment-release": "project",
+    "ai-recovery": "project",
+    "documentation-enablement": "project",
+    "canvas-strategy": "module",
+    "modules-governance": "module",
+    "module-tech-stack": "module",
+    "features-grooming": "project",
+    "bugs-readiness": "project",
+    "api-readiness": "project",
+    "diagrams-expectations": "project",
+    "specs-distribution": "project",
+    "docs-governance": "project",
+    "audit-readiness": "project",
+    "risks-assumptions": "project",
+    "web-experience": "project",
+    "accessibility-seo": "project",
+    "content-workflow": "project",
+    "api-contracts": "project",
+    "api-observability": "project",
+    "api-governance": "project",
+    "mobile-delivery": "project",
+    "mobile-experience": "project",
+    "device-support": "project",
+    "desktop-distribution": "project",
+    "hardware-dependencies": "project",
+    "desktop-support": "project",
+    "package-distribution": "module",
+    "versioning-governance": "module",
+    "adoption-readiness": "project",
+    "frontend-state-management": "module",
+    "edge-rendering": "module",
+    "frontend-architecture": "module"
   }
 }

@@ -1,0 +1,1099 @@
+innerError Error: Cannot find module '../build/Debug/pty.node'
+Require stack:
+- /home/aaron/opnix/node_modules/.pnpm/node-pty@1.0.0/node_modules/node-pty/lib/unixTerminal.js
+- /home/aaron/opnix/node_modules/.pnpm/node-pty@1.0.0/node_modules/node-pty/lib/index.js
+- /home/aaron/opnix/services/terminalPty.js
+- /home/aaron/opnix/server.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Module._load (node:internal/modules/cjs/loader:1038:27)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (/home/aaron/opnix/node_modules/.pnpm/node-pty@1.0.0/node_modules/node-pty/lib/unixTerminal.js:34:15)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/aaron/opnix/node_modules/.pnpm/node-pty@1.0.0/node_modules/node-pty/lib/unixTerminal.js',
+    '/home/aaron/opnix/node_modules/.pnpm/node-pty@1.0.0/node_modules/node-pty/lib/index.js',
+    '/home/aaron/opnix/services/terminalPty.js',
+    '/home/aaron/opnix/server.js'
+  ]
+}
+[terminalPty] node-pty unavailable: Cannot find module '../build/Release/pty.node'
+Require stack:
+- /home/aaron/opnix/node_modules/.pnpm/node-pty@1.0.0/node_modules/node-pty/lib/unixTerminal.js
+- /home/aaron/opnix/node_modules/.pnpm/node-pty@1.0.0/node_modules/node-pty/lib/index.js
+- /home/aaron/opnix/services/terminalPty.js
+- /home/aaron/opnix/server.js
+Question file watcher started (chokidar)
+🔄 Question hot-reload enabled
+🛰️  Roadmap sync watchers active
+
+╔══════════════════════════════════════════╗
+║           OPNIX v1.0 - OPERATIONAL        ║
+║              TOOLKIT SERVER               ║
+╚══════════════════════════════════════════╝
+
+🚀 Server: http://localhost:7337
+🤖 Agents: curl http://localhost:7337/api/agents
+📦 Modules: curl http://localhost:7337/api/modules/detect
+❓ Progressive: curl http://localhost:7337/api/progressive/status
+⚡ Execute: curl http://localhost:7337/api/claude/execute
+🔄 Recovery: curl http://localhost:7337/api/recovery/status
+📝 Task Logs: curl http://localhost:7337/api/task-logs/cli/summary
+📊 Status Dashboard: curl http://localhost:7337/api/status/complete
+📄 Export: curl http://localhost:7337/api/export/markdown
+📊 Context: curl http://localhost:7337/api/context/status
+
+Real Functionality:
+  ✓ Agent directory scanning
+  ✓ Module auto-detection
+  ✓ Progressive questioning system
+  ✓ Auto-artifact generation
+  ✓ Pattern detection
+  ✓ File system operations
+  ✓ Spec generation
+  ✓ Canvas export
+  ✓ Terminal status bar active (PID: 2084525)
+        
+🔄 Initializing auto-recovery system...
+🔄 Auto-recovery: No interrupted sessions found
+✅ Auto-recovery system initialized successfully
+📁 File tracking initialized for status dashboard
+📊 Status dashboard tracking initialized
+🔍 Running initial progressive analysis...
+🔍 Initializing Progressive Document System...
+🎨 Storybook: Auto-started on port 6006
+🔎 Running initial project analysis...
+📄 Auto-generating initial artifacts...
+  📊 Generating project analysis...
+  🗺️  Generating module diagram...
+  🎨 Generating frontend checklist...
+✅ Generated 3 artifact types
+📄 Auto-generating initial artifacts...
+  📊 Generating project analysis...
+  🗺️  Generating module diagram...
+  🎨 Generating frontend checklist...
+✅ Generated 3 artifact types
+✅ Progressive Document System ready
+✅ Progressive analysis complete - artifacts available in /exports
+Terminal term-1759269234681-vuq8ai connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759269508911-me1ajh connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759269588961-vmfc1l connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270802446-oi5yk9 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270870718-b5n76 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270871298-iozs2 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270871815-gkczhg connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270878926-wfyibl connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270880216-1o072i connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270881778-gm2n2e connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270883367-3ed0w connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270884891-b7ij4n connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270886415-fx8d0n connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270888094-msz8sk connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270889748-ouihas connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270891313-tbwzl connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270892840-7393j connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270895404-08i4b connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270895935-b74hb9 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270896467-3bnqyf connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270896940-hnsvdr connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270901789-kboydp connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270904204-fp5j6 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270906536-dsxij9 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270909220-vtti2m connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270912034-c1bode connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270913542-uvuhnt connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+✓ Canvas exported: opnix-canvas-2025-09-30T22-21-54-799Z.png
+Terminal term-1759270920319-q0lz58 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270921597-lk2fp7 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759270924276-041o19 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271082496-velmm6 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271083681-h0mvnq connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271084190-i5wnwf connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271085255-785fie connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271086504-u24x9n connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271088057-we91t connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271089626-7dfpp9 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271091285-f6ftc connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271092965-sgl9e connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271094643-ycol2 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271096156-e86z7 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271097672-dag62 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271099205-rrndmn connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271101789-qh3wah connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271102379-q2cze connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271102915-d9peh6 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271103526-6f4aum connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271108295-opigi9 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271110629-s4op7c connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271112991-q7t1mf connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271115851-dlihcj connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271118721-8cd52 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271120159-y4k5yk connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+✓ Canvas exported: opnix-canvas-2025-09-30T22-25-21-469Z.png
+Terminal term-1759271126986-mzkbqe connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271128308-3f6d connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759271130988-vtxd7x connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308669975-aq34i connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308670619-a7btut connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308671178-e166vu connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308672311-e5dxmf connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308673814-hcrcp connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308675524-mhbsaf connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308677446-nn5lya connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308679013-k3z3o3 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308680594-ouvod connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308682121-t53t3 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308683683-seqezp connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308685339-t5u82 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308687104-o78bo8 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308689976-p0ze9c connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308690549-fsgkj connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308691111-v0dg8g connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308691669-hwd70n connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308696491-s4j02e connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308699058-3qoq3 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308701607-88cxc connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308704395-x21rra connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308707121-g9jv49 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308708604-in662i connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+✓ Canvas exported: opnix-canvas-2025-10-01T08-51-49-847Z.png
+Terminal term-1759308715417-50iz9 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308716630-9k4xz3 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Terminal term-1759308719192-mqy4p5 connected
+Error creating terminal: Error: node-pty is not installed; terminal sessions are disabled in this environment.
+    at TerminalManager.createTerminal (/home/aaron/opnix/services/terminalPty.js:24:13)
+    at WebSocketServer.<anonymous> (/home/aaron/opnix/server.js:2172:48)
+    at WebSocketServer.emit (node:events:524:28)
+    at /home/aaron/opnix/server.js:2160:21
+    at WebSocketServer.completeUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:438:5)
+    at WebSocketServer.handleUpgrade (/home/aaron/opnix/node_modules/.pnpm/ws@8.18.3/node_modules/ws/lib/websocket-server.js:346:10)
+    at Server.<anonymous> (/home/aaron/opnix/server.js:2159:17)
+    at Server.emit (node:events:524:28)
+    at onParserExecuteCommon (node:_http_server:938:14)
+    at onParserExecute (node:_http_server:839:3)
+Invalid JSON in questions file: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+❌ Question watcher error: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+Invalid JSON in questions file: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+❌ Question watcher error: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+Invalid JSON in questions file: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+❌ Question watcher error: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+Invalid JSON in questions file: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+❌ Question watcher error: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+Invalid JSON in questions file: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)
+❌ Question watcher error: Error: sections must be an array
+    at QuestionFileWatcher.validateQuestions (/home/aaron/opnix/services/questionFileWatcher.js:348:15)
+    at QuestionFileWatcher.processFileChange (/home/aaron/opnix/services/questionFileWatcher.js:128:12)

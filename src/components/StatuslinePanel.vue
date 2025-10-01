@@ -3,8 +3,8 @@
     <div class="card status-card">
       <div class="status-header">
         <div>
-          <h3 style="color: var(--accent-cyan);">Ticket Pulse</h3>
-          <p style="color: var(--text-muted); font-size: 0.8rem;">Live view of open vs closed work</p>
+          <h3 class="status-header-title">Ticket Pulse</h3>
+          <p class="status-header-subtitle">Live view of open vs closed work</p>
         </div>
         <div class="status-counts">
           <div class="status-metric">
@@ -22,8 +22,8 @@
         </div>
       </div>
       <div class="status-bar" aria-label="Open vs closed work balance">
-        <div class="status-bar-open" :style="{ width: ticketProgress.openPct + '%' }"></div>
-        <div class="status-bar-closed" :style="{ width: ticketProgress.closedPct + '%' }"></div>
+        <div class="status-bar-open" :class="statusBarOpenClass"></div>
+        <div class="status-bar-closed" :class="statusBarClosedClass"></div>
       </div>
       <div class="status-legend">
         <span class="status-chip open">Open {{ ticketProgress.openPct }}%</span>
@@ -66,6 +66,26 @@ export default {
     latestAudit: {
       type: Object,
       default: null
+    }
+  },
+  computed: {
+    statusBarOpenClass() {
+      return this.buildStatusWidthClass('status-bar-open', this.ticketProgress.openPct);
+    },
+    statusBarClosedClass() {
+      return this.buildStatusWidthClass('status-bar-closed', this.ticketProgress.closedPct);
+    }
+  },
+  methods: {
+    buildStatusWidthClass(prefix, value) {
+      const numeric = Number(value);
+
+      if (!Number.isFinite(numeric)) {
+        return `${prefix}--pct-0`;
+      }
+
+      const clamped = Math.max(0, Math.min(100, Math.round(numeric)));
+      return `${prefix}--pct-${clamped}`;
     }
   }
 };

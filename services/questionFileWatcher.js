@@ -189,6 +189,8 @@ class QuestionFileWatcher extends EventEmitter {
     sectionsArray.forEach((section, sectionIdx) => {
       const sectionId = section.id || `section-${sectionIdx}`;
       const title = section.title || section.name || '';
+      const rawContext = (section && section.context) || (questions.sectionContexts || {})[sectionId] || 'project';
+      const sectionContext = typeof rawContext === 'string' ? rawContext.toLowerCase() : rawContext;
       const questionMap = new Map();
 
       (section.questions || []).forEach((question, questionIdx) => {
@@ -204,7 +206,8 @@ class QuestionFileWatcher extends EventEmitter {
           question,
           hash,
           index: questionIdx,
-          sectionTitle: title
+          sectionTitle: title,
+          context: question.context || sectionContext
         };
         questionMap.set(questionId, entry);
         snapshot.questionIndex.set(key, entry);
@@ -213,6 +216,7 @@ class QuestionFileWatcher extends EventEmitter {
       snapshot.sections.set(sectionId, {
         id: sectionId,
         title,
+        context: sectionContext,
         questions: questionMap
       });
     });
@@ -235,7 +239,8 @@ class QuestionFileWatcher extends EventEmitter {
         question: change.question,
         previousQuestion: change.previousQuestion || null,
         hash: change.hash,
-        previousHash: change.previousHash || null
+        previousHash: change.previousHash || null,
+        context: change.context || null
       });
     };
 
@@ -243,12 +248,13 @@ class QuestionFileWatcher extends EventEmitter {
       const added = [];
       const removed = [];
       const updated = [];
+      const context = (nextSection && nextSection.context !== undefined) ? nextSection.context : (prevSection && prevSection.context !== undefined ? prevSection.context : null);
 
       nextSection.questions.forEach((entry, questionId) => {
         const prevEntry = prevSection?.questions.get(questionId);
         if (!prevEntry) {
           added.push(questionId);
-          recordQuestion({ type: 'added', questionId, sectionId, question: entry.question, hash: entry.hash });
+          recordQuestion({ type: 'added', questionId, sectionId, question: entry.question, hash: entry.hash, context });
         } else if (prevEntry.hash !== entry.hash) {
           updated.push(questionId);
           recordQuestion({
@@ -258,7 +264,8 @@ class QuestionFileWatcher extends EventEmitter {
             question: entry.question,
             previousQuestion: prevEntry.question,
             hash: entry.hash,
-            previousHash: prevEntry.hash
+            previousHash: prevEntry.hash,
+            context
           });
         }
       });
@@ -267,7 +274,7 @@ class QuestionFileWatcher extends EventEmitter {
         prevSection.questions.forEach((entry, questionId) => {
           if (!nextSection.questions.has(questionId)) {
             removed.push(questionId);
-            recordQuestion({ type: 'removed', questionId, sectionId, question: entry.question, hash: entry.hash });
+            recordQuestion({ type: 'removed', questionId, sectionId, question: entry.question, hash: entry.hash, context });
           }
         });
       }
@@ -278,6 +285,7 @@ class QuestionFileWatcher extends EventEmitter {
             type: 'added',
             id: sectionId,
             title: nextSection.title,
+            context: nextSection.context || null,
             questionCount: nextSection.questions.size,
             changes: { added, removed: [], updated: [] }
           });
@@ -290,6 +298,7 @@ class QuestionFileWatcher extends EventEmitter {
           type: 'updated',
           id: sectionId,
           title: nextSection.title || prevSection.title,
+          context: nextSection.context || (prevSection && prevSection.context) || null,
           questionCount: nextSection.questions.size,
           changes: { added, removed, updated }
         });
@@ -306,12 +315,13 @@ class QuestionFileWatcher extends EventEmitter {
         const removed = [];
         prevSection.questions.forEach(entry => {
           removed.push(entry.questionId);
-          recordQuestion({ type: 'removed', questionId: entry.questionId, sectionId, question: entry.question, hash: entry.hash });
+          recordQuestion({ type: 'removed', questionId: entry.questionId, sectionId, question: entry.question, hash: entry.hash, context: (prevSection && prevSection.context) || null });
         });
         sectionDiffs.push({
           type: 'removed',
           id: sectionId,
           title: prevSection.title,
+          context: prevSection.context || null,
           questionCount: 0,
           changes: { added: [], removed, updated: [] }
         });

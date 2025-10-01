@@ -29,9 +29,27 @@
       @clear-terminal="clearTerminalHistory"
     />
 
+    <BreadcrumbNavigation
+      :active-tab="activeTab"
+      :main-tabs="mainTabs"
+      :context-status="contextStatus"
+      :branch-status="branchStatus"
+      :current-session-id="selectedCliSession?.id"
+      :current-task-id="contextStatus?.currentTask"
+      :current-module="selectedModules?.[0]"
+      :current-ticket="ticketBeingUpdated"
+      :current-feature="newFeature?.title ? newFeature : null"
+      @navigate="handleBreadcrumbNavigation"
+    />
+
     <TabNavigation
       :main-tabs="mainTabs"
       :active-tab="activeTab"
+      :stats="stats"
+      :branch-status="branchStatus"
+      :context-status="contextStatus"
+      :terminal-running="terminalRunning"
+      :terminal-error="terminalError"
       @select-tab="setTab"
     />
 
@@ -46,10 +64,27 @@
       :diagrams-props="diagramsProps"
       :api-props="apiProps"
       :storybook-props="storybookProps"
+      :tech-stack-props="techStackProps"
       :docs-props="docsProps"
     />
 
 
+
+    <!-- Bulk Operations Toolbar -->
+    <BulkOperationsToolbar
+      v-if="activeTab === 'bugs'"
+      type="tickets"
+      :items="tickets"
+      @refresh="refreshTickets"
+      @export="handleBulkExport"
+    />
+    <BulkOperationsToolbar
+      v-if="activeTab === 'features'"
+      type="features"
+      :items="features"
+      @refresh="refreshFeatures"
+      @export="handleBulkExport"
+    />
 
     <ModalsLayer
       :runbook-modal-active="runbookModalOpen"
@@ -96,9 +131,11 @@
 import appOptions from "./appOptions.js";
 import AppHeader from "./components/AppHeader.vue";
 import WorkbenchStrip from "./components/WorkbenchStrip.vue";
+import BreadcrumbNavigation from "./components/BreadcrumbNavigation.vue";
 import TabNavigation from "./components/TabNavigation.vue";
 import TabContentRouter from "./components/TabContentRouter.vue";
 import ModalsLayer from "./components/ModalsLayer.vue";
+import BulkOperationsToolbar from "./components/BulkOperationsToolbar.vue";
 
 export default {
   ...appOptions,
@@ -106,9 +143,23 @@ export default {
     ...(appOptions.components || {}),
     AppHeader,
     WorkbenchStrip,
+    BreadcrumbNavigation,
     TabNavigation,
     TabContentRouter,
-    ModalsLayer
+    ModalsLayer,
+    BulkOperationsToolbar
+  },
+  methods: {
+    ...(appOptions.methods || {}),
+    handleBreadcrumbNavigation(path) {
+      // Handle breadcrumb navigation - could be used for deep linking
+      if (path.startsWith('/') && path.length > 1) {
+        const tabId = path.split('/')[1];
+        if (this.mainTabs.find(tab => tab.id === tabId)) {
+          this.setTab(tabId);
+        }
+      }
+    }
   }
 };
 </script>

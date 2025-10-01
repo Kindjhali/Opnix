@@ -199,6 +199,69 @@ async function claudeExecuteRoute(req, res) {
     }
 }
 
+async function listHandoffsRoute(req, res) {
+    const { agentHandoffManager, logServerError } = getDeps();
+    try {
+        const { limit } = req.query || {};
+        const handoffs = await agentHandoffManager.listHandoffs({ limit });
+        res.json({ handoffs });
+    } catch (error) {
+        logServerError('agents:handoffs:list', error);
+        res.status(500).json({ error: 'Failed to list agent handoffs' });
+    }
+}
+
+async function getHandoffRoute(req, res) {
+    const { agentHandoffManager, logServerError } = getDeps();
+    try {
+        const { id } = req.params || {};
+        const handoff = await agentHandoffManager.getHandoff(id);
+        if (!handoff) {
+            return res.status(404).json({ error: 'Handoff not found' });
+        }
+        res.json({ handoff });
+    } catch (error) {
+        logServerError('agents:handoffs:get', error);
+        res.status(500).json({ error: 'Failed to load agent handoff' });
+    }
+}
+
+async function createHandoffRoute(req, res) {
+    const { agentHandoffManager, logServerError } = getDeps();
+    try {
+        const payload = req.body || {};
+        const handoff = await agentHandoffManager.createHandoff(payload);
+        res.status(201).json({ success: true, handoff });
+    } catch (error) {
+        if (error && typeof error.message === 'string' && error.message.includes('required')) {
+            return res.status(400).json({ error: error.message });
+        }
+        logServerError('agents:handoffs:create', error);
+        res.status(500).json({ error: 'Failed to create agent handoff' });
+    }
+}
+
+async function updateHandoffRoute(req, res) {
+    const { agentHandoffManager, logServerError } = getDeps();
+    try {
+        const { id } = req.params || {};
+        const updates = req.body || {};
+        const handoff = await agentHandoffManager.updateHandoff(id, updates);
+        res.json({ success: true, handoff });
+    } catch (error) {
+        if (error && typeof error.message === 'string') {
+            if (error.message.includes('not found')) {
+                return res.status(404).json({ error: error.message });
+            }
+            if (error.message.includes('required')) {
+                return res.status(400).json({ error: error.message });
+            }
+        }
+        logServerError('agents:handoffs:update', error);
+        res.status(500).json({ error: 'Failed to update agent handoff' });
+    }
+}
+
 function createAgentsRoutes(deps) {
     setAgentsDependencies(deps);
     const router = express.Router();
@@ -208,6 +271,10 @@ function createAgentsRoutes(deps) {
     router.get('/api/agents', listAgentsRoute);
     router.post('/api/agents/activate', activateAgentRoute);
     router.post('/api/claude/execute', claudeExecuteRoute);
+    router.get('/api/agents/handoffs', listHandoffsRoute);
+    router.get('/api/agents/handoffs/:id', getHandoffRoute);
+    router.post('/api/agents/handoffs', createHandoffRoute);
+    router.patch('/api/agents/handoffs/:id', updateHandoffRoute);
 
     return router;
 }

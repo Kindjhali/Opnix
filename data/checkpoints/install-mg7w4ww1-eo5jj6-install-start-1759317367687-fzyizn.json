@@ -1,0 +1,16 @@
+{
+  "id": "install-mg7w4ww1-eo5jj6-install-start-1759317367687-fzyizn",
+  "sessionId": "install-mg7w4ww1-eo5jj6",
+  "type": "install-start",
+  "description": "Installation process started",
+  "critical": true,
+  "timestamp": "2025-10-01T11:16:07.687Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-01T11:16:07.686Z"
+  },
+  "version": "1.0.0"
+}

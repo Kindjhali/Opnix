@@ -1,0 +1,16 @@
+{
+  "id": "install-mg7w4ww1-eo5jj6-install-progress-1759317367691-68a8w4",
+  "sessionId": "install-mg7w4ww1-eo5jj6",
+  "type": "install-progress",
+  "description": "Dependencies installed",
+  "critical": false,
+  "timestamp": "2025-10-01T11:16:07.691Z",
+  "context": {
+    "phase": "dependencies-installed"
+  },
+  "data": {
+    "phase": "dependencies-installed",
+    "timestamp": "2025-10-01T11:16:07.691Z"
+  },
+  "version": "1.0.0"
+}
