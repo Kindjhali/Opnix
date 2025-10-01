@@ -1,18 +1,45 @@
 export function findRouteHandlers(app, method, routePath) {
   const lower = method.toLowerCase();
   const stack = app?.router?.stack || app?._router?.stack || [];
-  for (const layer of stack) {
-    if (!layer.route) continue;
-    if (!matchesPath(layer.route.path, routePath)) continue;
-    if (!layer.route.methods?.[lower]) continue;
-    return layer.route.stack
-      .filter(entry => !entry.method || entry.method === lower)
-      .map(entry => entry.handle);
+  const handlers = findInStack(stack, lower, routePath);
+  if (handlers) {
+    return handlers;
   }
   throw new Error(`Route ${method.toUpperCase()} ${routePath} not found`);
 }
 
+function findInStack(stack, method, routePath) {
+  for (const layer of stack) {
+    if (layer.route) {
+      const paths = Array.isArray(layer.route.path) ? layer.route.path : [layer.route.path];
+      if (!layer.route.methods?.[method]) continue;
+      for (const path of paths) {
+        if (matchesPath(path, routePath)) {
+          return layer.route.stack
+            .filter(entry => !entry.method || entry.method === method)
+            .map(entry => entry.handle);
+        }
+      }
+    } else if (layer.handle && layer.handle.stack) {
+      const nested = findInStack(layer.handle.stack, method, routePath);
+      if (nested) {
+        return nested;
+      }
+    }
+  }
+  return null;
+}
+
 function matchesPath(routePath, requestedPath) {
+  if (Array.isArray(routePath)) {
+    return routePath.some(entry => matchesPath(entry, requestedPath));
+  }
+  if (routePath instanceof RegExp) {
+    return routePath.test(requestedPath);
+  }
+  if (typeof routePath !== 'string' || typeof requestedPath !== 'string') {
+    return false;
+  }
   if (routePath === requestedPath) return true;
   // Basic support for parameterised routes like /api/tickets/:id
   const routeParts = routePath.split('/');

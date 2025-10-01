@@ -265,6 +265,8 @@ async function handleNewProject(context) {
         questionnaire
     });
 
+    await promptForAgentFiles(context, 'new');
+
     return { questionnaire };
 }
 
@@ -319,6 +321,8 @@ async function handleExistingProject() {
         mode: 'existing',
         audit
     });
+
+    await promptForAgentFiles({ modulesResult: { modules: audit.modules || [] }, packageJson: audit.packageJson || {} }, 'existing');
 
     return audit;
 }
@@ -385,6 +389,444 @@ async function runScaffoldingStage({ mode, context, questionnaire, audit }) {
         console.error('[Opnix Setup] Scaffolding stage failed:', error);
     }
     return null;
+}
+
+async function promptForAgentFiles(context, mode) {
+    if (!process.stdin.isTTY) {
+        console.log('[Opnix Setup] Non-interactive terminal detected; skipping agent files generation.');
+        return;
+    }
+
+    console.log('\n────────────────────────────────────────');
+    console.log('Agent Files Generation');
+    console.log('────────────────────────────────────────');
+    console.log('Generate AI agent guidance files (CLAUDE.md, AGENTS.md, GEMINI.md) tailored to your project?');
+    console.log('These files help AI assistants understand your project structure and conventions.');
+    console.log('');
+
+    const answer = await new Promise(resolve => {
+        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+        rl.question('Generate agent guidance files? [Y/n]: ', input => {
+            rl.close();
+            resolve(input.trim().toLowerCase());
+        });
+    });
+
+    if (answer === 'n' || answer === 'no') {
+        console.log('[Opnix Setup] Skipping agent files generation.');
+        return;
+    }
+
+    console.log('[Opnix Setup] Generating project-tailored agent files...');
+    
+    try {
+        const agentFiles = await generateAgentFiles(context, mode);
+        
+        console.log('[Opnix Setup] ✓ Agent files generated successfully:');
+        agentFiles.forEach(file => {
+            console.log(`  - ${path.relative(ROOT_DIR, file.path)}`);
+        });
+        
+        return agentFiles;
+    } catch (error) {
+        console.error('[Opnix Setup] ⚠️  Agent files generation failed:', error.message);
+        return [];
+    }
+}
+
+async function generateAgentFiles(context, mode) {
+    const timestamp = new Date().toISOString();
+    const projectName = context.packageJson?.name || 'Opnix Project';
+    const description = context.packageJson?.description || 'Project managed with Opnix';
+    const modules = context.modulesResult?.modules || [];
+    const techStack = extractTechStack(context.packageJson);
+    
+    const templateData = {
+        projectName,
+        description,
+        techStack,
+        moduleCount: modules.length,
+        mode,
+        timestamp,
+        conventions: extractConventions(context),
+        architecture: extractArchitecture(modules)
+    };
+
+    const files = [];
+
+    // Generate CLAUDE.md
+    const claudeContent = renderClaudeTemplate(templateData);
+    const claudePath = path.join(ROOT_DIR, 'CLAUDE.md');
+    await fs.writeFile(claudePath, claudeContent, 'utf8');
+    files.push({ type: 'CLAUDE.md', path: claudePath });
+
+    // Generate AGENTS.md
+    const agentsContent = renderAgentsTemplate(templateData);
+    const agentsPath = path.join(ROOT_DIR, 'AGENTS.md');
+    await fs.writeFile(agentsPath, agentsContent, 'utf8');
+    files.push({ type: 'AGENTS.md', path: agentsPath });
+
+    // Generate GEMINI.md
+    const geminiContent = renderGeminiTemplate(templateData);
+    const geminiPath = path.join(ROOT_DIR, 'GEMINI.md');
+    await fs.writeFile(geminiPath, geminiContent, 'utf8');
+    files.push({ type: 'GEMINI.md', path: geminiPath });
+
+    return files;
+}
+
+function extractTechStack(packageJson) {
+    const dependencies = Object.keys(packageJson?.dependencies || {});
+    const devDependencies = Object.keys(packageJson?.devDependencies || {});
+    const frameworks = [];
+    
+    // Detect common frameworks
+    if (dependencies.includes('react')) frameworks.push('React');
+    if (dependencies.includes('vue')) frameworks.push('Vue.js');
+    if (dependencies.includes('express')) frameworks.push('Express');
+    if (dependencies.includes('next')) frameworks.push('Next.js');
+    if (dependencies.includes('nuxt')) frameworks.push('Nuxt.js');
+    if (devDependencies.includes('vite')) frameworks.push('Vite');
+    if (devDependencies.includes('webpack')) frameworks.push('Webpack');
+    
+    return {
+        dependencies: dependencies.slice(0, 10), // Top 10 deps
+        devDependencies: devDependencies.slice(0, 10),
+        frameworks
+    };
+}
+
+function extractConventions(context) {
+    const conventions = [];
+    
+    // Check if using TypeScript
+    if (context.packageJson?.devDependencies?.typescript) {
+        conventions.push('TypeScript for type safety');
+    }
+    
+    // Check if using ESLint
+    if (context.packageJson?.devDependencies?.eslint) {
+        conventions.push('ESLint for code quality');
+    }
+    
+    // Check if using Prettier
+    if (context.packageJson?.devDependencies?.prettier) {
+        conventions.push('Prettier for code formatting');
+    }
+    
+    // Add camelCase convention since we enforce it
+    conventions.push('camelCase naming convention enforced');
+    
+    return conventions.length > 0 ? conventions : ['Standard JavaScript conventions'];
+}
+
+function extractArchitecture(modules) {
+    if (!modules || modules.length === 0) {
+        return 'Modular architecture to be determined';
+    }
+    
+    const types = [...new Set(modules.map(m => m.type).filter(Boolean))];
+    const hasApi = types.includes('api');
+    const hasFrontend = types.includes('frontend') || types.includes('component');
+    const hasBackend = types.includes('backend') || types.includes('service');
+    
+    if (hasApi && hasFrontend) {
+        return 'Full-stack application with API and frontend components';
+    } else if (hasApi) {
+        return 'API-focused architecture';
+    } else if (hasFrontend) {
+        return 'Frontend-focused application';
+    } else if (hasBackend) {
+        return 'Backend service architecture';
+    }
+    
+    return 'Modular component-based architecture';
+}
+
+function renderClaudeTemplate(data) {
+    return `# CLAUDE.md - Claude AI Assistant Guidelines
+
+## Project Overview
+
+**Project**: ${data.projectName}
+**Description**: ${data.description}
+**Architecture**: ${data.architecture}
+**Generated**: ${data.timestamp}
+
+## Technology Stack
+
+### Core Dependencies
+${data.techStack.dependencies.map(dep => `- ${dep}`).join('\n')}
+
+### Development Tools
+${data.techStack.devDependencies.map(dep => `- ${dep}`).join('\n')}
+
+### Frameworks & Libraries
+${data.techStack.frameworks.map(fw => `- ${fw}`).join('\n')}
+
+## Code Conventions
+
+${data.conventions.map(conv => `- ${conv}`).join('\n')}
+
+## Project Structure
+
+This project uses Opnix for project management and follows modular architecture principles with ${data.moduleCount} detected modules.
+
+## Development Guidelines
+
+1. **Code Quality**: Follow existing patterns and maintain consistency
+2. **Testing**: Write tests for new functionality
+3. **Documentation**: Update relevant docs when making changes
+4. **Commits**: Use clear, descriptive commit messages
+
+## Opnix Integration
+
+This project uses Opnix for:
+- Module detection and dependency mapping
+- Ticket and feature management
+- Documentation generation
+- Canvas visualization
+- Progressive project analysis
+
+When working with this codebase, use Opnix's APIs and conventions for managing project state.
+
+## File Locations
+
+- **Modules**: Detected automatically, managed via Opnix canvas
+- **Documentation**: \`docs/\` directory, accessible via Docs tab
+- **Specs**: \`spec/\` directory for generated specifications
+- **Tests**: Follow existing test patterns in the project
+
+## AI Assistant Notes
+
+- Always read existing code before making changes
+- Use Opnix APIs when available instead of direct file manipulation
+- Respect the camelCase naming convention
+- Consider module dependencies when making changes
+- Update documentation for significant changes
+`;
+}
+
+function renderAgentsTemplate(data) {
+    return `# AGENTS.md - Multi-Agent Coordination Guidelines
+
+## Project Context
+
+**Project**: ${data.projectName}
+**Mode**: ${data.mode} project setup
+**Architecture**: ${data.architecture}
+**Modules**: ${data.moduleCount} detected
+**Generated**: ${data.timestamp}
+
+## Agent Roles & Responsibilities
+
+### Primary Development Agent
+- **Focus**: Core feature implementation and bug fixes
+- **Scope**: Module development, API endpoints, frontend components
+- **Tools**: Full access to codebase, Opnix management interface
+
+### Documentation Agent
+- **Focus**: Documentation maintenance and generation
+- **Scope**: README updates, API docs, architectural documentation
+- **Tools**: Docs tab, markdown generation, template system
+
+### Testing Agent
+- **Focus**: Test coverage and quality assurance
+- **Scope**: Unit tests, integration tests, end-to-end validation
+- **Tools**: Test runners, coverage tools, validation scripts
+
+### Architecture Agent
+- **Focus**: System design and module coordination
+- **Scope**: Module relationships, dependency management, scaffolding
+- **Tools**: Canvas visualization, module detector, dependency analysis
+
+## Coordination Protocols
+
+### Handoff Requirements
+1. **Clear State Documentation**: Document current implementation status
+2. **Dependency Mapping**: Note which modules/files are affected
+3. **Test Status**: Report test coverage and any failing tests
+4. **Next Steps**: Provide actionable next steps for the receiving agent
+
+### Communication Format
+\`\`\`
+Agent: [ROLE]
+Status: [COMPLETE|IN_PROGRESS|BLOCKED]
+Changes: [List of modified files/modules]
+Dependencies: [List of affected systems]
+Next: [Specific actions for next agent]
+Notes: [Any important context or blockers]
+\`\`\`
+
+## Technology Context
+
+### Stack Overview
+${data.techStack.frameworks.map(fw => `- ${fw}`).join('\n')}
+
+### Code Conventions
+${data.conventions.map(conv => `- ${conv}`).join('\n')}
+
+### Opnix Integration Points
+- Module detection and management
+- Ticket lifecycle tracking
+- Canvas dependency visualization
+- Progressive documentation system
+- CLI interview workflows
+
+## Quality Gates
+
+### Before Handoff
+- [ ] Code follows project conventions
+- [ ] Tests pass for modified functionality
+- [ ] Documentation updated for changes
+- [ ] Opnix state reflects current project status
+- [ ] No broken dependencies or circular references
+
+### Implementation Standards
+- Real, working code only (no placeholders)
+- Complete end-to-end functionality
+- Proper error handling
+- Integration with existing Opnix systems
+
+## Agent-Specific Notes
+
+### Development Agent
+- Use Opnix APIs for state management
+- Respect module boundaries and dependencies
+- Follow camelCase naming throughout
+- Test changes with existing workflows
+
+### Documentation Agent
+- Use Docs tab for markdown management
+- Generate specs via progressive system
+- Maintain consistency with existing docs
+- Link documentation to relevant modules
+
+### Testing Agent
+- Cover new functionality with appropriate tests
+- Validate Opnix integration points
+- Test module detection and canvas rendering
+- Ensure CLI workflows remain functional
+
+### Architecture Agent
+- Use canvas for dependency visualization
+- Validate module health and relationships
+- Ensure scaffolding remains consistent
+- Monitor for architectural debt
+`;
+}
+
+function renderGeminiTemplate(data) {
+    return `# GEMINI.md - Google Gemini Assistant Guidelines
+
+## Project Profile
+
+**Name**: ${data.projectName}
+**Type**: ${data.architecture}
+**Setup Mode**: ${data.mode}
+**Module Count**: ${data.moduleCount}
+**Generated**: ${data.timestamp}
+
+## Technology Landscape
+
+### Primary Technologies
+${data.techStack.frameworks.length > 0 ? data.techStack.frameworks.map(fw => `- ${fw}`).join('\n') : '- JavaScript/Node.js based'}
+
+### Key Dependencies
+${data.techStack.dependencies.slice(0, 5).map(dep => `- ${dep}`).join('\n')}
+
+### Development Environment
+${data.techStack.devDependencies.slice(0, 5).map(dep => `- ${dep}`).join('\n')}
+
+## Development Context
+
+### Code Standards
+${data.conventions.map(conv => `- ${conv}`).join('\n')}
+
+### Project Management
+This project uses **Opnix** for comprehensive project management:
+- Automated module detection and dependency mapping
+- Visual canvas for architecture understanding
+- Progressive documentation and specification generation
+- Integrated ticket and feature lifecycle management
+- CLI-driven interview and analysis workflows
+
+## Interaction Guidelines
+
+### When Reading Code
+1. Start with the project structure via Opnix canvas
+2. Understand module relationships before making changes
+3. Check existing patterns and conventions
+4. Review relevant documentation in \`docs/\` directory
+
+### When Writing Code
+1. Follow camelCase naming strictly (enforced by ESLint)
+2. Use Opnix APIs when available for project state
+3. Maintain module boundaries and dependencies
+4. Write complete, functional implementations only
+
+### When Documenting
+1. Use the Docs tab for markdown management
+2. Follow existing documentation patterns
+3. Link to relevant modules and specifications
+4. Update architectural docs for significant changes
+
+## Opnix System Integration
+
+### Key Components
+- **Canvas**: Visual module and dependency management
+- **Tickets**: Issue tracking and lifecycle management
+- **Features**: Feature planning and implementation tracking
+- **Docs**: Integrated documentation system
+- **Specs**: Progressive specification generation
+- **CLI**: Interview-driven analysis and generation
+
+### API Integration Points
+- Module detection: \`/api/modules/detect\`
+- Canvas operations: \`/api/canvas/export\`
+- Documentation: \`/api/docs/*\`
+- Ticket management: \`/api/tickets\`
+- Feature tracking: \`/api/features\`
+
+## Quality Expectations
+
+### Code Quality
+- No placeholder code or incomplete implementations
+- Proper error handling and edge case coverage
+- Integration with existing Opnix workflows
+- Comprehensive testing of new functionality
+
+### Documentation Quality
+- Clear, actionable documentation
+- Consistent formatting and structure
+- Links to relevant code and specifications
+- Regular updates to reflect current state
+
+### Architecture Quality
+- Respect module boundaries and dependencies
+- Maintain clean separation of concerns
+- Consider performance and scalability
+- Document architectural decisions
+
+## Gemini-Specific Capabilities
+
+Leverage your strengths in:
+- **Code Analysis**: Deep understanding of complex codebases
+- **Pattern Recognition**: Identifying architectural patterns and anti-patterns
+- **Documentation**: Creating comprehensive, well-structured documentation
+- **Problem Solving**: Breaking down complex problems into manageable tasks
+- **Integration**: Understanding how components work together
+
+## Project Context for AI
+
+This is a ${data.mode === 'new' ? 'new project' : 'existing project'} being managed with Opnix. The system provides:
+- Automated project analysis and module detection
+- Visual representation of project structure
+- Progressive documentation and specification generation
+- Integrated development workflow management
+
+Focus on understanding the existing patterns and extending them consistently rather than introducing new paradigms that might conflict with the Opnix methodology.
+`;
 }
 
 async function main() {

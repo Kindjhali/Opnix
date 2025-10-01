@@ -4,7 +4,7 @@
 - `services/diagramGenerator.js` produces Mermaid definitions (architecture, sequence, entity, delivery-flow) using module detector output, features, tickets, and tech stack data.
 - `/api/diagrams/:type` refreshes diagrams on demand, returning rendered Mermaid source and maintaining `.mmd` files under `spec/diagrams/`.
 - Audit execution stores the latest diagrams and the runtime bundler mirrors them into `.opnix/runtime/diagrams/` for downstream viewers, while the Diagrams tab auto-renders the newest architecture export post-audit.
-- The Diagrams tab now themes Mermaid output in-app: MOLE/CANYON palettes feed `mermaid.initialize`, and the canvas inherits the neon card framing so diagrams stay legible inside the console.
+- The Diagrams tab now themes Mermaid output in-app: MOLE/CANYON palettes feed `mermaid.initialize`, and the canvas inherits the card framing so diagrams stay legible inside the console.
 
 ## Extension Prompts
 - Which additional diagram types add value (deployment topology, dependency heatmaps, roadmap timelines, runbooks)?

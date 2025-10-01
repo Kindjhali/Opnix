@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Opnix Neon Installer CLI
+ * Opnix Installer CLI
  * Provides a themed installation experience with automated dependency setup and decision-tree handoff.
  */
 
@@ -8,6 +8,9 @@ const fs = require('fs').promises;
 const path = require('path');
 const { spawn } = require('child_process');
 const readline = require('readline');
+const checkpointManager = require('../services/checkpointManager');
+const gracefulFailureHandler = require('../services/gracefulFailureHandler');
+const taskLogger = require('../services/taskLogger');
 
 const ROOT = path.join(__dirname, '..');
 const NODE_MODULES_DIR = path.join(ROOT, 'node_modules');
@@ -42,16 +45,17 @@ const ANSI = {
 };
 
 const palette = {
-    background: [15, 15, 15],
-    panel: [31, 31, 31],
-    textBright: [253, 253, 253],
-    textMuted: [148, 163, 184],
-    accentPink: [233, 69, 96],
-    accentCyan: [6, 182, 212],
-    accentBlue: [31, 182, 255],
-    success: [16, 185, 129],
-    warning: [245, 158, 11],
-    danger: [239, 68, 68]
+    background: [10, 15, 28],      // --bg-darkest from MOLE
+    panel: [30, 38, 81],            // --bg-card from MOLE
+    textBright: [250, 235, 215],    // --text-light from MOLE
+    textMuted: [123, 138, 168],     // --text-muted from MOLE
+    accentPink: [233, 69, 96],      // --text-primary from MOLE (#E94560)
+    accentCyan: [6, 182, 212],      // --info from MOLE (#06B6D4)
+    accentBlue: [31, 182, 255],     // --accent-2 from MOLE (#1FB6FF)
+    accentOrange: [255, 140, 59],   // --accent-1 from MOLE (#FF8C3B)
+    success: [16, 185, 129],        // --success from MOLE
+    warning: [245, 158, 11],        // --warning from MOLE
+    danger: [239, 68, 68]           // --danger from MOLE
 };
 
 function colour(value, type) {
@@ -70,7 +74,7 @@ function style(text, { fg, bg, bold = false, dim = false } = {}) {
 const theme = {
     heading: text => style(text, { fg: palette.accentCyan, bold: true }),
     accent: text => style(text, { fg: palette.accentBlue, bold: true }),
-    neon: text => style(text, { fg: palette.accentPink, bold: true }),
+    logo: text => style(text, { fg: palette.accentPink, bold: true }),
     bright: text => style(text, { fg: palette.textBright }),
     muted: text => style(text, { fg: palette.textMuted }),
     border: text => style(text, { fg: palette.accentPink }),
@@ -115,18 +119,23 @@ function logError(...parts) {
 }
 
 function banner() {
-    const width = 54;
-    const lines = [
-        theme.heading(padCenter('Opnix Installer', width)),
-        theme.accent(padCenter('MOLE Neon Console · JetBrains Mono', width)),
-        theme.muted(padCenter('Visual Ops Toolkit · Audit · Storytelling', width))
+    const logo = [
+        '   ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄    ▄ ▄▄▄ ▄▄   ▄▄',
+        '  █       █       █  █  █ █   █  █ █  █',
+        '  █   ▄   █    ▄  █   █▄█ █   █  █▄█  █',
+        '  █  █ █  █   █▄█ █       █   █       █',
+        '  █  █▄█  █    ▄▄▄█  ▄    █   █       █',
+        '  █       █   █   █ █ █   █   █ ██▄██ █',
+        '  █▄▄▄▄▄▄▄█▄▄▄█   █▄█  █▄▄█▄▄▄█▄█   █▄█'
     ];
-    const border = '━'.repeat(width + 2);
-    console.log(theme.border(`┏${border}┓`));
-    lines.forEach(line => {
-        console.log(`${theme.border('┃ ')}${line}${theme.border(' ┃')}`);
+
+    console.log('');
+    logo.forEach(line => {
+        console.log(theme.neon(line));
     });
-    console.log(theme.border(`┗${border}┛`));
+    console.log('');
+    console.log(theme.muted(padCenter('Operational Toolkit · Visual Canvas · Audit Engine', 50)));
+    console.log(theme.accent(padCenter('MOLE Console · JetBrains Mono', 50)));
     console.log('');
 }
 
@@ -454,7 +463,7 @@ function printNextSteps() {
     console.log(theme.section('Next actions'));
     const steps = [
         { label: 'Start the server', detail: 'npm start' },
-        { label: 'Open the neon console', detail: 'http://localhost:7337' },
+        { label: 'Open the console', detail: 'http://localhost:7337' },
         { label: 'Test terminal status bar', detail: 'npm run terminal:status' },
         { label: 'Inspect data store', detail: 'ls data/' },
         { label: 'Explore spec artefacts', detail: 'ls spec/' },
@@ -467,25 +476,156 @@ function printNextSteps() {
 }
 
 async function main() {
+    const installSessionId = `install-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    let installTaskId = null;
+
     try {
-        banner();
+        // Initialize recovery system and task logging for installation
+        await checkpointManager.initialize();
+        await taskLogger.initialize();
+
         await ensurePackageJson();
         const priorInstall = await detectPriorInstall();
+
+        // Start installation task logging
+        installTaskId = await taskLogger.startTask(
+            'Opnix Installation',
+            'Complete installation of Opnix operational toolkit',
+            'installer',
+            {
+                installationType: priorInstall ? 'reinstall' : 'fresh-install',
+                nodeVersion: process.version,
+                platform: process.platform
+            }
+        );
+
+        banner();
+
+        // Create initial checkpoint
+        await checkpointManager.createCheckpoint(installSessionId, {
+            phase: 'initialization',
+            timestamp: new Date().toISOString()
+        }, {
+            type: 'install-start',
+            description: 'Installation process started',
+            critical: true,
+            context: { phase: 'init' }
+        });
+
+        await taskLogger.addTaskNote(installTaskId, 'Package.json validated', 'milestone');
+
+        // Checkpoint after package.json check
+        await checkpointManager.createCheckpoint(installSessionId, {
+            phase: 'package-validated',
+            priorInstall,
+            timestamp: new Date().toISOString()
+        }, {
+            type: 'install-progress',
+            description: 'Package.json validated',
+            context: { phase: 'package-validated', priorInstall }
+        });
+
         await ensureOpnixDirs();
         await ensureRuntimeBundleUnpacked();
-        logInfo(theme.muted('Checking workspace telemetry...'));
+
+        // Checkpoint after directory setup
+        await checkpointManager.createCheckpoint(installSessionId, {
+            phase: 'directories-setup',
+            timestamp: new Date().toISOString()
+        }, {
+            type: 'install-progress',
+            description: 'Directories and runtime bundle setup complete',
+            context: { phase: 'directories-setup' }
+        });
+
+        logInfo(theme.muted('Checking workspace dependencies...'));
         await ensureDependencies();
+
+        await taskLogger.addTaskNote(installTaskId, 'Dependencies installed successfully', 'progress');
+
+        // Checkpoint after dependencies
+        await checkpointManager.createCheckpoint(installSessionId, {
+            phase: 'dependencies-installed',
+            timestamp: new Date().toISOString()
+        }, {
+            type: 'install-progress',
+            description: 'Dependencies installed',
+            context: { phase: 'dependencies-installed' }
+        });
+
         await ensureDataDir();
         await ensureSpecDirs();
         await verifyUltraThinkIntegration();
         await installTerminalStatusBar();
+
+        // Checkpoint before wizard
+        await checkpointManager.createCheckpoint(installSessionId, {
+            phase: 'pre-wizard',
+            timestamp: new Date().toISOString()
+        }, {
+            type: 'install-progress',
+            description: 'Core installation complete, launching wizard',
+            context: { phase: 'pre-wizard' }
+        });
+
         await offerWizard({ isReinstall: priorInstall });
         printNextSteps();
+
+        await taskLogger.updateTaskMetrics(installTaskId, {
+            linesChanged: 0,
+            filesModified: ['package.json', '.opnix/', 'data/', 'spec/'],
+            complexity: 'high',
+            installationType: priorInstall ? 'reinstall' : 'fresh-install'
+        });
+
+        // Final checkpoint
+        await checkpointManager.createCheckpoint(installSessionId, {
+            phase: 'completed',
+            priorInstall,
+            completedAt: new Date().toISOString()
+        }, {
+            type: 'install-complete',
+            description: 'Installation completed successfully',
+            critical: true,
+            context: { phase: 'completed', priorInstall }
+        });
+
+        // Complete installation task logging
+        await taskLogger.completeTask(
+            installTaskId,
+            `Opnix installation completed successfully. ${priorInstall ? 'Reinstallation' : 'Fresh installation'} finished with all components initialized.`,
+            'success'
+        );
+
         logSuccess(
             theme.bright('Opnix installation complete. '),
-            theme.muted('Enjoy the neon canvas.')
+            theme.muted('Enjoy the visual canvas.')
         );
+
     } catch (error) {
+        // Handle installation failure with recovery and task logging
+        try {
+            await gracefulFailureHandler.handleSessionFailure(installSessionId, error, {
+                sessionType: 'installation',
+                phase: 'main',
+                operation: 'opnix-install'
+            });
+
+            // Complete task with failure outcome if task was started
+            if (installTaskId) {
+                await taskLogger.completeTask(
+                    installTaskId,
+                    `Installation failed: ${error.message}. Recovery system activated.`,
+                    'failure'
+                );
+            }
+        } catch (recoveryError) {
+            logError(
+                theme.bright('Recovery handling failed: '),
+                theme.muted(recoveryError.message)
+            );
+        }
+
         logError(
             theme.bright('Installation failed: '),
             theme.muted(error.message)

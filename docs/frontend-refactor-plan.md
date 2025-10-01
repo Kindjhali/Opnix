@@ -5,8 +5,13 @@
 - `src/App.vue + src/appOptions.js` — 3,683 LOC, monolithic Vue 3 app with tabs, API calls, canvas logic, Markdown manager, terminal client, Storybook embed, and progressive interview orchestration.
 - Both files load via CDN Vue runtime (no build step) and rely on globally registered refs/components.
 
+## Recent Progress (2025-09-27)
+- Introduced `src/composables/appStore.js`, a reactive singleton shared by `App.vue`, terminal/command centre composables, and CLI routes. State previously hoisted in `appOptions.js` is now resolved via `useAppStore()`, unblocking the rest of the decomposition strategy.
+- Updated `commandCenterManager`, `terminalManager`, and `themeManager` to fall back to the store when invoked outside the Vue instance, ensuring CLI/test flows stay aligned with the UI refactor.
+
 ## Goals
 1. Reduce the surface area of `public/index.html` and `src/App.vue + src/appOptions.js` without breaking the SPA bootstrap or CDN deployment.
+2. Preserve accessibility + metadata (viewport, charset) and ensure the theme toggle continues to apply `data-theme` to `<body>`/`<html>`.
 2. Improve maintainability by extracting cohesive modules/components while keeping the runtime script-based (no bundler yet).
 3. Preserve existing functionality (tabs, canvas, terminal, Markdown manager, Storybook embed, diagrams, interview flow).
 4. Maintain accessibility + theming hooks introduced in recent sessions (theme toggle, keyboard navigation, live regions).
@@ -98,3 +103,7 @@
 ---
 
 Prepared by Codex (GPT-5) — 2025-09-25
+
+## Updated Architecture
+
+See [Composables Overview](composables-overview.md) for current module breakdown.

@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-09-28T12:31:29.531Z",
+  "milestones": {
+    "ms-status": {
+      "id": "ms-status",
+      "name": "Status Transition",
+      "status": "pending",
+      "progress": 0
+    }
+  },
+  "history": [],
+  "summary": {
+    "source": "test",
+    "ticketCount": 0,
+    "moduleCount": 0,
+    "featureCount": 0
+  }
+}
+

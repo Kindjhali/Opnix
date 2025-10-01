@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-26T15:18:00.920Z",
+  "generatedAt": "2025-09-28T12:31:26.794Z",
   "modules": [
     {
       "id": "backend",
@@ -9,18 +9,19 @@
         "server.js"
       ],
       "dependencies": [
-        "services"
+        "services",
+        "routes"
       ],
       "externalDependencies": [
         "express",
         "cors",
-        "glob"
+        "compression"
       ],
       "fileCount": 1,
-      "lineCount": 4151,
-      "todoCount": 5,
+      "lineCount": 1609,
+      "todoCount": 0,
       "coverage": 0,
-      "health": 46,
+      "health": 71,
       "frameworks": [
         "express"
       ],
@@ -46,24 +47,6 @@
       "manual": false
     },
     {
-      "id": "cc-sessions",
-      "name": "Cc Sessions",
-      "type": "code",
-      "pathHints": [
-        "cc-sessions"
-      ],
-      "dependencies": [],
-      "externalDependencies": [],
-      "fileCount": 11,
-      "lineCount": 2561,
-      "todoCount": 1,
-      "coverage": 0,
-      "health": 70,
-      "frameworks": [],
-      "source": "directory",
-      "manual": false
-    },
-    {
       "id": "data",
       "name": "Workspace Data",
       "type": "storage",
@@ -72,9 +55,9 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 27,
-      "lineCount": 2460,
-      "todoCount": 44,
+      "fileCount": 47,
+      "lineCount": 7902,
+      "todoCount": 364,
       "coverage": 0,
       "health": 20,
       "frameworks": [],
@@ -108,9 +91,9 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 77,
-      "lineCount": 17032,
-      "todoCount": 190,
+      "fileCount": 101,
+      "lineCount": 27640,
+      "todoCount": 250,
       "coverage": 0,
       "health": 20,
       "frameworks": [],
@@ -127,13 +110,36 @@
       "dependencies": [],
       "externalDependencies": [],
       "fileCount": 46,
-      "lineCount": 3840,
-      "todoCount": 7,
+      "lineCount": 3844,
+      "todoCount": 8,
       "coverage": 0,
-      "health": 40,
+      "health": 35,
       "frameworks": [
         "vue"
       ],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "routes",
+      "name": "Routes",
+      "type": "code",
+      "pathHints": [
+        "routes"
+      ],
+      "dependencies": [
+        "services"
+      ],
+      "externalDependencies": [
+        "express",
+        "glob"
+      ],
+      "fileCount": 17,
+      "lineCount": 3320,
+      "todoCount": 0,
+      "coverage": 6,
+      "health": 75,
+      "frameworks": [],
       "source": "directory",
       "manual": false
     },
@@ -154,11 +160,11 @@
         "${consoleImport}",
         "${specArchiveImport}"
       ],
-      "fileCount": 5,
-      "lineCount": 2013,
-      "todoCount": 0,
-      "coverage": 20,
-      "health": 79,
+      "fileCount": 6,
+      "lineCount": 2570,
+      "todoCount": 3,
+      "coverage": 17,
+      "health": 63,
       "frameworks": [],
       "source": "directory",
       "manual": false
@@ -172,15 +178,16 @@
       ],
       "dependencies": [],
       "externalDependencies": [
+        "chokidar",
         "vue",
         "react",
         "express",
         "cors"
       ],
-      "fileCount": 13,
-      "lineCount": 6062,
-      "todoCount": 43,
-      "coverage": 8,
+      "fileCount": 23,
+      "lineCount": 10190,
+      "todoCount": 48,
+      "coverage": 9,
       "health": 20,
       "frameworks": [],
       "source": "directory",
@@ -195,29 +202,11 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 14,
-      "lineCount": 2062,
-      "todoCount": 90,
+      "fileCount": 185,
+      "lineCount": 141395,
+      "todoCount": 7722,
       "coverage": 100,
       "health": 20,
-      "frameworks": [],
-      "source": "directory",
-      "manual": false
-    },
-    {
-      "id": "spec-kit",
-      "name": "Spec Kit",
-      "type": "code",
-      "pathHints": [
-        "spec-kit"
-      ],
-      "dependencies": [],
-      "externalDependencies": [],
-      "fileCount": 2,
-      "lineCount": 1223,
-      "todoCount": 0,
-      "coverage": 100,
-      "health": 100,
       "frameworks": [],
       "source": "directory",
       "manual": false
@@ -231,16 +220,77 @@
       ],
       "dependencies": [],
       "externalDependencies": [
-        "mermaid",
         "cytoscape",
         "cytoscape-edgehandles",
-        "vue"
+        "vue",
+        "mermaid",
+        "marked"
       ],
-      "fileCount": 5,
-      "lineCount": 2015,
+      "fileCount": 72,
+      "lineCount": 8459,
       "todoCount": 0,
-      "coverage": 20,
-      "health": 79,
+      "coverage": 7,
+      "health": 71,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "storybook-static",
+      "name": "Storybook Static",
+      "type": "code",
+      "pathHints": [
+        "storybook-static"
+      ],
+      "dependencies": [],
+      "externalDependencies": [
+        "vertx",
+        "@storybook",
+        "node:module",
+        "node:url",
+        "node:path"
+      ],
+      "fileCount": 42,
+      "lineCount": 58080,
+      "todoCount": 56,
+      "coverage": 0,
+      "health": 20,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "test-output",
+      "name": "Test Output",
+      "type": "code",
+      "pathHints": [
+        "test-output"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 0,
+      "lineCount": 0,
+      "todoCount": 0,
+      "coverage": 0,
+      "health": 75,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
+      "id": "test-results",
+      "name": "Test Results",
+      "type": "code",
+      "pathHints": [
+        "test-results"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 1,
+      "lineCount": 4,
+      "todoCount": 0,
+      "coverage": 100,
+      "health": 100,
       "frameworks": [],
       "source": "directory",
       "manual": false
@@ -254,21 +304,26 @@
       ],
       "dependencies": [
         "backend",
-        "services"
+        "services",
+        "src"
       ],
       "externalDependencies": [
+        "node:http",
         "node:assert",
         "node:fs",
         "node:path",
+        "node:test",
         "express",
         "vue",
-        "node:url"
+        "node:url",
+        "node:child_process",
+        "@playwright"
       ],
-      "fileCount": 19,
-      "lineCount": 1050,
+      "fileCount": 31,
+      "lineCount": 3569,
       "todoCount": 0,
       "coverage": 100,
-      "health": 91,
+      "health": 85,
       "frameworks": [],
       "source": "directory",
       "manual": false
@@ -278,6 +333,18 @@
     {
       "id": "backend->services",
       "source": "backend",
+      "target": "services",
+      "type": "internal"
+    },
+    {
+      "id": "backend->routes",
+      "source": "backend",
+      "target": "routes",
+      "type": "internal"
+    },
+    {
+      "id": "routes->services",
+      "source": "routes",
       "target": "services",
       "type": "internal"
     },
@@ -304,12 +371,18 @@
       "source": "tests",
       "target": "services",
       "type": "internal"
+    },
+    {
+      "id": "tests->src",
+      "source": "tests",
+      "target": "src",
+      "type": "internal"
     }
   ],
   "summary": {
-    "moduleCount": 13,
-    "dependencyCount": 5,
-    "externalDependencyCount": 21,
-    "totalLines": 44469
+    "moduleCount": 15,
+    "dependencyCount": 8,
+    "externalDependencyCount": 34,
+    "totalLines": 268582
   }
 }

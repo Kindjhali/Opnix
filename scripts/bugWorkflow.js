@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { execSync } = require('child_process');
-const fs = require('fs').promises;
 
 const API_BASE = 'http://localhost:7337/api';
 
@@ -226,7 +225,7 @@ async function main() {
             await startBug(parseInt(ticketId), args[0]);
             break;
 
-        case 'complete':
+        case 'complete': {
             if (!ticketId) {
                 console.error('❌ Ticket ID is required');
                 return;
@@ -234,8 +233,9 @@ async function main() {
             const summary = args.join(' ');
             await completeBug(parseInt(ticketId), summary);
             break;
+        }
 
-        case 'pause':
+        case 'pause': {
             if (!ticketId) {
                 console.error('❌ Ticket ID is required');
                 return;
@@ -243,6 +243,8 @@ async function main() {
             const reason = args.join(' ');
             await pauseBug(parseInt(ticketId), reason);
             break;
+
+        }
 
         case 'resume':
             if (!ticketId) {
@@ -252,19 +254,20 @@ async function main() {
             await resumeBug(parseInt(ticketId));
             break;
 
-        case 'status':
+        case 'status': {
             if (!ticketId) {
                 console.error('❌ Ticket ID is required');
                 return;
             }
             await showStatus(parseInt(ticketId));
             break;
+        }
 
         case 'active':
             await showActive();
             break;
 
-        case 'validate':
+        case 'validate': {
             if (!ticketId) {
                 console.error('❌ Ticket ID is required');
                 return;
@@ -279,6 +282,7 @@ async function main() {
                 }
             }
             break;
+        }
 
         default:
             console.error(`❌ Unknown command: ${command}`);

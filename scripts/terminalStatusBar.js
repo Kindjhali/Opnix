@@ -254,7 +254,7 @@ async function updateShellConfig(configPath, shell) {
     if (shell === 'fish') {
         statusBarConfig = `
 # Opnix Context Status Bar
-function opnix_status_bar
+function opnixStatusBar
     if test -f "${STATUS_SCRIPT}"
         bash "${STATUS_SCRIPT}"
     end
@@ -283,36 +283,36 @@ end
         // bash/zsh
         statusBarConfig = `
 # Opnix Context Status Bar
-opnix_status_bar() {
+opnixStatusBar() {
     if [ -f "${STATUS_SCRIPT}" ]; then
         bash "${STATUS_SCRIPT}"
     fi
 }
 
 # Create claude/codex CLI wrappers that enable status bar
-claude_with_status() {
+claudeWithStatus() {
     export CLAUDE_CLI_SESSION=1
     command claude "$@"
     unset CLAUDE_CLI_SESSION
 }
 
-codex_with_status() {
+codexWithStatus() {
     export CODEX_CLI_SESSION=1
     command codex "$@"
     unset CODEX_CLI_SESSION
 }
 
 # Create aliases for CLI tools
-alias claude='claude_with_status'
-alias codex='codex_with_status'
+alias claude='claudeWithStatus'
+alias codex='codexWithStatus'
 
 # For direct anthropic CLI usage
-anthropic_with_status() {
+anthropicWithStatus() {
     export ANTHROPIC_CLI_SESSION=1
     command anthropic "$@"
     unset ANTHROPIC_CLI_SESSION
 }
-alias anthropic='anthropic_with_status'
+alias anthropic='anthropicWithStatus'
 `;
     }
 

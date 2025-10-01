@@ -1,0 +1,181 @@
+{
+  "project": {
+    "name": "Untitled Project",
+    "type": "Unknown",
+    "patterns": [
+      "api-service",
+      "backend-heavy",
+      "web-application",
+      "frontend-heavy",
+      "vue-project",
+      "npm-project",
+      "documented-project",
+      "comprehensive-docs"
+    ],
+    "moduleCount": 12,
+    "totalLines": 55473,
+    "frameworks": [
+      "express",
+      "vue"
+    ]
+  },
+  "mermaid": "graph TD\n    backend[[\"Backend API\"]\n    agents[[\"Agent Library\"]\n    data[[\"Workspace Data\"]\n    docs{[\"Documentation\"]\n    legacy_exports[[\"Legacy Exports\"]\n    frontend([\"Frontend Interface\"]\n    routes[[\"Routes\"]\n    scripts[[[\"Automation Scripts\"]\n    services[[\"Services\"]\n    spec[[\"Spec Archive\"]\n    src[[\"Application Source\"]\n    tests[[\"Tests\"]\n    backend --> services\n    backend --> routes\n    routes --> services\n    scripts --> services\n    scripts --> backend\n    tests --> backend\n    tests --> services\n    classDef frontend fill:#e1f5fe\n    classDef backend fill:#f3e5f5\n    classDef database fill:#e8f5e8\n    class backend backend\n    class agents knowledge\n    class data storage\n    class docs documentation\n    class legacy_exports artifacts\n    class frontend frontend\n    class routes code\n    class scripts automation\n    class services workspace\n    class spec artifacts\n    class src code\n    class tests code",
+  "d3": {
+    "nodes": [
+      {
+        "id": "backend",
+        "name": "Backend API",
+        "type": "backend",
+        "size": 72.94377299288821,
+        "health": 71,
+        "color": "#ab47bc",
+        "frameworks": [
+          "express"
+        ]
+      },
+      {
+        "id": "agents",
+        "name": "Agent Library",
+        "type": "knowledge",
+        "size": 0,
+        "health": 75,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "data",
+        "name": "Workspace Data",
+        "type": "storage",
+        "size": 70.36148493750537,
+        "health": 20,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "docs",
+        "name": "Documentation",
+        "type": "documentation",
+        "size": 0,
+        "health": 75,
+        "color": "#ffa726",
+        "frameworks": []
+      },
+      {
+        "id": "legacy-exports",
+        "name": "Legacy Exports",
+        "type": "artifacts",
+        "size": 68.85509670034818,
+        "health": 25,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "frontend",
+        "name": "Frontend Interface",
+        "type": "frontend",
+        "size": 82.50358951477294,
+        "health": 35,
+        "color": "#42a5f5",
+        "frameworks": [
+          "vue"
+        ]
+      },
+      {
+        "id": "routes",
+        "name": "Routes",
+        "type": "code",
+        "size": 79.94294986415977,
+        "health": 75,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "scripts",
+        "name": "Automation Scripts",
+        "type": "automation",
+        "size": 76.07878073278508,
+        "health": 79,
+        "color": "#ef5350",
+        "frameworks": []
+      },
+      {
+        "id": "services",
+        "name": "Services",
+        "type": "workspace",
+        "size": 89.005490139363,
+        "health": 20,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "spec",
+        "name": "Spec Archive",
+        "type": "artifacts",
+        "size": 102.93500556085371,
+        "health": 20,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "src",
+        "name": "Application Source",
+        "type": "code",
+        "size": 85.29911963824013,
+        "health": 73,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "tests",
+        "name": "Tests",
+        "type": "code",
+        "size": 70.46647277848756,
+        "health": 91,
+        "color": "#78909c",
+        "frameworks": []
+      }
+    ],
+    "links": [
+      {
+        "source": "backend",
+        "target": "services",
+        "type": "internal"
+      },
+      {
+        "source": "backend",
+        "target": "routes",
+        "type": "internal"
+      },
+      {
+        "source": "routes",
+        "target": "services",
+        "type": "internal"
+      },
+      {
+        "source": "scripts",
+        "target": "services",
+        "type": "internal"
+      },
+      {
+        "source": "scripts",
+        "target": "backend",
+        "type": "internal"
+      },
+      {
+        "source": "tests",
+        "target": "backend",
+        "type": "internal"
+      },
+      {
+        "source": "tests",
+        "target": "services",
+        "type": "internal"
+      }
+    ]
+  },
+  "metadata": {
+    "generated": "2025-09-27T07:35:15.610Z",
+    "totalNodes": 12,
+    "totalEdges": 7
+  }
+}

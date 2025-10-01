@@ -1,0 +1,141 @@
+/* Extracted from base.css (Phase 3) */
+.roadmap-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.roadmap-stat {
+    flex: 1 1 160px;
+    background: var(--bg-darkest);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.roadmap-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.roadmap-stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.roadmap-container {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.roadmap-timeline {
+    position: relative;
+    margin: 2rem 0;
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding-left: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.timeline-item:last-child .timeline-connector {
+    display: none;
+}
+
+.timeline-connector {
+    position: absolute;
+    left: 1.75rem;
+    top: 2.5rem;
+    width: 2px;
+    height: calc(100% + 1rem);
+    background: linear-gradient(180deg, var(--accent-2), var(--text-muted));
+}
+
+.timeline-marker {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-1);
+    background: var(--bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 18px var(--accent-1);
+}
+
+.timeline-progress {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+}
+
+.timeline-content {
+    flex: 1;
+    background: var(--bg-medium);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-medium, 0 0 18px rgba(0,0,0,0.35));
+}
+
+.timeline-date {
+    font-size: 0.8rem;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.timeline-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+}
+
+.timeline-description {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.timeline-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--glass-overlay-strong, rgba(255,255,255,0.08));
+    padding-top: 0.75rem;
+}
+
+.milestone-form {
+    margin: 1.5rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.completion-summary {
+    margin-top: 1rem;
+    border: 1px solid var(--accent-2);
+    border-radius: 4px;
+    padding: 0.75rem;
+    background: var(--bg-darkest);
+    color: var(--text-secondary);
+}
+

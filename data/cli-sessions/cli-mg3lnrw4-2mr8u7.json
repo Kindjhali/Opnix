@@ -1,0 +1,76 @@
+{
+  "sessionId": "cli-mg3lnrw4-2mr8u7",
+  "category": "module",
+  "command": "/new-module",
+  "createdAt": "2025-09-28T11:11:47.188Z",
+  "updatedAt": "2025-09-28T11:11:47.188Z",
+  "currentIndex": 0,
+  "questions": [
+    {
+      "id": "canvas-ownership-model",
+      "prompt": "Who is accountable for keeping the canvas accurate and how often is it reviewed?",
+      "type": "textarea",
+      "placeholder": "Architecture guild reviews weekly, platform team signs off pre-release, automated checks in CI/CD…",
+      "required": true,
+      "sectionId": "canvas-strategy",
+      "sectionTitle": "Canvas Dependency Strategy",
+      "category": "module"
+    },
+    {
+      "id": "canvas-update-signal",
+      "prompt": "What signals (detector runs, ADRs, code reviews) should trigger a canvas refresh?",
+      "type": "textarea",
+      "placeholder": "e.g., Detector runs nightly, major feature merges require manual annotation, ADR approval auto-updates nodes.",
+      "required": true,
+      "sectionId": "canvas-strategy",
+      "sectionTitle": "Canvas Dependency Strategy",
+      "category": "module"
+    },
+    {
+      "id": "module-ownership-matrix",
+      "prompt": "Map modules to owning teams and outline escalation paths when dependencies degrade.",
+      "type": "textarea",
+      "placeholder": "List module → squad, secondary contacts, escalation SLAs, and change approval requirements.",
+      "required": true,
+      "sectionId": "modules-governance",
+      "sectionTitle": "Module Governance",
+      "category": "module"
+    },
+    {
+      "id": "module-health-criteria",
+      "prompt": "What health metrics (coverage, TODO thresholds, coupling limits) should we enforce per module?",
+      "type": "textarea",
+      "placeholder": "Define minimum coverage, max TODO debt, dependency caps, and alerting thresholds.",
+      "required": true,
+      "sectionId": "modules-governance",
+      "sectionTitle": "Module Governance",
+      "category": "module"
+    }
+  ],
+  "responses": [],
+  "engineState": {
+    "responses": {},
+    "triggeredSections": [],
+    "detectedPatterns": [
+      "api-service",
+      "backend-heavy",
+      "web-application",
+      "frontend-heavy",
+      "vue-project",
+      "npm-project",
+      "documented-project",
+      "comprehensive-docs"
+    ],
+    "artifactQueue": [
+      "project-analysis",
+      "module-diagram",
+      "frontend-checklist",
+      "ui-component-map",
+      "api-documentation",
+      "endpoint-catalog",
+      "technical-specification",
+      "architecture-diagram"
+    ],
+    "currentPhase": "detection"
+  }
+}

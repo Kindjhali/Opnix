@@ -529,6 +529,20 @@
           "required": true
         },
         {
+          "id": "monitoring-procedures",
+          "prompt": "Detail dashboards, health checks, and monitoring procedures operators rely on.",
+          "type": "textarea",
+          "placeholder": "List critical dashboards, alert routing, synthetic checks, and heartbeat expectations.",
+          "required": false
+        },
+        {
+          "id": "troubleshooting-playbook",
+          "prompt": "Document the standard troubleshooting steps or runbooks for recurring incidents.",
+          "type": "textarea",
+          "placeholder": "Link to diagnostic flows, known issues, or service-specific playbooks.",
+          "required": false
+        },
+        {
           "id": "incident-response",
           "prompt": "Outline on-call rotations, escalation paths, and incident response expectations.",
           "type": "textarea",

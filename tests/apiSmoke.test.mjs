@@ -1,3 +1,4 @@
+import http from 'node:http';
 import assert from 'node:assert/strict';
 import {
   app,
@@ -36,11 +37,69 @@ import { invokeRoute } from './helpers/invokeRoute.mjs';
   const detectModules = await invokeRoute(app, { method: 'POST', path: '/api/modules/detect', body: {} });
   assert(Array.isArray(detectModules.body.modules), 'module detection should return module array');
 
+  const roadmapState = await invokeRoute(app, { method: 'GET', path: '/api/roadmap/state' });
+  assert.equal(roadmapState.statusCode, 200, 'roadmap state should respond with 200');
+  assert.equal(roadmapState.body.success, true, 'roadmap state payload should include success flag');
+  assert(Array.isArray(roadmapState.body.state?.milestones), 'roadmap state should include milestones array');
+
+  if ((roadmapState.body.state?.milestones || []).length) {
+    const target = roadmapState.body.state.milestones[0];
+    const patchBody = { field: 'notes', value: 'Smoke test inline update' };
+    const updateResponse = await invokeRoute(app, {
+      method: 'PATCH',
+      path: '/api/roadmap/milestones/:id',
+      params: { id: String(target.id ?? target.name ?? 1) },
+      body: patchBody
+    });
+    assert.equal(updateResponse.statusCode, 200, 'roadmap milestone update should respond with 200');
+    assert.equal(updateResponse.body.success, true, 'roadmap milestone update should include success flag');
+    const updatedList = updateResponse.body.state?.milestones || [];
+    const updated = updatedList.find(item => String(item.id ?? item.name) === String(target.id ?? target.name));
+    assert(updated, 'roadmap milestone update should return updated milestone');
+    if (updated) {
+      assert.equal(updated.notes, patchBody.value, 'roadmap milestone should contain updated notes');
+    }
+  }
+
+  const roadmapVersions = await invokeRoute(app, { method: 'GET', path: '/api/roadmap/versions' });
+  assert.equal(roadmapVersions.statusCode, 200, 'roadmap versions should respond with 200');
+  assert(Array.isArray(roadmapVersions.body.versions), 'roadmap versions should be an array');
+
   const markdownArchive = await invokeRoute(app, { method: 'GET', path: '/api/archive/markdown' });
   assert(Array.isArray(markdownArchive.body.files), 'markdown archive should list files');
 
+  const docsGenerate = await invokeRoute(app, { method: 'POST', path: '/api/docs/generate', body: {} });
+  assert.equal(docsGenerate.statusCode, 200, 'docs generate should respond with 200');
+  assert.equal(docsGenerate.body.success, true, 'docs generate should indicate success');
+  assert(docsGenerate.body.doc && docsGenerate.body.doc.filename, 'docs generate should return doc metadata');
+
+  const apiSpecDraft = await invokeRoute(app, { method: 'POST', path: '/api/api-spec/generate', body: { format: 'openapi' } });
+  assert.equal(apiSpecDraft.statusCode, 200, 'api spec draft should respond with 200');
+  assert.equal(apiSpecDraft.body.success, true, 'api spec draft should indicate success');
+  assert(apiSpecDraft.body.spec, 'api spec draft should include spec payload');
+
+  const apiSpecExport = await invokeRoute(app, { method: 'POST', path: '/api/api-spec/export', body: { spec: apiSpecDraft.body.spec, format: 'openapi' } });
+  assert.equal(apiSpecExport.statusCode, 200, 'api spec export should respond with 200');
+  assert.equal(apiSpecExport.body.success, true, 'api spec export should indicate success');
+  assert(apiSpecExport.body.filename, 'api spec export should include filename');
+
+  const apiSpecTest = await invokeRoute(app, { method: 'POST', path: '/api/api-spec/test', body: { spec: apiSpecDraft.body.spec, format: 'openapi' } });
+  assert.equal(apiSpecTest.statusCode, 200, 'api spec test should respond with 200');
+  assert(Array.isArray(apiSpecTest.body.results), 'api spec test should return results array');
+
   const exportsListing = await invokeRoute(app, { method: 'GET', path: '/api/exports' });
   assert(Array.isArray(exportsListing.body.files), 'exports endpoint should return file array');
+
+  const serverInstance = http.createServer(app);
+  await new Promise(resolve => serverInstance.listen(0, '127.0.0.1', resolve));
+  const { port } = serverInstance.address();
+  const cssResponse = await fetch(`http://127.0.0.1:${port}/css/base.css`);
+  assert.equal(cssResponse.status, 200, 'css asset should respond with 200');
+  const contentType = cssResponse.headers.get('content-type') || '';
+  assert(contentType.includes('text/css'), 'css asset should return text/css content-type');
+  const cssBody = await cssResponse.text();
+  assert(cssBody && cssBody.length > 0, 'css asset should include content');
+  await new Promise(resolve => serverInstance.close(resolve));
 
   const snapshot = await listExportFiles();
   assert(Array.isArray(snapshot), 'listExportFiles helper should return array');

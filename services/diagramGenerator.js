@@ -150,7 +150,7 @@ function buildEntityDiagram({ modules = [] }) {
         const source = sanitizeId(module.id || module.name || 'Module');
         (module.dependencies || []).forEach(dep => {
             const target = sanitizeId(dep);
-            lines.push(`  ${source} ||--o{ ${target} : depends_on`);
+            lines.push(`  ${source} ||--o{ ${target} : "depends on"`);
         });
     });
 

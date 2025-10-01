@@ -3,17 +3,17 @@
     <div class="theme-switcher">
       <button
         class="theme-btn"
-        :class="{ active: app.currentTheme === 'mole' }"
+        :class="{ active: currentTheme === 'mole' }"
         type="button"
-        @click="app.setTheme('mole')"
+        @click="emitTheme('mole')"
       >
         MOLE
       </button>
       <button
         class="theme-btn"
-        :class="{ active: app.currentTheme === 'canyon' }"
+        :class="{ active: currentTheme === 'canyon' }"
         type="button"
-        @click="app.setTheme('canyon')"
+        @click="emitTheme('canyon')"
       >
         CANYON
       </button>
@@ -27,9 +27,15 @@
 export default {
   name: 'AppHeader',
   props: {
-    app: {
-      type: Object,
+    currentTheme: {
+      type: String,
       required: true
+    }
+  },
+  emits: ['set-theme'],
+  methods: {
+    emitTheme(theme) {
+      this.$emit('set-theme', theme);
     }
   }
 };

@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const { execSync } = require('child_process');
+const { syncRoadmapState } = require('./roadmapState');
 
 class BugWorkflowManager {
   constructor() {
@@ -12,7 +13,7 @@ class BugWorkflowManager {
     try {
       const data = await fs.readFile(this.ticketsPath, 'utf8');
       return JSON.parse(data);
-    } catch (error) {
+    } catch {
       return { tickets: [], nextId: 1 };
     }
   }
@@ -25,7 +26,7 @@ class BugWorkflowManager {
     try {
       const data = await fs.readFile(this.workflowPath, 'utf8');
       return JSON.parse(data);
-    } catch (error) {
+    } catch {
       return {
         workflows: {},
         settings: {
@@ -81,6 +82,7 @@ class BugWorkflowManager {
     ticket.workflowId = workflowId;
 
     await this.saveTickets(ticketsData);
+    await syncRoadmapState({ reason: 'bug-workflow:start', overrides: { tickets: ticketsData } });
     await this.saveWorkflowState(workflowState);
 
     return { ticket, workflow };
@@ -128,6 +130,7 @@ class BugWorkflowManager {
     }
 
     await this.saveTickets(ticketsData);
+    await syncRoadmapState({ reason: 'bug-workflow:complete', overrides: { tickets: ticketsData } });
     await this.saveWorkflowState(workflowState);
 
     return { ticket, workflow, commitHash };
@@ -157,6 +160,7 @@ class BugWorkflowManager {
     ticket.status = 'paused';
 
     await this.saveTickets(ticketsData);
+    await syncRoadmapState({ reason: 'bug-workflow:pause', overrides: { tickets: ticketsData } });
     await this.saveWorkflowState(workflowState);
 
     return { ticket, workflow };
@@ -186,6 +190,7 @@ class BugWorkflowManager {
     ticket.status = 'in-progress';
 
     await this.saveTickets(ticketsData);
+    await syncRoadmapState({ reason: 'bug-workflow:resume', overrides: { tickets: ticketsData } });
     await this.saveWorkflowState(workflowState);
 
     return { ticket, workflow };
@@ -204,7 +209,7 @@ Closes ticket #${ticket.id}
 🤖 Generated with Opnix Bug Workflow
 Co-Authored-By: Opnix <noreply@opnix.com>`;
 
-      const result = execSync(`git commit -m "${commitMessage.replace(/"/g, '\\"')}"`, {
+      execSync(`git commit -m "${commitMessage.replace(/"/g, '\\"')}"`, {
         stdio: 'pipe',
         encoding: 'utf8'
       });

@@ -1,0 +1,11 @@
+{
+  "*.{js,mjs}": [
+    "eslint --fix --max-warnings 0"
+  ],
+  "*.vue": [
+    "eslint --fix --max-warnings 0"
+  ],
+  "*.{css,scss}": [
+    "stylelint --fix"
+  ]
+}

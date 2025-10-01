@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <!-- MOLE Theme Color Gradient -->
+    <linearGradient id="neonGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E94560;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#FF8C3B;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#06B6D4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1FB6FF;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Neon glow filter -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Strong outer glow -->
+    <filter id="strongGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background - MOLE darkest -->
+  <rect width="64" height="64" fill="#0A0F1C" rx="14"/>
+
+  <!-- Letter O with gradient stroke -->
+  <ellipse cx="20" cy="32" rx="12" ry="16"
+           fill="none" stroke="url(#neonGlow)" stroke-width="3.5"
+           filter="url(#strongGlow)"/>
+
+  <!-- Letter P vertical stem -->
+  <line x1="40" y1="20" x2="40" y2="44"
+        stroke="#E94560" stroke-width="3.5" stroke-linecap="round"
+        filter="url(#strongGlow)"/>
+
+  <!-- Letter P rounded top -->
+  <path d="M 40 20 Q 52 20 52 28 Q 52 36 40 36"
+        fill="none" stroke="url(#neonGlow)" stroke-width="3.5"
+        stroke-linecap="round" filter="url(#strongGlow)"/>
+
+  <!-- Decorative accent line (underline) -->
+  <line x1="12" y1="52" x2="52" y2="52"
+        stroke="#1FB6FF" stroke-width="2" stroke-linecap="round"
+        opacity="0.6" filter="url(#glow)"/>
+
+  <!-- Accent dots -->
+  <circle cx="14" cy="55" r="1.5" fill="#FF8C3B" filter="url(#glow)"/>
+  <circle cx="32" cy="55" r="1.5" fill="#06B6D4" filter="url(#glow)"/>
+  <circle cx="50" cy="55" r="1.5" fill="#1FB6FF" filter="url(#glow)"/>
+</svg>

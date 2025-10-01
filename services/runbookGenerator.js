@@ -1,5 +1,9 @@
 const path = require('path');
 const fs = require('fs').promises;
+const { ArtifactGenerator } = require('./artifactGenerator');
+const { buildSpecKitMarkdown } = require('./specGenerator');
+
+const artifactGenerator = new ArtifactGenerator(process.cwd());
 
 const RUNBOOK_SECTION_DEFINITIONS = [
   {
@@ -25,7 +29,9 @@ const RUNBOOK_SECTION_DEFINITIONS = [
       { id: 'availability-targets', label: 'Availability Targets' },
       { id: 'scaling-strategy', label: 'Scaling Strategy' },
       { id: 'observability-tooling', label: 'Observability Tooling' },
-      { id: 'incident-response', label: 'Incident Response' }
+      { id: 'monitoring-procedures', label: 'Monitoring Procedures' },
+      { id: 'incident-response', label: 'Incident Response' },
+      { id: 'troubleshooting-playbook', label: 'Troubleshooting Playbook' }
     ]
   },
   {
@@ -71,6 +77,88 @@ const RUNBOOK_SECTION_DEFINITIONS = [
     ]
   }
 ];
+
+function deriveProjectType(modules, techStack) {
+  const types = new Set((modules || []).map(module => String(module.type || '').toLowerCase()));
+  const frameworks = new Set((techStack?.frameworks || []).map(fw => fw.toLowerCase()));
+
+  if (types.has('mobile') || frameworks.has('react-native') || frameworks.has('expo')) return 'Mobile App';
+  if (types.has('desktop') || frameworks.has('electron')) return 'Desktop Software';
+  if (types.has('frontend') || frameworks.has('react') || frameworks.has('vue') || frameworks.has('angular')) return 'Web Application';
+  if (types.has('api') || frameworks.has('express') || frameworks.has('fastify') || frameworks.has('koa') || frameworks.has('nest')) return 'API Service';
+  if (types.has('data-pipeline')) return 'Data Platform';
+  return 'Operational Toolkit';
+}
+
+function deriveProjectPatterns(modules, techStack) {
+  const patterns = new Set();
+  const types = new Set((modules || []).map(module => String(module.type || '').toLowerCase()));
+  const dependencies = (techStack?.dependencies || []).map(dep => dep.toLowerCase());
+  const devDependencies = (techStack?.devDependencies || []).map(dep => dep.toLowerCase());
+  const frameworks = (techStack?.frameworks || []).map(dep => dep.toLowerCase());
+  const combined = new Set([...dependencies, ...devDependencies, ...frameworks]);
+
+  if (types.has('frontend')) patterns.add('frontend-heavy');
+  if (types.has('api')) patterns.add('api-service');
+  if (combined.has('docker') || combined.has('kubernetes') || combined.has('helm')) patterns.add('containerized');
+  if (combined.has('lambda') || combined.has('serverless')) patterns.add('serverless');
+  if (combined.has('electron')) patterns.add('desktop-app');
+  return Array.from(patterns);
+}
+
+function buildSpecSnapshotPayload({ projectName, projectType, responseMap, modulesResult, tickets, techStack }) {
+  const frameworks = techStack?.frameworks || [];
+  const primaryFramework = responseMap.get('preferred-framework') || frameworks[0] || null;
+  const projectGoal = responseMap.get('project-purpose') || 'Operational readiness planning';
+  return {
+    project: {
+      name: projectName || 'Opnix Project',
+      type: projectType,
+      goal: projectGoal
+    },
+    technical: {
+      language: responseMap.get('primary-language') || null,
+      framework: primaryFramework,
+      stack: frameworks,
+      architecture: {
+        dataStores: responseMap.get('data-sources') || null,
+        integrations: responseMap.get('integration-consumers') || null,
+        testingStrategy: responseMap.get('testing-strategy') || null,
+        observability: responseMap.get('observability-tooling') || null
+      }
+    },
+    modules: modulesResult?.modules || [],
+    canvas: {
+      edges: modulesResult?.edges || [],
+      summary: modulesResult?.summary || {}
+    },
+    features: [],
+    tickets: tickets || []
+  };
+}
+
+function formatRecommendationsMarkdown(recommendations) {
+  const lines = ['## Recommendations'];
+  if (Array.isArray(recommendations) && recommendations.length) {
+    lines.push(...recommendations.map(rec => `- ${rec}`));
+  } else {
+    lines.push('- Populate additional runbook responses to unlock tailored recommendations.');
+  }
+  lines.push('');
+  return lines.join('\n');
+}
+
+function formatTestingQuickWins(quickWins) {
+  const lines = ['## Testing Quick Wins'];
+  if (Array.isArray(quickWins) && quickWins.length) {
+    lines.push(...quickWins.map(item => `- ${item}`));
+  } else {
+    lines.push('- No immediate testing quick wins detected.');
+  }
+  lines.push('');
+  return lines.join('\n');
+}
+
 
 function toResponseMap(sessionResponses, responsesObject) {
   const map = new Map();
@@ -174,9 +262,54 @@ async function generateRunbook({
 }) {
   const responseMap = toResponseMap(session?.responses, responses);
 
+  const projectType = deriveProjectType(modulesResult?.modules, techStack);
+  const projectPatterns = deriveProjectPatterns(modulesResult?.modules, techStack);
+  const projectData = {
+    name: projectName || 'Opnix Project',
+    type: projectType,
+    patterns: projectPatterns
+  };
+  const moduleDataForArtifacts = {
+    modules: modulesResult?.modules || [],
+    summary: modulesResult?.summary || {},
+    edges: modulesResult?.edges || []
+  };
+
+  let recommendations = [];
+  let quickWins = [];
+  try {
+    recommendations = artifactGenerator.generateProjectRecommendations(projectData, moduleDataForArtifacts, responseMap);
+  } catch (error) {
+    console.error('Runbook recommendation generation failed:', error);
+  }
+  try {
+    quickWins = artifactGenerator.identifyTestingQuickWins(moduleDataForArtifacts);
+  } catch (error) {
+    console.error('Runbook testing quick wins generation failed:', error);
+  }
+
+  const specSnapshotPayload = buildSpecSnapshotPayload({
+    projectName,
+    projectType,
+    responseMap,
+    modulesResult,
+    tickets,
+    techStack
+  });
+
+  let specMarkdown = '';
+  try {
+    specMarkdown = buildSpecKitMarkdown(specSnapshotPayload).trim();
+  } catch (error) {
+    console.error('Runbook spec snapshot generation failed:', error);
+    specMarkdown = 'Specification snapshot unavailable. Ensure spec generator configuration is valid.';
+  }
+
   const now = new Date();
   const title = projectName ? `${projectName} Operational Runbook` : 'Operational Runbook';
-  const header = `# ${title}\n\n`;
+  const header = `# ${title}
+
+`;
 
   const metadata = [
     `- Generated: ${now.toISOString()}`,
@@ -194,15 +327,21 @@ async function generateRunbook({
   const ticketSummary = buildTicketSummary(tickets);
   const techStackSummary = buildTechStackSummary(techStack);
 
-  const body = [
+  const bodySegments = [
     '## Module Summary',
     moduleSummary,
     '## High Priority Tickets',
     ticketSummary,
     '## Tech Stack Snapshot',
     techStackSummary,
+    formatRecommendationsMarkdown(recommendations),
+    formatTestingQuickWins(quickWins),
+    '## Specification Snapshot',
+    specMarkdown ? `${specMarkdown}` + '\n' : '- Specification snapshot currently unavailable.\n',
     sections
-  ].join('\n');
+  ];
+
+  const body = bodySegments.join('\n');
 
   const content = `${header}${metadata}${body}`;
 

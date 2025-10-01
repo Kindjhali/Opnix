@@ -3,37 +3,59 @@
     "stylelint-config-standard",
     "stylelint-config-standard-scss"
   ],
-  "plugins": ["stylelint-scss"],
+  "plugins": [
+    "stylelint-scss"
+  ],
   "rules": {
     "at-rule-no-unknown": null,
     "scss/at-rule-no-unknown": true,
     "selector-pseudo-class-no-unknown": [
       true,
       {
-        "ignorePseudoClasses": ["global", "deep", "slotted"]
+        "ignorePseudoClasses": [
+          "global",
+          "deep",
+          "slotted"
+        ]
       }
     ],
     "selector-pseudo-element-no-unknown": [
       true,
       {
-        "ignorePseudoElements": ["v-deep", "v-global", "v-slotted"]
+        "ignorePseudoElements": [
+          "v-deep",
+          "v-global",
+          "v-slotted"
+        ]
       }
     ],
     "property-no-unknown": [
       true,
       {
-        "ignoreProperties": ["composes"]
+        "ignoreProperties": [
+          "composes"
+        ]
       }
     ],
     "color-function-notation": "legacy",
     "color-function-alias-notation": null,
     "alpha-value-notation": "number",
     "custom-property-empty-line-before": "never",
-    "no-descending-specificity": null
+    "no-descending-specificity": null,
+    "selector-class-pattern": [
+      "^(?:[a-z0-9]+(?:-[a-z0-9]+)*(?:__(?:[a-z0-9]+(?:-[a-z0-9]+)*)|--(?:[a-z0-9]+(?:-[a-z0-9]+)*))?|[a-z]+[A-Za-z0-9]+)$",
+      {
+        "message": "Expected class selector to be kebab-case, BEM, or camelCase"
+      }
+    ],
+    "media-feature-range-notation": "prefix"
   },
   "ignoreFiles": [
-    "node_modules/**/*",
+    ".storybook/**/*",
+    "dist/**/*",
     "exports/**/*",
-    ".storybook/**/*"
+    "node_modules/**/*",
+    "public/assets/**/*.css",
+    "storybook-static/**/*"
   ]
 }

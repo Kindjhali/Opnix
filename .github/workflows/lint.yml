@@ -1,0 +1,46 @@
+name: Lint and Style Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        
+    - name: Install pnpm
+      run: npm install -g pnpm
+        
+    - name: Install dependencies
+      run: pnpm install
+      
+    - name: Run ESLint with camelCase enforcement
+      run: pnpm lint:js --max-warnings 0
+      env:
+        CI: true
+        
+    - name: Run Stylelint
+      run: pnpm lint:css
+      
+    - name: Check for snake_case violations
+      run: |
+        # Search for common snake_case patterns in code
+        if grep -r --include="*.js" --include="*.mjs" --include="*.vue" \
+           --exclude-dir=node_modules --exclude-dir=.git \
+           -E '\b[a-z]+_[a-z]+\b' . | \
+           grep -v -E '(__dirname|__filename|child_process|process_exit|bash_profile|node_modules)'; then
+          echo "❌ Found snake_case violations!"
+          exit 1
+        else
+          echo "✅ No snake_case violations found"
+        fi

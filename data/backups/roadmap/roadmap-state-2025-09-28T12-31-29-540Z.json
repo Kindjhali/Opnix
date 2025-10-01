@@ -1,0 +1,74 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-09-28T12:31:29.537Z",
+  "milestones": {
+    "ms-status": {
+      "id": "ms-status",
+      "name": "Status Transition",
+      "status": "active",
+      "progress": 0,
+      "updatedAt": "2025-09-28T12:31:29.535Z",
+      "dependencySummary": {
+        "total": 0,
+        "satisfied": 0,
+        "blocked": 0,
+        "pending": 0,
+        "missing": 0,
+        "gatingProgress": 100,
+        "status": "clear",
+        "details": []
+      }
+    }
+  },
+  "history": [
+    {
+      "reason": "roadmap:manual-edit:status+dependencySummary",
+      "timestamp": "2025-09-28T12:31:29.536Z",
+      "actor": null,
+      "summary": {
+        "source": "roadmap:manual-edit:status+dependencySummary",
+        "ticketCount": 153,
+        "moduleCount": 15,
+        "featureCount": 0,
+        "generatedAt": "2025-09-28T12:31:29.536Z"
+      },
+      "changes": [
+        {
+          "id": "ms-status",
+          "title": "Status Transition",
+          "updatedFields": [
+            "status",
+            "dependencySummary"
+          ],
+          "updatedAt": "2025-09-28T12:31:29.536Z",
+          "status": {
+            "from": "pending",
+            "to": "active"
+          },
+          "dependencySummary": {
+            "from": null,
+            "to": {
+              "total": 0,
+              "satisfied": 0,
+              "blocked": 0,
+              "pending": 0,
+              "missing": 0,
+              "gatingProgress": 100,
+              "status": "clear",
+              "details": []
+            }
+          },
+          "actor": null
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "source": "roadmap:manual-edit:status+dependencySummary",
+    "ticketCount": 153,
+    "moduleCount": 15,
+    "featureCount": 0,
+    "generatedAt": "2025-09-28T12:31:29.536Z"
+  }
+}
+

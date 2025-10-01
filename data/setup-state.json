@@ -1,20 +1,105 @@
 {
-  "lastSelectedMode": "existing",
+  "lastSelectedMode": "new",
   "history": [
     {
-      "mode": "existing",
-      "timestamp": "2025-09-25T16:17:36.269Z",
-      "output": "spec/audits/opnix-existing-project-entry-2025-09-25T16-17-36-268Z.md"
+      "mode": "new",
+      "timestamp": "2025-09-28T11:02:07.345Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T11-02-06-748Z.md"
     },
     {
-      "mode": "existing",
-      "timestamp": "2025-09-25T06:58:37.382Z",
-      "output": "spec/audits/opnix-existing-project-entry-2025-09-25T06-58-37-382Z.md"
+      "mode": "new",
+      "timestamp": "2025-09-28T09:57:03.855Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-57-03-291Z.md"
     },
     {
-      "mode": "existing",
-      "timestamp": "2025-09-25T06:49:39.856Z",
-      "output": "spec/audits/opnix-existing-project-entry-2025-09-25T06-49-39-855Z.md"
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:49.146Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-48-605Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:48.276Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-47-682Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:47.318Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-46-774Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:46.426Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-45-895Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:45.522Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-44-966Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:27.827Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-27-313Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:26.548Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-26-032Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:25.314Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-24-785Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:24.062Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-23-549Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:56:23.219Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-56-22-678Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:55:06.880Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-55-06-364Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:55:05.652Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-55-05-130Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:55:04.394Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-55-03-861Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:55:03.101Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-55-02-562Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:55:01.845Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-55-01-337Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:53:27.203Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-53-26-703Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:52:03.973Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-52-03-475Z.md"
+    },
+    {
+      "mode": "new",
+      "timestamp": "2025-09-28T09:12:54.205Z",
+      "output": "spec/revision/opnix-new-project-scope-2025-09-28T09-12-53-701Z.md"
     }
   ]
 }

@@ -1,0 +1,16 @@
+[
+  {
+    "timestamp": "2025-09-28T11:09:21.713Z",
+    "command": "/spec",
+    "fullCommand": "/spec",
+    "reasons": [
+      "UltraThink gating: append [[ ultrathink ]] to the command (e.g. `/spec [[ ultrathink ]]`) or switch modes via POST /api/ultrathink/mode {\"mode\":\"max\"} before retrying."
+    ],
+    "diagnostics": {
+      "daicState": "Discussion",
+      "contextUsed": 0,
+      "contextLimit": 160000,
+      "ultraThinkMode": "api"
+    }
+  }
+]

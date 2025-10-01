@@ -8,9 +8,10 @@ Opnix delivers a neon-soaked command center for auditing, explaining, and visual
 - **Automated Audits** — `claude$ setup` or the wizard runs module detection, ticket/feature analysis, spec-kit generation, canvas snapshots, and Markdown docs; artefacts land in `spec/`.
 - **Cytoscape Module Canvas** — renders live module graphs, merges manual links (`data/module-links.json`), supports drag-and-drop dependencies, and exports PNG/JSON payloads.
 - **Ticket Command Center** — CRUD via `/api/tickets`, filtering, tagging, and a completion modal that captures work summaries before a ticket can be marked finished.
+- **Roadmap Navigator** — dedicated tab with minimal/detailed views, auto-refreshing milestones, history, and one-click rollback/export for cached versions in `data/backups/roadmap/`.
 - **Progressive Interview Playbook** — blueprint in `public/data/interview-sections.json` powers the spec builder and audit questionnaire for new projects.
 - **Mermaid Diagram Engine** — architecture, sequence, entity, and delivery-flow diagrams derived from detector + interview data (details in `docs/visual-enablement-scope.md`).
-- **Storybook Integration** — `pnpm run storybook:generate` rebuilds stories from detector exports + interview answers, and `pnpm run storybook` renders them with MOLE/CANYON themes.
+- **Storybook Integration** — `pnpm run storybook:generate` rebuilds stories from detector exports + interview answers, and `pnpm run storybook` renders them with MOLE/CANYON themes through the in-app Storybook tab.
 - **Hidden `.opnix` Scaffold** — every wizard run composes `.opnix/scaffold/` with module handbooks, ticket summaries, tech-stack manifests, and framework bootstraps without overwriting prior runs.
 - **Audit Checklists** — `/api/checklists` enforces hook-driven status transitions (`start-checklist`, `complete-checklist`) so compliance steps can’t be bypassed.
 - **Runbook Generator** — CLI `/runbook` sessions merge interview answers with live module/ticket snapshots and drop Markdown playbooks into `spec/runbooks/` for the Docs tab.
@@ -29,9 +30,22 @@ Opnix delivers a neon-soaked command center for auditing, explaining, and visual
       │
       └─ Cytoscape, Mermaid, local Vue state hydrate from live API responses
 ```
-- **Frontend**: `public/index.html` bootstraps the Vue app defined by `src/App.vue` (template) and `src/appOptions.js` (logic). Components manage tickets, features, modules, diagrams, docs, and theme switching.
-- **Backend**: `server.js` exposes REST endpoints for tickets, features, modules, agents, audits, the spec archive, and spec generation. It reuses shared services for detection and document creation.
+- **Frontend**: Modular Vue 3 architecture with `src/App.vue` as the root component and decomposed logic in specialized blocs:
+  - **Components**: `src/components/` contains reusable Vue SFC components (TicketsBoard.vue, ModulesCanvas.vue, DocsViewer.vue, etc.)
+  - **Composables**: `src/composables/` manages domain-specific logic (terminalManager.js, commandCenterManager.js, themeManager.js)
+  - **Services**: `src/services/apiClient.js` centralizes REST API calls for CLI and UI reuse
+  - **Blocs**: Domain-specific state and action managers extracted from the monolithic `appOptions.js`
+- **State Management**: `src/composables/appStore.js` exposes a reactive singleton (`useAppStore`) that serves as the central state store for all components, CLI flows, and automation
+- **Build System**: Vite bundles the modular frontend from `src/main.js` entry point to `public/assets/main.js` for production serving
+- **Backend**: `server.js` wires the Express instance, applies platform middleware (CORS, gzip compression), and mounts the modular routers in `routes/` (tickets, features, modules, docs, CLI, etc.) while delegating heavy orchestration to dedicated services such as `services/auditManager.js`.
 - **Data Sources**: `data/tickets.json`, `data/features.json`, `data/module-links.json`, and `public/data/interview-sections.json` provide persistent state; `spec/` stores generated artefacts.
+
+## Theme System
+- Base styles live in `public/css/base.css`, which only imports tab/component bundles so each surface stays isolated.
+- Theme palettes live in `public/css/theme-*.css`; the active palette is driven by the managed `<link id="opnix-theme-link">` in `public/index.html`.
+- `src/composables/themeManager.js` swaps themes lazily, updates `data-theme` attributes, persists the choice, and signals loading/error state through the app store.
+- Automated coverage in `tests/themeManager.test.mjs` exercises MOLE ↔ CANYON swaps and persistence to `localStorage`.
+- See `docs/theme-architecture.md` for the detailed diagram and steps to add a new theme.
 
 ## Requirements
 - Node.js ≥ 18
@@ -47,10 +61,13 @@ cd opnix
 # 2. Run the neon installer (installs deps, ensures spec/ tree, launches wizard)
 pnpm run setup:install
 
-# 3. Start the server
+# 3. Build the production bundle (Vite)
+pnpm build
+
+# 4. Start the server
 pnpm start
 
-# 4. Open the interface
+# 5. Open the interface
 open http://localhost:7337  # or use your browser of choice
 ```
 
@@ -78,6 +95,11 @@ open http://localhost:7337  # or use your browser of choice
 - `pnpm run storybook:generate` automatically mirrors stories into `runtime/stories/` alongside the source files.
 - The audit pipeline copies fresh spec/doc/diagram exports into `runtime/`, keeping the bundle in sync with `spec/` without manual curation.
 
+## Static Assets & Routes
+- `server.js` mounts two `createStaticRoutes` instances: the first exposes all of `public/`, the second serves `public/css/` from `/css` with a 1 hour cache (see `docs/static-assets.md`).
+- Vite emits the production bundle to `public/assets/`; the HTML shell lives at `public/index.html` and references `/assets/main.js` plus the theme stylesheets resolved via `/css`.
+- Smoke coverage requests `/css/base.css` (`tests/apiSmoke.test.mjs`) so the CSS mount stays verified. Drop new assets anywhere under `public/` and reference them via absolute paths (`/css/custom.css`, `/assets/img/...`).
+
 ### Installation Decision Tree
 - **New Project Path**
   1. Installer detects an empty repo and emits `spec/revision/opnix-new-project-scope-*.md` with interview highlights.
@@ -98,6 +120,8 @@ Use this when you want to refresh the decision tree without re-running dependenc
 ## Core Workflows
 ### Claude Terminal
 - The Claude strip is pinned to the bottom of the interface so you can fire `claude$` commands from any tab; responses stay in view for quick copy/paste or follow-up actions.
+- The terminal header now surfaces the active git branch, divergence from upstream, dirty status, ticket progress, live context/token usage, files edited, and warning callouts when the context budget is nearing critical thresholds so you can sanity-check project state before running commands.
+- Tab navigation is icon-driven (labels animate in on focus/hover) so surfaces are recognizable at a glance while staying fully accessible.
 
 ### Tickets & Incident Response
 - View, filter, and create tickets from the **Bugs** tab.
@@ -113,9 +137,11 @@ Use this when you want to refresh the decision tree without re-running dependenc
 
 ### Spec & Docs Generation
 - Spec APIs (`/api/specs/generate`) rely on `services/specGenerator.js` to output JSON, Markdown, and GitHub Spec Kit formats.
-- `docsGenerator` produces complementary Markdown summary docs consumed by the audit.
+- API spec endpoints (`/api/api-spec/generate`, `/api/api-spec/export`, `/api/api-spec/test`) leverage `services/apiSpecGenerator.js` to assemble OpenAPI drafts from live modules/tickets/features and surface warnings back to the UI.
+- `docsGenerator` powers the new `/api/docs/generate` endpoint so Docs tab users can capture Markdown exports without running the full audit; files land under `spec/docs` with content echoed back to the UI.
 - All generated files are written to `spec/` and surfaced via `/api/exports`.
-- Docs tab renders those exports inside theme-aware Markdown wrappers so MOLE/CANYON palettes carry through to headings, callouts, and code blocks.
+- Docs tab renders those exports inside theme-aware Markdown wrappers so MOLE/CANYON palettes carry through to headings, callouts, and code blocks, and now shows the latest generated doc metadata/content inline.
+- Docs tab now includes an operational runbook interview modal plus a quick-generate path; outputs preview inline and are saved under `spec/runbooks/` alongside the CLI-generated files.
 
 ### Visual Enablement Sprint (In Flight)
 - **Mermaid Diagram Engine** — build flow/sequence/entity diagrams from detector, interview, ticket, and feature data. The Diagrams tab auto-renders the architecture view on first load and surfaces Mermaid parse errors in a styled alert. Exposed via `/api/diagrams/:type` (scope documented).
@@ -155,7 +181,7 @@ curl -s http://localhost:7337/api/claude/execute \
 
 - `/spec`, `/new-feature`, `/new-module`, `/new-bug`, `/new-diagram`, `/new-api`, and `/runbook` reuse the progressive question engine that powers the UI.
 - Responses are persisted under `data/cli-sessions/` and Markdown transcripts land in `spec/cli-sessions/`; runbook flows also drop files into `spec/runbooks/`.
-- The Questions tab mirrors CLI progress in real time, and `/help` lists the available commands from the terminal.
+- The Questions tab now includes a dedicated CLI Sessions panel with gating history, live progress, and transcript drill-down; `/help` lists the available commands from the terminal.
 - Planning commands pause when the DAIC state is not `Discussion` or when context usage tops 90%; reset via `POST /api/context/update` before retrying.
 - In UltraThink `api` mode append `[[ ultrathink ]]` to the command (for example `/spec [[ ultrathink ]]`) or change modes with `POST /api/ultrathink/mode` to clear the gate.
 - `/sessions` lists recent gating events alongside session metadata so you can confirm alignment before reissuing commands.
@@ -165,12 +191,14 @@ curl -s http://localhost:7337/api/claude/execute \
 | Path | Purpose |
 | --- | --- |
 | `public/index.html` | Vue mount point, theme variables, layout, modals |
-| `src/appOptions.js` | Vue Option API logic (API calls, canvas wiring, completion modal) |
-| `server.js` | Express routes, audit pipeline, spec archive helpers, decision-tree flows |
+| `src/appOptions.js` | Vue Option API orchestrator that stitches together composables and shared services |
+| `src/composables/` | Focused Vue logic extracted from `appOptions.js` (tickets, modules, docs, command center, etc.) |
+| `server.js` | Express bootstrap, middleware, router mounts, decision-tree flows || `routes/` | Express routers split by domain (`tickets.js`, `modules.js`, `docs.js`, `cli.js`, …) |
 | `services/moduleDetector.js` | Filesystem scan + manual link merge for modules |
 | `services/specGenerator.js` | JSON/Markdown/Spec Kit generation |
 | `services/docsGenerator.js` | Markdown report generator for audits |
 | `services/diagramGenerator.js` | Mermaid builders & exports surfaced via `/api/diagrams` |
+| `services/auditManager.js` | Aggregates spec/docs/canvas exports and follow-up tickets for audits |
 | `services/interviewLoader.js` | Loads interview blueprint and questionnaires |
 | `src/components/` | Vue single-file components extracted from the SPA for reuse/storybook |
 | `src/stories/` | Storybook stories backed by live repository data |
@@ -179,9 +207,12 @@ curl -s http://localhost:7337/api/claude/execute \
 | `docs/audit-flow.md` | Audit pipeline reference |
 | `docs/interview-playbook.md` | Interview stages and conditional sections |
 | `docs/storybook.md` | Storybook workflow & CI guidance |
+| `docs/api-migration-notes.md` | CamelCase field/status migration guide for API consumers |
 | `docs/checklists.md` | Checklist API and hook policy |
 | `docs/templates/` | Surface documentation templates for Canvas/Bugs/Features/etc. |
 | `data/module-links.json` | Persisted manual module edges |
+| `data/roadmap-state.json` | Roadmap milestones + summary with automatic backups |
+| `data/backups/roadmap/` | Timestamped roadmap state versions for rollback |
 | `data/tickets.json` | Primary ticket store |
 | `data/` | Workspace telemetry (tickets, features, manual modules, canvas links) |
 | `/spec` | Audit/spec/doc/canvas/diagram outputs |
@@ -246,3 +277,8 @@ git push -u origin main   # or master, depending on your default branch
 5. **Verify on GitHub**: refresh the repo page to confirm files uploaded.
 
 If the repository already exists locally with a remote, skip the `git init` and `git remote add` steps—just commit your changes and run `git push`.
+
+
+## Frontend Composable Architecture
+
+See `docs/composables-overview.md` for the current breakdown of `src/composables/` helpers and how they map into the Vue app. Shared state now lives in `src/composables/appStore.js`; composables such as `terminalManager`, `commandCenterManager`, and `themeManager` accept an optional context but default to `useAppStore()`, so CLI routes, tests, and Vue components all drive the same data.

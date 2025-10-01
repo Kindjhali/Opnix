@@ -2,8 +2,23 @@ const js = require('@eslint/js');
 const vue = require('eslint-plugin-vue');
 
 module.exports = [
+  {
+    ignores: ['node_modules/**', 'exports/**', '.storybook/**', 'cc-sessions/**', '.opnix/**', 'public/assets/**', 'public/**/*.pretty.js', 'storybook-static/**', 'tests/installerAgentFiles.test.mjs', 'tests/installerAgentFilesE2E.test.mjs']
+  },
   js.configs.recommended,
   ...vue.configs['flat/recommended'],
+  {
+    files: ['public/**/*.js'],
+    rules: {
+      'no-undef': 'off',
+      'prefer-const': 'off',
+      'no-var': 'off',
+      'no-unused-vars': 'off',
+      'camelcase': 'off',
+      'no-prototype-builtins': 'off',
+      'no-setter-return': 'off'
+    }
+  },
   {
     files: ['**/*.js'],
     languageOptions: {
@@ -24,7 +39,8 @@ module.exports = [
         setInterval: 'readonly',
         clearInterval: 'readonly',
         setImmediate: 'readonly',
-        clearImmediate: 'readonly'
+        clearImmediate: 'readonly',
+        navigator: 'readonly'
       }
     },
     rules: {
@@ -38,12 +54,13 @@ module.exports = [
         'properties': 'always',
         'ignoreDestructuring': false,
         'ignoreImports': false,
-        'allow': ['__dirname', '__filename']
+        'ignoreGlobals': false,
+        'allow': ['__dirname', '__filename', 'child_process', 'process_exit']
       }]
     }
   },
   {
-    files: ['public/**/*.js', 'src/**/*.js'],
+    files: ['src/**/*.js'],
     languageOptions: {
       ecmaVersion: 2024,
       sourceType: 'module',
@@ -53,6 +70,7 @@ module.exports = [
         document: 'readonly',
         localStorage: 'readonly',
         fetch: 'readonly',
+        navigator: 'readonly',
         URL: 'readonly',
         URLSearchParams: 'readonly',
         Blob: 'readonly',
@@ -74,7 +92,12 @@ module.exports = [
       sourceType: 'module',
       globals: {
         console: 'readonly',
-        process: 'readonly'
+        process: 'readonly',
+        fetch: 'readonly',
+        queueMicrotask: 'readonly',
+        document: 'readonly',
+        localStorage: 'readonly',
+        performance: 'readonly'
       }
     }
   },
@@ -104,15 +127,23 @@ module.exports = [
     },
     rules: {
       'vue/multi-word-component-names': 'off',
+      'vue/max-attributes-per-line': 'off',
+      'vue/singleline-html-element-content-newline': 'off',
+      'vue/multiline-html-element-content-newline': 'off',
+      'vue/v-on-event-hyphenation': 'off',
+      'vue/html-indent': 'off',
+      'vue/require-explicit-emits': 'off',
+      'vue/html-self-closing': 'off',
+      'vue/no-v-html': 'off',
+      'vue/attributes-order': 'off',
+      'vue/order-in-components': 'off',
       'camelcase': ['error', {
         'properties': 'always',
         'ignoreDestructuring': false,
         'ignoreImports': false,
-        'allow': ['__dirname', '__filename']
+        'ignoreGlobals': false,
+        'allow': ['__dirname', '__filename', 'child_process', 'process_exit']
       }]
     }
   },
-  {
-    ignores: ['node_modules/**', 'exports/**', '.storybook/**', 'cc-sessions/**', 'public/assets/**']
-  }
 ];

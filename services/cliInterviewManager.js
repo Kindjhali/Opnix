@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const { loadInterviewBlueprint } = require('./interviewLoader');
 const { ProgressiveQuestionEngine } = require('./progressiveQuestionEngine');
+const questionFileWatcher = require('./questionFileWatcher');
 
 const CLI_SESSIONS_DIR = path.join(__dirname, '..', 'data', 'cli-sessions');
 const CLI_ARTIFACTS_DIR = path.join(__dirname, '..', 'spec', 'cli-sessions');
@@ -259,6 +260,36 @@ async function startSession({ category, command }) {
 
   await writeSession(session);
 
+  // Register session with question file watcher for hot-reload support
+  const sessionHandler = {
+    sessionId: session.sessionId,
+    status: 'active',
+    currentQuestionId: questions[0]?.id,
+    
+    // Handle question updates
+    updateQuestions: async (newQuestions) => {
+      // Update session questions while preserving answers
+      const answeredIds = new Set(session.responses.map(r => r.questionId));
+      const updatedQuestions = newQuestions.filter(q => !answeredIds.has(q.id));
+      
+      // Merge with remaining questions
+      session.questions = [
+        ...session.questions.slice(0, session.currentIndex + 1),
+        ...updatedQuestions
+      ];
+      
+      await writeSession(session);
+      console.log(`Session ${session.sessionId}: Questions updated`);
+    },
+    
+    // Handle pending updates
+    notifyPendingUpdate: (update) => {
+      console.log(`Session ${session.sessionId}: ${update.message}`);
+    }
+  };
+  
+  questionFileWatcher.registerSession(session.sessionId, sessionHandler);
+
   const decoratedQuestion = decorateQuestion(questions[0], engine);
 
   return {
@@ -308,6 +339,13 @@ async function submitAnswer({ sessionId, questionId, answer }) {
   if (session.currentIndex < session.questions.length) {
     const rawNextQuestion = session.questions[session.currentIndex];
     nextQuestion = decorateQuestion(rawNextQuestion, engine);
+    
+    // Update session handler status
+    const sessionHandler = questionFileWatcher.activeSessions.get(sessionId);
+    if (sessionHandler) {
+      sessionHandler.currentQuestionId = rawNextQuestion.id;
+      sessionHandler.status = 'active';
+    }
   } else {
     completed = true;
     session.completedAt = new Date().toISOString();
@@ -315,6 +353,9 @@ async function submitAnswer({ sessionId, questionId, answer }) {
     const transcript = await writeSessionTranscript(session);
     artifacts = [...artifacts, transcript];
     session.artifacts = artifacts;
+    
+    // Unregister completed session from watcher
+    questionFileWatcher.unregisterSession(sessionId);
   }
 
   await writeSession(session);

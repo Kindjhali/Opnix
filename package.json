@@ -26,11 +26,14 @@
     "storybook:generate": "node scripts/generateStories.js",
     "storybook": "pnpm exec storybook dev -p 6006",
     "build-storybook": "pnpm exec storybook build",
-    "test:modules": "node tests/moduleDetector.test.js && node tests/featuresStatus.test.js && node tests/checklistStatus.test.js && node tests/specScaffold.test.mjs && node tests/interviewAdaptive.test.mjs && node tests/apiSmoke.test.mjs && node tests/integrationFlow.test.mjs && node tests/ticketsMigration.test.mjs && node tests/terminalRunner.test.mjs && node tests/markdownManager.test.mjs && node tests/ultraThinkEndpoints.test.mjs && node tests/cliInterviewCommands.test.mjs",
-    "build": "vite build"
+    "test:modules": "node tests/moduleDetector.test.js && node tests/featuresStatus.test.js && node tests/checklistStatus.test.js && node tests/specScaffold.test.mjs && node tests/interviewAdaptive.test.mjs && node tests/apiSmoke.test.mjs && node tests/integrationFlow.test.mjs && node tests/ticketsMigration.test.mjs && node tests/terminalRunner.test.mjs && node tests/markdownManager.test.mjs && node tests/ultraThinkEndpoints.test.mjs && node tests/cliInterviewCommands.test.mjs && node tests/runbookApiWorkflow.test.mjs && node tests/runbookGenerator.test.mjs && node tests/auditManager.test.mjs && node tests/roadmapStatusTransitions.test.mjs && node tests/roadmapDependencyCascade.test.mjs && node tests/roadmapGitAutomation.test.mjs && node tests/themeManager.test.mjs",
+    "test:runbook": "node tests/runbookGenerator.test.mjs",
+    "build": "vite build",
+    "prepare": "husky"
   },
   "dependencies": {
     "ansi_up": "^5.1.0",
+    "compression": "^1.8.1",
     "cors": "^2.8.5",
     "cytoscape": "^3.28.1",
     "cytoscape-edgehandles": "^4.0.1",
@@ -41,6 +44,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@playwright/test": "^1.55.1",
     "@storybook/addon-a11y": "^8.2.6",
     "@storybook/addon-essentials": "^8.2.6",
     "@storybook/addon-interactions": "^8.2.6",
@@ -50,7 +54,11 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "eslint": "^9.36.0",
     "eslint-plugin-vue": "^10.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.1",
+    "node-pty": "^1.0.0",
     "nodemon": "^3.0.1",
+    "playwright": "^1.55.1",
     "storybook": "^8.2.6",
     "stylelint": "^16.24.0",
     "stylelint-config-standard": "^39.0.0",
@@ -58,5 +66,11 @@
     "stylelint-scss": "^6.12.1",
     "vite": "^6.3.6",
     "vue-eslint-parser": "^10.2.0"
+  },
+  "lint-staged": {
+    "*.{js,vue,mjs}": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }
