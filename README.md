@@ -1,82 +1,58 @@
-```
-   ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄    ▄ ▄▄▄ ▄▄   ▄▄
-  █       █       █  █  █ █   █  █ █  █
-  █   ▄   █    ▄  █   █▄█ █   █  █▄█  █
-  █  █ █  █   █▄█ █       █   █       █
-  █  █▄█  █    ▄▄▄█  ▄    █   █       █
-  █       █   █   █ █ █   █   █ ██▄██ █
-  █▄▄▄▄▄▄▄█▄▄▄█   █▄█  █▄▄█▄▄▄█▄█   █▄█
-
-  Operational Toolkit · Visual Canvas · Audit Engine
-```
-
 # Opnix — Operational Toolkit
 
-Opnix delivers a visual command center for auditing, explaining, and visualising software projects end-to-end. It combines a Vue 3 single-page interface with an Express backend, filesystem-backed data, and automation that keeps every artefact grounded in the real repository—no mock payloads, no placeholders.
+A comprehensive visual command center for auditing, managing, and visualizing software projects. Opnix combines a modern Vue 3 interface with an Express backend to deliver real-time project insights, automated audits, and intelligent workflow automation.
 
-## Feature Highlights
-- **Automated Installation** — `pnpm install` automatically handles dependency setup, builds the production bundle, runs the setup wizard, and prepares your environment via postinstall hook.
-- **New vs Existing Project Decision Tree** — automatically routes greenfield repos to discovery interviews or established codebases to the full audit (`scripts/setupWizard.js`).
-- **Automated Audits** — `claude$ setup` or the wizard runs module detection, ticket/feature analysis, spec-kit generation, canvas snapshots, and Markdown docs; artefacts land in `spec/`.
-- **Cytoscape Module Canvas** — renders live module graphs, merges manual links (`data/module-links.json`), supports drag-and-drop dependencies, and exports PNG/JSON payloads.
-- **Ticket Command Center** — CRUD via `/api/tickets`, filtering, tagging, and a completion modal that captures work summaries before a ticket can be marked finished.
-- **Roadmap Navigator** — dedicated tab with minimal/detailed views, auto-refreshing milestones, history, and one-click rollback/export for cached versions in `data/backups/roadmap/`.
-- **Progressive Interview Playbook** — blueprint in `public/data/interview-sections.json` powers the spec builder and audit questionnaire for new projects.
-- **Mermaid Diagram Engine** — architecture, sequence, entity, and delivery-flow diagrams derived from detector + interview data (details in `docs/visual-enablement-scope.md`).
-- **Storybook Integration** — `pnpm run storybook:generate` rebuilds stories from detector exports + interview answers, and `pnpm run storybook` renders them with MOLE/CANYON themes through the in-app Storybook tab.
-- **Hidden `.opnix` Scaffold** — every wizard run composes `.opnix/scaffold/` with module handbooks, ticket summaries, tech-stack manifests, and framework bootstraps without overwriting prior runs.
-- **Audit Checklists** — `/api/checklists` enforces hook-driven status transitions (`start-checklist`, `complete-checklist`) so compliance steps can’t be bypassed.
-- **Runbook Generator** — CLI `/runbook` sessions merge interview answers with live module/ticket snapshots and drop Markdown playbooks into `spec/runbooks/` for the Docs tab.
+## ✨ Key Features
 
-## Architecture Overview
-```
-┌─────────────┐    REST/JSON    ┌──────────────┐
-│ Vue 3 SPA   │ <────────────── │ Express API  │
-│ (public/)   │                 │ (server.js)  │
-└─────┬───────┘                 └──────┬───────┘
-      │                                │
-      │                                ├─ services/moduleDetector.js
-      │                                ├─ services/specGenerator.js
-      │                                ├─ services/docsGenerator.js
-      │                                └─ services/interviewLoader.js
-      │
-      └─ Cytoscape, Mermaid, local Vue state hydrate from live API responses
-```
-- **Frontend**: Modular Vue 3 architecture with `src/App.vue` as the root component and decomposed logic in specialized blocs:
-  - **Components**: `src/components/` contains reusable Vue SFC components (TicketsBoard.vue, ModulesCanvas.vue, DocsViewer.vue, etc.)
-  - **Composables**: `src/composables/` manages domain-specific logic (terminalManager.js, commandCenterManager.js, themeManager.js)
-  - **Services**: `src/services/apiClient.js` centralizes REST API calls for CLI and UI reuse
-  - **Blocs**: Domain-specific state and action managers extracted from the monolithic `appOptions.js`
-- **State Management**: `src/composables/appStore.js` exposes a reactive singleton (`useAppStore`) that serves as the central state store for all components, CLI flows, and automation
-- **Build System**: Vite bundles the modular frontend from `src/main.js` entry point to `public/assets/main.js` for production serving
-- **Backend**: `server.js` wires the Express instance, applies platform middleware (CORS, gzip compression), and mounts the modular routers in `routes/` (tickets, features, modules, docs, CLI, etc.) while delegating heavy orchestration to dedicated services such as `services/auditManager.js`.
-  - Detailed router/service relationships are charted in `docs/server-routing-map.md` (Mermaid diagram plus explanation).
-- **Data Sources**: `data/tickets.json`, `data/features.json`, `data/module-links.json`, and `public/data/interview-sections.json` provide persistent state; `spec/` stores generated artefacts.
+### 🚀 Automated Project Management
+- **Intelligent Setup Wizard** — Adaptive installation that detects project type and guides configuration
+- **Module Detection** — Automatic discovery and mapping of project dependencies and architecture
+- **CLI Interview System** — Progressive questionnaires for specs, features, bugs, and runbooks
+- **Automated Audits** — Comprehensive project analysis with exportable reports
 
-## Theme System
-- Base styles live in `public/css/base.css`, which only imports tab/component bundles so each surface stays isolated.
-- Theme palettes live in `public/css/theme-*.css`; the active palette is driven by the managed `<link id="opnix-theme-link">` in `public/index.html`.
-- `src/composables/themeManager.js` swaps themes lazily, updates `data-theme` attributes, persists the choice, and signals loading/error state through the app store.
-- Automated coverage in `tests/themeManager.test.mjs` exercises MOLE ↔ CANYON swaps and persistence to `localStorage`.
-- See `docs/theme-architecture.md` for the detailed diagram and steps to add a new theme.
+### 📊 Visual Interfaces
+- **Interactive Module Canvas** — Cytoscape-powered dependency visualization with drag-and-drop editing
+- **Roadmap Management** — Plan and track features with detailed/minimal views and version history
+- **Tech Stack Dashboard** — Real-time technology inventory and dependency tracking
+- **Diagram Generation** — Mermaid-based architecture, sequence, and flow diagrams
 
-## Requirements
-- Node.js ≥ 18
-- pnpm ≥ 8 (required for all package operations)
-- macOS, Linux, or Windows (WSL recommended)
+### 🎯 Development Workflows
+- **Ticket Management** — Complete CRUD operations with filtering, tagging, and completion tracking
+- **Bug Workflow Enforcement** — Structured bug lifecycle with validation and automation
+- **Feature Planning** — Acceptance criteria, module mapping, and priority management
+- **Session Recovery** — Checkpoint-based recovery system for interrupted workflows
 
-## Getting Started
+### 🔧 Developer Tools
+- **Terminal Integration** — Built-in xterm.js terminal with WebSocket support
+- **Storybook Integration** — Component library with auto-generated stories
+- **E2E Testing** — Playwright-based end-to-end test suite
+- **API Documentation** — OpenAPI-compliant specs with auto-generation
 
-### Automated Installation (Recommended)
+### 🎨 User Experience
+- **MOLE Theme** — High-contrast, neurodivergent-friendly color palette
+- **Responsive Design** — Optimized for all screen sizes
+- **Progressive Disclosure** — Chunked information architecture
+- **Accessibility** — WCAG AA/AAA compliant with screen reader support
 
-Clone the repository and install in one go:
+## 📋 Prerequisites
+
+- **Node.js** ≥ 18
+- **pnpm** ≥ 8 (required for all package operations)
+- **Git** (for repository management)
+- **Platform**: macOS, Linux, or Windows (WSL recommended)
+
+## 🚀 Quick Start
+
+### Automated Installation
+
+Clone and install with automated setup:
 
 ```bash
-# Clone and navigate
+# Clone repository
 git clone https://github.com/Kindjhali/Opnix.git
 cd opnix
 
-# Install (automatically runs setup, build, and wizard)
+# Install and setup (runs postinstall automation)
 pnpm install
 
 # Start the server
@@ -85,253 +61,456 @@ pnpm start
 
 The `pnpm install` command automatically:
 - Installs all dependencies
-- Sets up project structure (data/, spec/, .opnix/)
+- Creates required directories (data/, spec/, .opnix/)
 - Builds the production bundle
 - Runs the interactive setup wizard
 
-Open http://localhost:7337 in your browser
+Open http://localhost:7337 in your browser.
 
 ### Manual Installation
 
-For development or step-by-step control:
+For development or granular control:
 
 ```bash
-# 1. Clone and navigate
+# Clone repository
 git clone https://github.com/Kindjhali/Opnix.git
 cd opnix
 
-# 2. Install dependencies only (skip automation)
+# Install dependencies only (skip automation)
 pnpm install --ignore-scripts
 
-# 3. Run setup manually
+# Run setup manually
 pnpm run setup:install
 
-# 4. Build production bundle
+# Build production bundle
 pnpm build
 
-# 5. Start the server
+# Start server
+pnpm start
+```
+
+## 📁 Project Structure
+
+```
+opnix/
+├── data/                    # Runtime data and state
+│   ├── tickets.json        # Ticket backlog
+│   ├── features.json       # Feature catalog
+│   ├── modules-detected.json # Module detection cache
+│   ├── roadmap-state.json  # Roadmap data
+│   ├── checkpoints/        # Recovery checkpoints
+│   └── cli-sessions/       # CLI interview sessions
+├── docs/                    # Documentation
+├── routes/                  # Express API routes
+├── scripts/                 # CLI tools and automation
+├── services/                # Backend business logic
+├── src/                     # Vue 3 frontend
+│   ├── components/         # UI components (38 total)
+│   ├── composables/        # Vue composition functions
+│   ├── blocs/              # State management
+│   └── services/           # Frontend API clients
+├── spec/                    # Generated specifications
+├── tests/                   # Test suites
+└── public/                  # Static assets
+```
+
+## 🎮 Command Reference
+
+### Server Commands
+
+```bash
+# Start production server
 pnpm start
 
-# 6. (Optional) Re-run setup wizard
-pnpm run setup:wizard
+# Development mode (with auto-reload)
+pnpm dev
+
+# Build for production
+pnpm build
 ```
 
-## Data Storage
-- All install-time JSON state lives under `data/` so audits and UI share a single source of truth.
-- `data/tickets.json` — primary ticket backlog (auto-created with an example ticket on first run).
-- `data/features.json` — feature catalogue persisted through the Features tab and audit pipeline.
-- `data/modules-detected.json` — latest detector snapshot (auto-refreshed whenever `/api/modules/graph` or `/api/modules/detect` runs, used as a cache if a future scan fails).
-- `data/module-links.json` — manual canvas edges captured via drag-and-drop.
-- `data/modules.json` — optional manual module overrides created through the Modules UI/API (merged into every detection pass).
-- `data/checklists.json` — operational checklists (audit/wizard) with hook-guarded status transitions.
-- `data/setup-state.json` — remembers the installer wizard's last selections and run history.
-- Legacy root-level JSON files are migrated into `data/` automatically when the installer or server starts.
-- `.opnix/scaffold/` — versioned scaffolding output containing module dossiers, ticket reports, tech-stack manifests, and framework-specific bootstrap code.
+### Setup Commands
 
-## .opnix Scaffold
-- Generated automatically at the end of every installer wizard run (both new-project discovery and existing-repo audits).
-- Produces module-specific README files, ticket markdown exports, a `tech/stack.md` report, and a `project/` skeleton (`package.json`, Express/Vue/React bootstraps when frameworks are detected).
-- Files are written with timestamped versions when prior artefacts exist, so manual edits are preserved.
-- Inspect `.opnix/scaffold/manifest.json` for a machine-readable summary of modules, tickets, and the files created in the latest pass.
-
-## .opnix Runtime Bundle
-- `.opnix/runtime/` mirrors every auto-generated artefact so installers can ship a single hidden payload.
-- `index.json` tracks blueprints, docs, canvas snapshots, diagrams, audit payloads, Storybook stories, and the latest scaffold manifest.
-- `pnpm run storybook:generate` automatically mirrors stories into `runtime/stories/` alongside the source files.
-- The audit pipeline copies fresh spec/doc/diagram exports into `runtime/`, keeping the bundle in sync with `spec/` without manual curation.
-
-## Static Assets & Routes
-- `server.js` mounts two `createStaticRoutes` instances: the first exposes all of `public/`, the second serves `public/css/` from `/css` with a 1 hour cache (see `docs/static-assets.md`).
-- Vite emits the production bundle to `public/assets/`; the HTML shell lives at `public/index.html` and references `/assets/main.js` plus the theme stylesheets resolved via `/css`.
-- Smoke coverage requests `/css/base.css` (`tests/apiSmoke.test.mjs`) so the CSS mount stays verified. Drop new assets anywhere under `public/` and reference them via absolute paths (`/css/custom.css`, `/assets/img/...`).
-
-### Installation Decision Tree
-- **New Project Path**
-  1. Installer detects an empty repo and emits `spec/revision/opnix-new-project-scope-*.md` with interview highlights.
-  2. Open the Spec Builder tab, complete staged questions, and export the resulting spec kit.
-     - As you answer, the UI auto-seeds placeholder modules/features (via `src/spec-scaffold.mjs`) and rehydrates them on reload so greenfield work has scaffolded specs before any detectors run.
-  3. Use the Playbook pane (blueprint in `docs/interview-playbook.md`) for stakeholder alignment.
-- **Existing Repository Path**
-  1. Wizard runs the audit (equivalent to `claude$ setup`).
-  2. Artefacts land in `spec/` (grouped into `blueprints/`, `docs/`, `revision/`, `canvas/`, `audits/`).
-  3. Follow the recommended remediation list and rerun the audit to measure improvement.
-
-### Manual Wizard Invocation
 ```bash
+# Run interactive setup wizard
 pnpm run setup:wizard
+
+# Manual installer (directories, agent files)
+pnpm run setup:install
 ```
-Use this when you want to refresh the decision tree without re-running dependency checks.
 
-## Core Workflows
-### Claude Terminal
-- The Claude strip is pinned to the bottom of the interface so you can fire `claude$` commands from any tab; responses stay in view for quick copy/paste or follow-up actions.
-- The terminal header now surfaces the active git branch, divergence from upstream, dirty status, ticket progress, live context/token usage, files edited, and warning callouts when the context budget is nearing critical thresholds so you can sanity-check project state before running commands.
-- Tab navigation is icon-driven (labels animate in on focus/hover) so surfaces are recognizable at a glance while staying fully accessible.
-
-### Tickets & Incident Response
-- View, filter, and create tickets from the **Bugs** tab.
-- Status dropdown enforces `reported → inProgress → finished` transitions.
-- Moving a ticket to `finished` triggers a completion modal requiring a summary of work performed, validation steps, and follow-ups.
-- Backend (`server.js`) persists the `completionSummary` alongside updated timestamps.
-
-### Module Detection & Canvas
-- `services/moduleDetector.js` scans directories, imports, TODO markers, and merges manual links/overrides (modules include a `source` flag and honour `data/modules.json`).
-- `/api/modules/graph` powers the canvas, module cards, and export pipeline, persisting results to `data/modules-detected.json` so the UI can fall back when offline.
-- The Modules tab automatically triggers a detection pass the first time you visit it each session, so cards always reflect the current workspace without pressing “Auto-Detect”.
-- Dragging edges in the canvas saves to `data/module-links.json`; exports use `/api/canvas/export` and are stored under `spec/canvas`.
-
-### Spec & Docs Generation
-- Spec APIs (`/api/specs/generate`) rely on `services/specGenerator.js` to output JSON, Markdown, and GitHub Spec Kit formats.
-- API spec endpoints (`/api/api-spec/generate`, `/api/api-spec/export`, `/api/api-spec/test`) leverage `services/apiSpecGenerator.js` to assemble OpenAPI drafts from live modules/tickets/features and surface warnings back to the UI.
-- `docsGenerator` powers the new `/api/docs/generate` endpoint so Docs tab users can capture Markdown exports without running the full audit; files land under `spec/docs` with content echoed back to the UI.
-- All generated files are written to `spec/` and surfaced via `/api/exports`.
-- Docs tab renders those exports inside theme-aware Markdown wrappers so MOLE/CANYON palettes carry through to headings, callouts, and code blocks, and now shows the latest generated doc metadata/content inline.
-- Docs tab now includes an operational runbook interview modal plus a quick-generate path; outputs preview inline and are saved under `spec/runbooks/` alongside the CLI-generated files.
-
-### Visual Enablement Sprint (In Flight)
-- **Mermaid Diagram Engine** — build flow/sequence/entity diagrams from detector, interview, ticket, and feature data. The Diagrams tab auto-renders the architecture view on first load and surfaces Mermaid parse errors in a styled alert. Exposed via `/api/diagrams/:type` (scope documented).
-- **Storybook Autogen** — `pnpm run storybook:generate` scans component metadata, interview answers, and detector outputs to mint live stories (details in `docs/storybook.md`).
-- **Timeline Canvas** — roadmap/Gantt view wired to features/tickets with export hooks (roadmap item).
-
-## Command Reference
-| Task | Command |
-| --- | --- |
-| Install Opnix | `pnpm install opnix@latest` |
-| Start server | `pnpm start` |
-| Development mode (nodemon) | `pnpm run dev` |
-| Re-run setup wizard | `pnpm run setup:wizard` |
-| Manual installer | `pnpm run setup:install` |
-| Claude audit (API) | `claude$ setup` via CLI bar or `POST /api/claude/execute` |
-| Export tickets as Markdown | `curl http://localhost:7337/api/export/markdown > tickets.md` |
-| Fetch architecture diagram | `curl http://localhost:7337/api/diagrams/architecture` |
-| Full test suite | `pnpm test:modules` |
-| E2E tests | `pnpm test:e2e` |
-| Linting | `pnpm lint` |
-
-## CLI Interviews & Automation
-Keep the Express server running (`pnpm start`) and interact with the interview engine via the slash-command endpoint at `/api/claude/execute`. Each call returns JSON suitable for automation pipelines.
+### Bug Workflow
 
 ```bash
-# Kick off the specification interview
-curl -s http://localhost:7337/api/claude/execute \
+# Start bug workflow
+pnpm bug:start
+
+# Mark bug complete
+pnpm bug:complete
+
+# Pause/resume bug workflow
+pnpm bug:pause
+pnpm bug:resume
+
+# Check workflow status
+pnpm bug:status
+pnpm bug:active
+pnpm bug:validate
+```
+
+### Terminal Integration
+
+```bash
+# Install terminal status bar
+pnpm terminal:install
+
+# Uninstall terminal status bar
+pnpm terminal:uninstall
+
+# Check terminal status
+pnpm terminal:status
+```
+
+### Progress Tracking
+
+```bash
+# Show progress dashboard
+pnpm progress
+
+# Display summary
+pnpm progress:summary
+
+# Show help
+pnpm progress:help
+```
+
+### Testing
+
+```bash
+# Run all module tests
+pnpm test:modules
+
+# E2E tests
+pnpm test:e2e
+pnpm test:e2e:ui        # Interactive mode
+pnpm test:e2e:headed    # Headed browser mode
+pnpm test:e2e:debug     # Debug mode
+pnpm test:e2e:report    # Show test report
+```
+
+### Development Tools
+
+```bash
+# Linting
+pnpm lint               # Lint JS and CSS
+pnpm lint:js           # Lint JavaScript only
+pnpm lint:css          # Lint CSS only
+
+# Storybook
+pnpm storybook          # Start Storybook dev server (port 6006)
+pnpm storybook:generate # Generate component stories
+pnpm build-storybook    # Build static Storybook
+```
+
+### API Commands
+
+```bash
+# Get next Claude task
+pnpm claude:next
+
+# Export tickets to Markdown
+pnpm claude:export
+```
+
+## 🌐 API Endpoints
+
+### Core APIs
+
+- `GET /api/tickets` — List all tickets
+- `POST /api/tickets` — Create ticket
+- `PUT /api/tickets/:id` — Update ticket
+- `DELETE /api/tickets/:id` — Delete ticket
+- `GET /api/modules/graph` — Module dependency graph
+- `GET /api/modules/detect` — Run module detection
+- `POST /api/canvas/export` — Export canvas as image
+
+### CLI Interview Endpoints
+
+- `POST /api/claude/execute` — Execute slash commands
+- `GET /api/cli/sessions` — List CLI sessions
+- `GET /api/cli/sessions/:id` — Get session details
+- `POST /api/specs/export/scoped` — Export scoped specs
+- `POST /api/runbooks/constitution` — Generate governance digest
+
+### Roadmap APIs
+
+- `GET /api/roadmap` — Get roadmap state
+- `POST /api/roadmap/milestone` — Create milestone
+- `POST /api/roadmap/rollback/:version` — Rollback to version
+- `GET /api/roadmap/history` — Get version history
+
+### System APIs
+
+- `GET /api/diagrams/:type` — Generate diagram (architecture, sequence, flow)
+- `GET /api/tech-stack` — Technology inventory
+- `POST /api/context/update` — Update context state
+- `GET /api/progress` — Progress dashboard data
+
+## 🎨 UI Components
+
+### Main Tabs
+
+- **Canvas** — Module visualization with Cytoscape
+- **Modules** — Module management and editing
+- **Tickets** — Ticket board with filtering
+- **Features** — Feature planning and tracking
+- **Roadmap** — Timeline and milestone management
+- **Specs** — Specification browser
+- **Diagrams** — Architecture diagrams
+- **Docs** — Documentation viewer
+- **API** — API explorer
+- **Tech Stack** — Technology dashboard
+- **Terminal** — Integrated terminal
+- **Storybook** — Component library
+
+### Modal Components
+
+- Ticket Completion Modal
+- Feature Modal
+- Bug Modal
+- Runbook Modal
+- Add Module Modal
+
+## 🔄 CLI Interview System
+
+Interactive command-line questionnaires for structured project documentation:
+
+### Available Commands
+
+| Command | Purpose | Output |
+|---------|---------|--------|
+| `/spec` | Full specification interview | Spec JSON/Markdown/Spec Kit |
+| `/new-feature` | Feature intake | Feature record + tickets |
+| `/new-module` | Module onboarding | Module stub + diagram |
+| `/new-bug` | Bug/incident intake | Ticket + checklists |
+| `/new-diagram` | Diagram briefing | Mermaid source |
+| `/new-api` | API specification | OpenAPI draft |
+| `/runbook` | Operational playbook | Markdown runbook |
+| `/plan` | Delivery plan | Plan Markdown |
+| `/tasks` | Task queue snapshot | Task summary |
+| `/constitution` | Governance digest | Guidance Markdown |
+| `/specify` | Scoped spec export | Filtered spec output |
+
+### Usage Example
+
+```bash
+# Start specification interview
+curl -X POST http://localhost:7337/api/claude/execute \
   -H 'Content-Type: application/json' \
   -d '{"command":"/spec"}'
 
-# Answer follow-up questions
-curl -s http://localhost:7337/api/claude/execute \
+# Answer question
+curl -X POST http://localhost:7337/api/claude/execute \
   -H 'Content-Type: application/json' \
-  -d '{"command":"/answer cli-123 project-name Atlas"}'
-
-# List active/archived sessions
-curl -s http://localhost:7337/api/claude/execute \
-  -H 'Content-Type: application/json' \
-  -d '{"command":"/sessions"}'
+  -d '{"command":"/answer <session-id> <question-id> <your-answer>"}'
 ```
 
-- `/spec`, `/new-feature`, `/new-module`, `/new-bug`, `/new-diagram`, `/new-api`, and `/runbook` reuse the progressive question engine that powers the UI. `/spec` automatically chains the plan generator and converts follow-ups into `plan-chain` tickets with a mirrored task queue under `.opnix/scaffold/tasks/`, so no manual `/plan` run is required.
-- `/specify` generates scoped specification exports (JSON/Markdown/Spec Kit) with optional section filters so you can create targeted artefacts without rerunning the full interview.
-- `/constitution` builds a governance digest from `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `agents/agent-organizer.md`, returning a CLI summary plus a Markdown artefact under `spec/cli-sessions/`.
-- Both flows are also available via the API (`POST /api/specs/export/scoped` and `POST /api/runbooks/constitution`) so UI surfaces and automations can reuse the same exporters.
-- Responses are persisted under `data/cli-sessions/` and Markdown transcripts land in `spec/cli-sessions/`; runbook flows also drop files into `spec/runbooks/`.
-- The Questions tab now includes a dedicated CLI Sessions panel with gating history, live progress, and transcript drill-down; `/help` lists the available commands from the terminal.
-- Planning commands pause when the DAIC state is not `Discussion` or when context usage tops 90%; reset via `POST /api/context/update` before retrying.
-- In UltraThink `api` mode append `[[ ultrathink ]]` to the command (for example `/spec [[ ultrathink ]]`) or change modes with `POST /api/ultrathink/mode` to clear the gate.
-- `/sessions` lists recent gating events alongside session metadata so you can confirm alignment before reissuing commands.
-- See `docs/cli-command-workflows.md` for deeper architecture notes and follow-on roadmap items.
+## 🗄️ Data Storage
 
-## Key Files & Directories
-| Path | Purpose |
-| --- | --- |
-| `public/index.html` | Vue mount point, theme variables, layout, modals |
-| `src/appOptions.js` | Vue Option API orchestrator that stitches together composables and shared services |
-| `src/composables/` | Focused Vue logic extracted from `appOptions.js` (tickets, modules, docs, command center, etc.) |
-| `server.js` | Express bootstrap, middleware, router mounts, decision-tree flows || `routes/` | Express routers split by domain (`tickets.js`, `modules.js`, `docs.js`, `cli.js`, …) |
-| `services/moduleDetector.js` | Filesystem scan + manual link merge for modules |
-| `services/specGenerator.js` | JSON/Markdown/Spec Kit generation |
-| `services/docsGenerator.js` | Markdown report generator for audits |
-| `services/diagramGenerator.js` | Mermaid builders & exports surfaced via `/api/diagrams` |
-| `services/auditManager.js` | Aggregates spec/docs/canvas exports and follow-up tickets for audits |
-| `services/interviewLoader.js` | Loads interview blueprint and questionnaires |
-| `src/components/` | Vue single-file components extracted from the SPA for reuse/storybook |
-| `src/stories/` | Storybook stories backed by live repository data |
-| `docs/install-decision-tree.md` | Installation wizard overview & Mermaid decision tree |
-| `docs/agent-coordination.md` | Multi-agent handoff protocol and API reference |
-| `docs/visual-enablement-scope.md` | Detailed plan for Mermaid + Storybook deliverables |
-| `docs/audit-flow.md` | Audit pipeline reference |
-| `docs/interview-playbook.md` | Interview stages and conditional sections |
-| `docs/storybook.md` | Storybook workflow & CI guidance |
-| `docs/api-migration-notes.md` | CamelCase field/status migration guide for API consumers |
-| `docs/checklists.md` | Checklist API and hook policy |
-| `docs/templates/` | Surface documentation templates for Canvas/Bugs/Features/etc. |
-| `data/module-links.json` | Persisted manual module edges |
-| `data/roadmap-state.json` | Roadmap milestones + summary with automatic backups |
-| `data/backups/roadmap/` | Timestamped roadmap state versions for rollback |
-| `data/tickets.json` | Primary ticket store |
-| `data/` | Workspace telemetry (tickets, features, manual modules, canvas links) |
-| `/spec` | Audit/spec/doc/canvas/diagram outputs |
+All state is persisted to JSON files in the `data/` directory:
 
-## Data Contracts
-- Tickets include: `id`, `title`, `description`, `priority`, `status`, `tags`, `modules`, `created`, `updated`, `completionSummary?`.
-- Modules include: `id`, `name`, `type`, `pathHints`, `dependencies`, `externalDependencies`, `health`, `coverage`.
-- Feature records include: `id`, `title`, `description`, `moduleId`, `priority`, `status`, `acceptanceCriteria`, `created`.
+- `tickets.json` — Ticket backlog
+- `features.json` — Feature catalog
+- `modules-detected.json` — Module detection cache
+- `module-links.json` — Manual canvas edges
+- `roadmap-state.json` — Roadmap data
+- `bug-workflow-state.json` — Bug workflow state
+- `setup-state.json` — Installation configuration
+- `tech-stack.json` — Technology inventory
+- `cli-gating-log.json` — Alignment gate events
+- `terminal-history.json` — Terminal command history
 
-## Accessibility & Design
-- WCAG-compliant contrast ratios with visual accents (MOLE/CANYON themes).
-- Progressive disclosure in the interview flow, timeline planning, and docs.
-- Animations respect motion reduction preferences; focus states and keyboard navigation are maintained across the interface.
+### Generated Artifacts
 
-## Testing & Validation Checklist
-- [ ] Run `pnpm run setup:install` in a clean clone; verify wizard branches appropriately.
-- [ ] Trigger `claude$ setup` to ensure audits complete and artefacts populate `spec/`.
-- [ ] Create, update, finish, and delete tickets via UI; ensure completion summary is required when finishing.
-- [ ] Detect modules and export canvas (PNG/JSON) from the UI.
-- [ ] Generate spec/doc bundles and confirm they land in `spec/`.
+Specifications and exports are saved to `spec/`:
 
-## Code Quality & Development
-- **Package Manager**: All operations use `pnpm` instead of `npm` for consistency and performance
-- **Linting**: ESLint with Vue.js support and Stylelint for CSS/SCSS files
-- **Code Quality**: 60% reduction in linting warnings achieved through proper implementation vs suppression
-- **Naming Convention**: **CRITICAL** - All code must use camelCase (variables, properties, functions, API endpoints)
-  - ESLint enforces camelCase with error severity
-  - No snake_case or kebab-case allowed in JavaScript/Vue code
-  - API endpoints and database fields must follow camelCase standard
+- `spec/blueprints/` — Spec JSON and Markdown
+- `spec/runbooks/` — Generated runbooks
+- `spec/cli-sessions/` — Interview transcripts
+- `spec/canvas/` — Canvas snapshots
+- `spec/docs/` — Documentation exports
 
-## Contributing
-1. Fork the repo and create a feature branch.
-2. Follow the style guide (theme tokens in `index.html`) and prefer filesystem-backed data over mock objects.
-3. Add docs under `docs/` for any substantial feature or workflow.
-4. Run the installer + wizard to ensure no regressions in the onboarding flow.
-5. Open a PR with screenshots of UI changes when applicable.
+## 🧪 Testing
 
-## Roadmap Signals
-- Automated Mermaid diagram exports in audit summaries.
-- Storybook auto-generation leveraging detector + interview snapshots.
-- Visual timeline canvas for milestone planning.
-- Dependency book with internal/external risk scoring exposed via API & UI.
+### Test Suites
+
+- **Unit Tests** — Module-level testing (19 test files)
+- **Integration Tests** — API workflow testing
+- **E2E Tests** — Playwright end-to-end tests
+- **Component Tests** — Storybook visual testing
+
+### Run Tests
+
+```bash
+# All module tests
+pnpm test:modules
+
+# E2E tests
+pnpm test:e2e
+
+# Specific test
+node tests/roadmapStatusTransitions.test.mjs
+```
+
+## 🎨 Theming
+
+Opnix uses the MOLE color palette optimized for accessibility:
+
+- **Primary**: #E94560 (Neon Pink)
+- **Accent 1**: #1FB6FF (Electric Blue)
+- **Accent 2**: #06B6D4 (Cyan)
+- **Warning**: #FF8C3B (Orange)
+- **Success**: #10B981 (Green)
+- **Danger**: #DC2626 (Red)
+
+Theme variables are defined in CSS custom properties and support both light and dark modes.
+
+## 🛠️ Development
+
+### Prerequisites for Development
+
+```bash
+# Install dependencies
+pnpm install --ignore-scripts
+
+# Setup development environment
+pnpm run setup:wizard
+
+# Start development server
+pnpm dev
+```
+
+### Code Quality
+
+```bash
+# Run linters
+pnpm lint
+
+# Auto-fix issues
+pnpm lint:js --fix
+pnpm lint:css --fix
+```
+
+### Git Hooks
+
+Husky pre-commit hooks enforce:
+- ESLint validation
+- Stylelint validation
+- Automatic code formatting
+
+## 📝 Documentation
+
+- `docs/spec.md` — Project specification
+- `docs/cli-command-workflows.md` — CLI interview system
+- `docs/tech-stack.md` — Technology documentation
+- `docs/storybook.md` — Component library guide
+- `docs/e2e-testing.md` — E2E testing guide
+- `docs/narrative.md` — Project narrative
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests (`pnpm test:modules`)
+5. Commit changes (`git commit -m 'Add amazing feature'`)
+6. Push to branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🔗 Links
+
+- **Repository**: https://github.com/Kindjhali/Opnix
+- **Issues**: https://github.com/Kindjhali/Opnix/issues
+- **Discussions**: https://github.com/Kindjhali/Opnix/discussions
+
+## 💡 Tips
+
+### First-Time Setup
+
+1. Run `pnpm install` to trigger automated setup
+2. Follow the setup wizard prompts
+3. Access the UI at http://localhost:7337
+4. Explore the Canvas tab for module visualization
+5. Use `/spec` command to create project documentation
+
+### Common Workflows
+
+**Creating a Feature:**
+1. Use Features tab or `/new-feature` command
+2. Define acceptance criteria
+3. Link to modules
+4. Set priority and tags
+5. Generate tickets automatically
+
+**Running an Audit:**
+1. Use setup wizard or CLI
+2. Review generated specs in Specs tab
+3. Export Markdown documentation
+4. Update roadmap with findings
+
+**Managing Bugs:**
+1. Start with `pnpm bug:start`
+2. Use `/new-bug` for structured intake
+3. Track in Tickets board
+4. Complete with `pnpm bug:complete`
+
+## 🆘 Troubleshooting
+
+### Installation Issues
+
+**Problem**: Postinstall fails
+```bash
+# Solution: Run manual installation
+pnpm install --ignore-scripts
+pnpm run setup:install
+pnpm build
+```
+
+**Problem**: Port 7337 already in use
+```bash
+# Solution: Change port in server.js or kill existing process
+lsof -ti:7337 | xargs kill
+```
+
+### Runtime Issues
+
+**Problem**: Module detection fails
+```bash
+# Solution: Clear cache and re-detect
+rm data/modules-detected.json
+curl http://localhost:7337/api/modules/detect
+```
+
+**Problem**: Terminal not connecting
+```bash
+# Solution: Restart server and check WebSocket
+pnpm start
+# Check browser console for WebSocket errors
+```
+
+## 🚀 What's Next
+
+- GraphQL API integration
+- Real-time collaboration features
+- Enhanced AI-powered code analysis
+- Cloud deployment templates
+- Mobile responsive improvements
+- Advanced reporting and analytics
 
 ---
 
-### Uploading Opnix to GitHub
-1. **Create a GitHub repository** (web UI → “New repository”). Copy the remote URL, e.g., `https://github.com/<username>/opnix.git`.
-2. **Initialize and commit locally** (if you haven’t already):
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial Opnix import"
-   ```
-3. **Add the remote**:
-   ```bash
-git remote add origin https://github.com/<username>/opnix.git
-   ```
-4. **Push to GitHub**:
-   ```bash
-git push -u origin main   # or master, depending on your default branch
-   ```
-5. **Verify on GitHub**: refresh the repo page to confirm files uploaded.
-
-If the repository already exists locally with a remote, skip the `git init` and `git remote add` steps—just commit your changes and run `git push`.
-
-
-## Frontend Composable Architecture
-
-See `docs/composables-overview.md` for the current breakdown of `src/composables/` helpers and how they map into the Vue app. Shared state now lives in `src/composables/appStore.js`; composables such as `terminalManager`, `commandCenterManager`, and `themeManager` accept an optional context but default to `useAppStore()`, so CLI routes, tests, and Vue components all drive the same data.
+**Built with ❤️ using Vue 3, Express, Cytoscape, and modern web technologies.**
