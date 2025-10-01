@@ -131,7 +131,7 @@ function banner() {
 
     console.log('');
     logo.forEach(line => {
-        console.log(theme.neon(line));
+        console.log(theme.logo(line));
     });
     console.log('');
     console.log(theme.muted(padCenter('Operational Toolkit · Visual Canvas · Audit Engine', 50)));
