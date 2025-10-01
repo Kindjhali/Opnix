@@ -6,12 +6,22 @@
 
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 const ROOT = path.join(__dirname, '..');
 
-// Detect if this is a user installation or development
-const isDevelopment = process.env.NODE_ENV === 'development' ||
-                      process.cwd() === ROOT;
+// Skip postinstall for global installations
+// Check if this is a global install by looking for npm's global marker
+const isGlobalInstall = process.env.npm_config_global === 'true' ||
+                        // Also check if required files exist (they won't in global install due to .npmignore)
+                        !fs.existsSync(path.join(ROOT, 'data')) ||
+                        !fs.existsSync(path.join(ROOT, 'docs'));
+
+if (isGlobalInstall) {
+    console.log('[Opnix] Skipping postinstall for global installation');
+    console.log('[Opnix] To use Opnix, run "opnix" in your project directory');
+    process.exit(0);
+}
 
 function runCommand(command, args, options = {}) {
     return new Promise((resolve, reject) => {
