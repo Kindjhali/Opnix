@@ -91,21 +91,41 @@ High-contrast colors optimized for accessibility
 
 ## ⚡ Installation
 
+### Install into Your Project
+
 ```bash
-# Clone the repository
-git clone https://github.com/Kindjhali/Opnix.git
-cd opnix
+# Navigate to your project
+cd your-project
 
-# Install and auto-setup (runs postinstall automation)
-pnpm install
+# Install Opnix
+pnpm add opnix
 
-# Start the server
-pnpm start
+# Or use npx to run without installing
+npx opnix
 ```
 
 **🌐 Open http://localhost:7337**
 
-> The installation automatically sets up directories, builds the production bundle, and runs the configuration wizard.
+> Opnix automatically:
+> - Detects your project structure
+> - Creates required directories (data/, spec/, .opnix/)
+> - Builds the production bundle
+> - Runs the setup wizard
+> - Starts the server
+
+### For Opnix Development
+
+```bash
+# Clone the Opnix repository
+git clone https://github.com/Kindjhali/Opnix.git
+cd opnix
+
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm dev
+```
 
 ## Core Features
 
