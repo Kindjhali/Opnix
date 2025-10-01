@@ -1,516 +1,530 @@
-# Opnix — Operational Toolkit
+```
+   ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄    ▄ ▄▄▄ ▄▄   ▄▄
+  █       █       █  █  █ █   █  █ █  █
+  █   ▄   █    ▄  █   █▄█ █   █  █▄█  █
+  █  █ █  █   █▄█ █       █   █       █
+  █  █▄█  █    ▄▄▄█  ▄    █   █       █
+  █       █   █   █ █ █   █   █ ██▄██ █
+  █▄▄▄▄▄▄▄█▄▄▄█   █▄█  █▄▄█▄▄▄█▄█   █▄█
 
-A comprehensive visual command center for auditing, managing, and visualizing software projects. Opnix combines a modern Vue 3 interface with an Express backend to deliver real-time project insights, automated audits, and intelligent workflow automation.
+  Operational Toolkit · Visual Canvas · Audit Engine
+```
 
-## ✨ Key Features
+<div align="center">
 
-### 🚀 Automated Project Management
-- **Intelligent Setup Wizard** — Adaptive installation that detects project type and guides configuration
-- **Module Detection** — Automatic discovery and mapping of project dependencies and architecture
-- **CLI Interview System** — Progressive questionnaires for specs, features, bugs, and runbooks
-- **Automated Audits** — Comprehensive project analysis with exportable reports
+[![MOLE Theme](https://img.shields.io/badge/Theme-MOLE-E94560?style=for-the-badge)](https://github.com/Kindjhali/Opnix)
+[![License](https://img.shields.io/badge/License-MIT-1FB6FF?style=for-the-badge)](LICENSE)
+[![Node](https://img.shields.io/badge/Node-%E2%89%A518-06B6D4?style=for-the-badge)](https://nodejs.org)
+[![Vue](https://img.shields.io/badge/Vue-3-FF8C3B?style=for-the-badge)](https://vuejs.org)
 
-### 📊 Visual Interfaces
-- **Interactive Module Canvas** — Cytoscape-powered dependency visualization with drag-and-drop editing
-- **Roadmap Management** — Plan and track features with detailed/minimal views and version history
-- **Tech Stack Dashboard** — Real-time technology inventory and dependency tracking
-- **Diagram Generation** — Mermaid-based architecture, sequence, and flow diagrams
+**A visual command center for understanding, managing, and documenting software projects.**
 
-### 🎯 Development Workflows
-- **Ticket Management** — Complete CRUD operations with filtering, tagging, and completion tracking
-- **Bug Workflow Enforcement** — Structured bug lifecycle with validation and automation
-- **Feature Planning** — Acceptance criteria, module mapping, and priority management
-- **Session Recovery** — Checkpoint-based recovery system for interrupted workflows
+Opnix combines intelligent project analysis with interactive visualizations to help teams maintain clarity across complex codebases.
 
-### 🔧 Developer Tools
-- **Terminal Integration** — Built-in xterm.js terminal with WebSocket support
-- **Storybook Integration** — Component library with auto-generated stories
-- **E2E Testing** — Playwright-based end-to-end test suite
-- **API Documentation** — OpenAPI-compliant specs with auto-generation
+[Installation](#installation) · [Features](#core-features) · [Workflows](#common-workflows) · [Documentation](#links)
 
-### 🎨 User Experience
-- **MOLE Theme** — High-contrast, neurodivergent-friendly color palette
-- **Responsive Design** — Optimized for all screen sizes
-- **Progressive Disclosure** — Chunked information architecture
-- **Accessibility** — WCAG AA/AAA compliant with screen reader support
+</div>
 
-## 📋 Prerequisites
+---
 
-- **Node.js** ≥ 18
-- **pnpm** ≥ 8 (required for all package operations)
-- **Git** (for repository management)
-- **Platform**: macOS, Linux, or Windows (WSL recommended)
+## 🎯 What is Opnix?
 
-## 🚀 Quick Start
+<table>
+<tr>
+<td width="50%">
 
-### Automated Installation
+### 🗺️ Visual Architecture Maps
+Interactive dependency graphs showing how your modules connect
 
-Clone and install with automated setup:
+### 📚 Automated Documentation
+Generate specs, runbooks, and technical docs from your code
+
+### 🎯 Intelligent Project Management
+Track features, tickets, and roadmaps with smart automation
+
+</td>
+<td width="50%">
+
+### 💻 CLI-Driven Workflows
+Progressive questionnaires that guide you through specs, bugs, and features
+
+### 📊 Real-Time Insights
+Live tech stack analysis, module health, and architecture diagrams
+
+### 🎨 MOLE Theme
+High-contrast colors optimized for accessibility
+
+</td>
+</tr>
+</table>
+
+## 🚀 Why Use Opnix?
+
+<table>
+<tr>
+<td width="33%">
+
+### 👤 Solo Developers
+✨ Maintain clarity on growing projects
+🔗 Visualize dependencies
+📝 Generate professional specs automatically
+
+</td>
+<td width="33%">
+
+### 👥 Teams
+🎓 Onboard with auto-generated diagrams
+📖 Keep docs in sync with code
+🎯 Track features and tech debt
+
+</td>
+<td width="33%">
+
+### 📊 Project Managers
+👁️ Real-time project visibility
+🗓️ Automated roadmap generation
+📤 Export-ready documentation
+
+</td>
+</tr>
+</table>
+
+## ⚡ Installation
 
 ```bash
-# Clone repository
+# Clone the repository
 git clone https://github.com/Kindjhali/Opnix.git
 cd opnix
 
-# Install and setup (runs postinstall automation)
+# Install and auto-setup (runs postinstall automation)
 pnpm install
 
 # Start the server
 pnpm start
 ```
 
-The `pnpm install` command automatically:
-- Installs all dependencies
-- Creates required directories (data/, spec/, .opnix/)
-- Builds the production bundle
-- Runs the interactive setup wizard
+**🌐 Open http://localhost:7337**
 
-Open http://localhost:7337 in your browser.
+> The installation automatically sets up directories, builds the production bundle, and runs the configuration wizard.
 
-### Manual Installation
+## Core Features
 
-For development or granular control:
+### 1. Visual Module Canvas
+
+**What it does:** Automatically detects and visualizes your project's module architecture using Cytoscape.
+
+**Key capabilities:**
+- Drag-and-drop dependency editing
+- Real-time module health indicators
+- Export as PNG or JSON
+- Manual override support for custom connections
+
+**Use case:** You're refactoring a monolith. The canvas shows you exactly which modules depend on the one you're changing, preventing accidental breaks.
+
+**Access:** Canvas tab in the UI or `GET /api/modules/graph`
+
+### 2. Smart Module Detection
+
+**What it does:** Scans your codebase to identify modules, analyze dependencies, and assess health metrics.
+
+**Detects:**
+- Package manifests (package.json, requirements.txt, etc.)
+- Import/export patterns
+- Directory structure and aliases
+- Circular dependencies and coupling issues
+
+**Use case:** After adding a new service, run detection to see how it fits into your existing architecture and catch any problematic dependencies early.
+
+**Access:** Auto-runs on startup or trigger with `GET /api/modules/detect`
+
+### 3. CLI Interview System
+
+**What it does:** Interactive command-line questionnaires that guide you through creating structured documentation.
+
+**Available interviews:**
+- `/spec` — Full project specification
+- `/new-feature` — Feature planning with acceptance criteria
+- `/new-module` — Module onboarding and documentation
+- `/new-bug` — Structured bug intake
+- `/runbook` — Operational playbooks for deployment/incidents
+- `/new-api` — API endpoint specifications
+
+**Use case:** A stakeholder requests a new feature. Run `/new-feature`, answer guided questions, and automatically generate tickets, acceptance criteria, and module mappings.
+
+**Example:**
+```bash
+curl -X POST http://localhost:7337/api/claude/execute \
+  -H 'Content-Type: application/json' \
+  -d '{"command":"/new-feature"}'
+```
+
+### 4. Automated Specification Generation
+
+**What it does:** Analyzes your codebase and generates comprehensive technical specifications.
+
+**Outputs:**
+- JSON spec with complete project metadata
+- Markdown documentation ready for GitHub
+- Spec Kit format for standardized docs
+- Architecture diagrams in Mermaid format
+
+**Use case:** Your team needs updated documentation for a quarterly review. Run the spec generator and export professional docs in minutes instead of days.
+
+**Access:** Setup wizard or Specs tab
+
+### 5. Roadmap Management
+
+**What it does:** Plan features, track milestones, and visualize project timelines.
+
+**Features:**
+- Drag-and-drop milestone organization
+- Automatic version history with rollback
+- Dependency tracking between features
+- Export to Markdown or JSON
+
+**Use case:** Planning a v2.0 release. Create milestones for each major feature, link dependencies, and export a timeline for your team.
+
+**Access:** Roadmap tab or `GET /api/roadmap`
+
+### 6. Ticket & Feature Tracking
+
+**What it does:** Complete project management with smart automation.
+
+**Capabilities:**
+- Create tickets from feature definitions
+- Filter by priority, status, tags
+- Completion workflows with validation
+- Export to Markdown for reporting
+
+**Use case:** During sprint planning, create a feature with acceptance criteria. Opnix automatically generates individual tickets for each criterion.
+
+**Access:** Tickets tab or `/api/tickets` endpoints
+
+### 7. Tech Stack Dashboard
+
+**What it does:** Real-time inventory of all technologies used in your project.
+
+**Tracks:**
+- Dependencies and versions
+- Framework usage across modules
+- Technology categories and trends
+- Potential security or compatibility issues
+
+**Use case:** Auditing dependencies before a major upgrade. See exactly which modules use the outdated library and plan your migration strategy.
+
+**Access:** Tech Stack tab or `GET /api/tech-stack`
+
+### 8. Live Architecture Diagrams
+
+**What it does:** Auto-generates Mermaid diagrams from your codebase structure.
+
+**Diagram types:**
+- Architecture overview (module relationships)
+- Sequence diagrams (API flows)
+- Entity diagrams (data models)
+- Flow diagrams (business logic)
+
+**Use case:** Explaining system architecture to a new team member. Generate an up-to-date diagram that shows actual current structure, not outdated documentation.
+
+**Access:** Diagrams tab or `GET /api/diagrams/:type`
+
+### 9. Integrated Terminal
+
+**What it does:** Built-in terminal with WebSocket support for running commands directly in the UI.
+
+**Features:**
+- Full terminal emulation with xterm.js
+- Command history and persistence
+- Theme integration matching UI
+- Real-time command output
+
+**Use case:** Running build commands or git operations without leaving the Opnix interface.
+
+**Access:** Terminal tab
+
+### 10. Runbook Generator
+
+**What it does:** Creates operational playbooks for deployment, incidents, and maintenance.
+
+**Templates include:**
+- Deployment procedures
+- Incident response guides
+- Release checklists
+- Compliance documentation
+
+**Use case:** Creating a runbook for your on-call rotation. Answer structured questions and generate a complete incident response guide.
+
+**Access:** `/runbook` CLI command or Runbook modal
+
+## Common Workflows
+
+### Starting a New Project
+
+1. **Install Opnix** in your project directory
+2. **Run the setup wizard** — Answer questions about your project
+3. **Review the Canvas** — See your initial architecture
+4. **Generate baseline docs** — Export specs and diagrams
+5. **Set up roadmap** — Plan your first features
+
+### Managing an Existing Project
+
+1. **Run module detection** — Get current architecture state
+2. **Create features** — Use `/new-feature` for new work
+3. **Track in roadmap** — Organize by milestone
+4. **Generate tickets** — Auto-create from acceptance criteria
+5. **Export documentation** — Keep stakeholders informed
+
+### Onboarding New Team Members
+
+1. **Export architecture diagram** — Show system overview
+2. **Share auto-generated specs** — Up-to-date technical docs
+3. **Provide module canvas** — Interactive exploration
+4. **Generate runbooks** — Operational procedures
+
+### Refactoring & Technical Debt
+
+1. **Visualize dependencies** — See what's coupled
+2. **Identify problem modules** — Health indicators
+3. **Plan refactoring** — Create features with clear criteria
+4. **Track progress** — Use roadmap milestones
+5. **Document changes** — Auto-update specs
+
+## Quick Reference
+
+### Essential Commands
 
 ```bash
-# Clone repository
-git clone https://github.com/Kindjhali/Opnix.git
-cd opnix
+# Start the server
+pnpm start
 
-# Install dependencies only (skip automation)
-pnpm install --ignore-scripts
+# Run setup wizard
+pnpm run setup:wizard
 
-# Run setup manually
-pnpm run setup:install
+# Development mode with auto-reload
+pnpm dev
 
 # Build production bundle
 pnpm build
-
-# Start server
-pnpm start
 ```
 
-## 📁 Project Structure
+### Key API Endpoints
+
+| Endpoint | Purpose |
+|----------|---------|
+| `POST /api/claude/execute` | Run CLI commands |
+| `GET /api/modules/graph` | Get module dependencies |
+| `GET /api/roadmap` | Fetch roadmap data |
+| `GET /api/tickets` | List all tickets |
+| `GET /api/diagrams/architecture` | Generate architecture diagram |
+| `GET /api/tech-stack` | Get technology inventory |
+
+### CLI Commands
+
+| Command | What it does |
+|---------|--------------|
+| `/spec` | Generate full project specification |
+| `/new-feature` | Create feature with acceptance criteria |
+| `/new-module` | Document a new module |
+| `/new-bug` | Structured bug intake |
+| `/runbook` | Generate operational runbook |
+| `/new-api` | Specify API endpoints |
+
+## Project Structure
 
 ```
 opnix/
-├── data/                    # Runtime data and state
-│   ├── tickets.json        # Ticket backlog
-│   ├── features.json       # Feature catalog
-│   ├── modules-detected.json # Module detection cache
-│   ├── roadmap-state.json  # Roadmap data
-│   ├── checkpoints/        # Recovery checkpoints
-│   └── cli-sessions/       # CLI interview sessions
-├── docs/                    # Documentation
-├── routes/                  # Express API routes
-├── scripts/                 # CLI tools and automation
-├── services/                # Backend business logic
-├── src/                     # Vue 3 frontend
-│   ├── components/         # UI components (38 total)
-│   ├── composables/        # Vue composition functions
-│   ├── blocs/              # State management
-│   └── services/           # Frontend API clients
-├── spec/                    # Generated specifications
-├── tests/                   # Test suites
-└── public/                  # Static assets
+├── src/                    # Vue 3 frontend
+│   ├── components/         # 38 UI components
+│   ├── composables/        # Reactive state management
+│   └── services/           # API clients
+├── routes/                 # Express API routes
+├── services/               # Backend logic
+├── scripts/                # CLI tools & automation
+├── data/                   # JSON state storage
+│   ├── tickets.json
+│   ├── features.json
+│   ├── roadmap-state.json
+│   └── modules-detected.json
+└── spec/                   # Generated documentation
+    ├── blueprints/
+    ├── runbooks/
+    └── diagrams/
 ```
 
-## 🎮 Command Reference
+## Data Storage
 
-### Server Commands
+Opnix stores all state as JSON files in the `data/` directory:
 
+- **tickets.json** — Task backlog and completion tracking
+- **features.json** — Feature definitions with acceptance criteria
+- **roadmap-state.json** — Milestones and timeline data
+- **modules-detected.json** — Cached module analysis
+- **tech-stack.json** — Technology inventory
+- **module-links.json** — Manual dependency overrides
+
+Generated documentation lives in `spec/`:
+
+- **spec/blueprints/** — Auto-generated specifications
+- **spec/runbooks/** — Operational playbooks
+- **spec/diagrams/** — Mermaid architecture diagrams
+
+## UI Overview
+
+### Main Interface Tabs
+
+- **Canvas** — Interactive module visualization
+- **Modules** — Module management and health metrics
+- **Tickets** — Task board with filtering
+- **Features** — Feature planning with criteria
+- **Roadmap** — Timeline and milestone tracking
+- **Specs** — Generated documentation browser
+- **Diagrams** — Architecture visualization
+- **Tech Stack** — Technology inventory
+- **Terminal** — Integrated command line
+- **Docs** — Documentation viewer
+- **API** — API endpoint explorer
+
+### Modal Workflows
+
+- **Ticket Completion** — Capture work summaries before closing
+- **Feature Creation** — Guided feature definition
+- **Bug Intake** — Structured bug reporting
+- **Runbook Generation** — Operational playbook creation
+- **Module Addition** — New module onboarding
+
+## Configuration
+
+### Setup Wizard
+
+The interactive wizard configures:
+- Project type detection (greenfield vs existing)
+- Technology stack identification
+- Initial module scanning
+- Documentation preferences
+- Agent file generation (CLAUDE.md, etc.)
+
+### Manual Configuration
+
+Skip automation with:
 ```bash
-# Start production server
-pnpm start
-
-# Development mode (with auto-reload)
-pnpm dev
-
-# Build for production
-pnpm build
+pnpm install --ignore-scripts
+pnpm run setup:install  # Manual setup
+pnpm build              # Build bundle
+pnpm start              # Start server
 ```
 
-### Setup Commands
+## Exporting & Integration
 
-```bash
-# Run interactive setup wizard
-pnpm run setup:wizard
+### Export Formats
 
-# Manual installer (directories, agent files)
-pnpm run setup:install
-```
+- **Markdown** — GitHub-ready documentation
+- **JSON** — Structured data for tooling
+- **PNG/SVG** — Visual diagrams and canvases
+- **Spec Kit** — Standardized specification format
 
-### Bug Workflow
+### Integration Points
 
-```bash
-# Start bug workflow
-pnpm bug:start
+- **Git Hooks** — Husky integration for quality checks
+- **CI/CD** — Automated spec generation on builds
+- **Storybook** — Component documentation (port 6006)
+- **APIs** — REST endpoints for external tools
 
-# Mark bug complete
-pnpm bug:complete
+## Use Case Examples
 
-# Pause/resume bug workflow
-pnpm bug:pause
-pnpm bug:resume
+### Example 1: Microservices Migration
+*"We're breaking up our monolith into microservices"*
 
-# Check workflow status
-pnpm bug:status
-pnpm bug:active
-pnpm bug:validate
-```
+1. Use Canvas to visualize current dependencies
+2. Identify clean separation boundaries
+3. Create features for each new service
+4. Track migration progress in Roadmap
+5. Generate architecture diagrams for documentation
 
-### Terminal Integration
+### Example 2: Compliance Documentation
+*"We need SOC2 documentation"*
 
-```bash
-# Install terminal status bar
-pnpm terminal:install
+1. Run `/runbook` for compliance templates
+2. Generate tech stack inventory
+3. Export architecture diagrams
+4. Create operational runbooks
+5. Maintain version history for audit trail
 
-# Uninstall terminal status bar
-pnpm terminal:uninstall
+### Example 3: Developer Onboarding
+*"New team member starts Monday"*
 
-# Check terminal status
-pnpm terminal:status
-```
+1. Export current architecture diagram
+2. Generate up-to-date specification
+3. Provide module canvas for exploration
+4. Share feature roadmap
+5. Link to auto-generated runbooks
+
+### Example 4: Technical Debt Planning
+*"We need to tackle accumulated debt"*
+
+1. Module detection identifies problem areas
+2. Create features for refactoring work
+3. Map dependencies to avoid breaks
+4. Track progress with tickets
+5. Update documentation automatically
+
+## Advanced Features
+
+### Bug Workflow Enforcement
+
+Structured bug lifecycle with commands:
+- `pnpm bug:start` — Begin bug workflow
+- `pnpm bug:complete` — Finish with validation
+- `pnpm bug:status` — Check current state
+
+### Session Recovery
+
+Checkpoint-based recovery for interrupted work:
+- Automatic state snapshots
+- Rollback to previous versions
+- Resume from last checkpoint
 
 ### Progress Tracking
 
-```bash
-# Show progress dashboard
-pnpm progress
-
-# Display summary
-pnpm progress:summary
-
-# Show help
-pnpm progress:help
-```
-
-### Testing
-
-```bash
-# Run all module tests
-pnpm test:modules
-
-# E2E tests
-pnpm test:e2e
-pnpm test:e2e:ui        # Interactive mode
-pnpm test:e2e:headed    # Headed browser mode
-pnpm test:e2e:debug     # Debug mode
-pnpm test:e2e:report    # Show test report
-```
-
-### Development Tools
-
-```bash
-# Linting
-pnpm lint               # Lint JS and CSS
-pnpm lint:js           # Lint JavaScript only
-pnpm lint:css          # Lint CSS only
-
-# Storybook
-pnpm storybook          # Start Storybook dev server (port 6006)
-pnpm storybook:generate # Generate component stories
-pnpm build-storybook    # Build static Storybook
-```
-
-### API Commands
-
-```bash
-# Get next Claude task
-pnpm claude:next
-
-# Export tickets to Markdown
-pnpm claude:export
-```
-
-## 🌐 API Endpoints
-
-### Core APIs
-
-- `GET /api/tickets` — List all tickets
-- `POST /api/tickets` — Create ticket
-- `PUT /api/tickets/:id` — Update ticket
-- `DELETE /api/tickets/:id` — Delete ticket
-- `GET /api/modules/graph` — Module dependency graph
-- `GET /api/modules/detect` — Run module detection
-- `POST /api/canvas/export` — Export canvas as image
-
-### CLI Interview Endpoints
-
-- `POST /api/claude/execute` — Execute slash commands
-- `GET /api/cli/sessions` — List CLI sessions
-- `GET /api/cli/sessions/:id` — Get session details
-- `POST /api/specs/export/scoped` — Export scoped specs
-- `POST /api/runbooks/constitution` — Generate governance digest
-
-### Roadmap APIs
-
-- `GET /api/roadmap` — Get roadmap state
-- `POST /api/roadmap/milestone` — Create milestone
-- `POST /api/roadmap/rollback/:version` — Rollback to version
-- `GET /api/roadmap/history` — Get version history
-
-### System APIs
-
-- `GET /api/diagrams/:type` — Generate diagram (architecture, sequence, flow)
-- `GET /api/tech-stack` — Technology inventory
-- `POST /api/context/update` — Update context state
-- `GET /api/progress` — Progress dashboard data
-
-## 🎨 UI Components
-
-### Main Tabs
-
-- **Canvas** — Module visualization with Cytoscape
-- **Modules** — Module management and editing
-- **Tickets** — Ticket board with filtering
-- **Features** — Feature planning and tracking
-- **Roadmap** — Timeline and milestone management
-- **Specs** — Specification browser
-- **Diagrams** — Architecture diagrams
-- **Docs** — Documentation viewer
-- **API** — API explorer
-- **Tech Stack** — Technology dashboard
-- **Terminal** — Integrated terminal
-- **Storybook** — Component library
-
-### Modal Components
-
-- Ticket Completion Modal
-- Feature Modal
-- Bug Modal
-- Runbook Modal
-- Add Module Modal
-
-## 🔄 CLI Interview System
-
-Interactive command-line questionnaires for structured project documentation:
-
-### Available Commands
-
-| Command | Purpose | Output |
-|---------|---------|--------|
-| `/spec` | Full specification interview | Spec JSON/Markdown/Spec Kit |
-| `/new-feature` | Feature intake | Feature record + tickets |
-| `/new-module` | Module onboarding | Module stub + diagram |
-| `/new-bug` | Bug/incident intake | Ticket + checklists |
-| `/new-diagram` | Diagram briefing | Mermaid source |
-| `/new-api` | API specification | OpenAPI draft |
-| `/runbook` | Operational playbook | Markdown runbook |
-| `/plan` | Delivery plan | Plan Markdown |
-| `/tasks` | Task queue snapshot | Task summary |
-| `/constitution` | Governance digest | Guidance Markdown |
-| `/specify` | Scoped spec export | Filtered spec output |
-
-### Usage Example
-
-```bash
-# Start specification interview
-curl -X POST http://localhost:7337/api/claude/execute \
-  -H 'Content-Type: application/json' \
-  -d '{"command":"/spec"}'
-
-# Answer question
-curl -X POST http://localhost:7337/api/claude/execute \
-  -H 'Content-Type: application/json' \
-  -d '{"command":"/answer <session-id> <question-id> <your-answer>"}'
-```
-
-## 🗄️ Data Storage
-
-All state is persisted to JSON files in the `data/` directory:
-
-- `tickets.json` — Ticket backlog
-- `features.json` — Feature catalog
-- `modules-detected.json` — Module detection cache
-- `module-links.json` — Manual canvas edges
-- `roadmap-state.json` — Roadmap data
-- `bug-workflow-state.json` — Bug workflow state
-- `setup-state.json` — Installation configuration
-- `tech-stack.json` — Technology inventory
-- `cli-gating-log.json` — Alignment gate events
-- `terminal-history.json` — Terminal command history
-
-### Generated Artifacts
-
-Specifications and exports are saved to `spec/`:
-
-- `spec/blueprints/` — Spec JSON and Markdown
-- `spec/runbooks/` — Generated runbooks
-- `spec/cli-sessions/` — Interview transcripts
-- `spec/canvas/` — Canvas snapshots
-- `spec/docs/` — Documentation exports
-
-## 🧪 Testing
-
-### Test Suites
-
-- **Unit Tests** — Module-level testing (19 test files)
-- **Integration Tests** — API workflow testing
-- **E2E Tests** — Playwright end-to-end tests
-- **Component Tests** — Storybook visual testing
-
-### Run Tests
-
-```bash
-# All module tests
-pnpm test:modules
-
-# E2E tests
-pnpm test:e2e
-
-# Specific test
-node tests/roadmapStatusTransitions.test.mjs
-```
-
-## 🎨 Theming
-
-Opnix uses the MOLE color palette optimized for accessibility:
-
-- **Primary**: #E94560 (Neon Pink)
-- **Accent 1**: #1FB6FF (Electric Blue)
-- **Accent 2**: #06B6D4 (Cyan)
-- **Warning**: #FF8C3B (Orange)
-- **Success**: #10B981 (Green)
-- **Danger**: #DC2626 (Red)
-
-Theme variables are defined in CSS custom properties and support both light and dark modes.
-
-## 🛠️ Development
-
-### Prerequisites for Development
-
-```bash
-# Install dependencies
-pnpm install --ignore-scripts
-
-# Setup development environment
-pnpm run setup:wizard
-
-# Start development server
-pnpm dev
-```
-
-### Code Quality
-
-```bash
-# Run linters
-pnpm lint
-
-# Auto-fix issues
-pnpm lint:js --fix
-pnpm lint:css --fix
-```
-
-### Git Hooks
-
-Husky pre-commit hooks enforce:
-- ESLint validation
-- Stylelint validation
-- Automatic code formatting
-
-## 📝 Documentation
-
-- `docs/spec.md` — Project specification
-- `docs/cli-command-workflows.md` — CLI interview system
-- `docs/tech-stack.md` — Technology documentation
-- `docs/storybook.md` — Component library guide
-- `docs/e2e-testing.md` — E2E testing guide
-- `docs/narrative.md` — Project narrative
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Run tests (`pnpm test:modules`)
-5. Commit changes (`git commit -m 'Add amazing feature'`)
-6. Push to branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🔗 Links
+Monitor project health:
+- `pnpm progress` — Dashboard view
+- `pnpm progress:summary` — Quick overview
+- Real-time metrics and KPIs
+
+## Requirements
+
+- Node.js ≥ 18
+- pnpm ≥ 8
+- Modern browser (Chrome, Firefox, Safari, Edge)
+- 500MB disk space for dependencies
+
+## Links
 
 - **Repository**: https://github.com/Kindjhali/Opnix
 - **Issues**: https://github.com/Kindjhali/Opnix/issues
 - **Discussions**: https://github.com/Kindjhali/Opnix/discussions
 
-## 💡 Tips
+## License
 
-### First-Time Setup
-
-1. Run `pnpm install` to trigger automated setup
-2. Follow the setup wizard prompts
-3. Access the UI at http://localhost:7337
-4. Explore the Canvas tab for module visualization
-5. Use `/spec` command to create project documentation
-
-### Common Workflows
-
-**Creating a Feature:**
-1. Use Features tab or `/new-feature` command
-2. Define acceptance criteria
-3. Link to modules
-4. Set priority and tags
-5. Generate tickets automatically
-
-**Running an Audit:**
-1. Use setup wizard or CLI
-2. Review generated specs in Specs tab
-3. Export Markdown documentation
-4. Update roadmap with findings
-
-**Managing Bugs:**
-1. Start with `pnpm bug:start`
-2. Use `/new-bug` for structured intake
-3. Track in Tickets board
-4. Complete with `pnpm bug:complete`
-
-## 🆘 Troubleshooting
-
-### Installation Issues
-
-**Problem**: Postinstall fails
-```bash
-# Solution: Run manual installation
-pnpm install --ignore-scripts
-pnpm run setup:install
-pnpm build
-```
-
-**Problem**: Port 7337 already in use
-```bash
-# Solution: Change port in server.js or kill existing process
-lsof -ti:7337 | xargs kill
-```
-
-### Runtime Issues
-
-**Problem**: Module detection fails
-```bash
-# Solution: Clear cache and re-detect
-rm data/modules-detected.json
-curl http://localhost:7337/api/modules/detect
-```
-
-**Problem**: Terminal not connecting
-```bash
-# Solution: Restart server and check WebSocket
-pnpm start
-# Check browser console for WebSocket errors
-```
-
-## 🚀 What's Next
-
-- GraphQL API integration
-- Real-time collaboration features
-- Enhanced AI-powered code analysis
-- Cloud deployment templates
-- Mobile responsive improvements
-- Advanced reporting and analytics
+MIT License - see LICENSE file for details
 
 ---
 
-**Built with ❤️ using Vue 3, Express, Cytoscape, and modern web technologies.**
+<div align="center">
+
+### 🎨 MOLE Color Palette
+
+<table>
+<tr>
+<td align="center" bgcolor="#E94560" style="color: white;"><b>Primary</b><br>#E94560</td>
+<td align="center" bgcolor="#1FB6FF" style="color: white;"><b>Accent 1</b><br>#1FB6FF</td>
+<td align="center" bgcolor="#06B6D4" style="color: white;"><b>Accent 2</b><br>#06B6D4</td>
+<td align="center" bgcolor="#FF8C3B" style="color: white;"><b>Warning</b><br>#FF8C3B</td>
+<td align="center" bgcolor="#10B981" style="color: white;"><b>Success</b><br>#10B981</td>
+</tr>
+</table>
+
+**Opnix** — Transform your codebase into clear, maintainable documentation and visual insights.
+
+*Built with ❤️ using Vue 3, Express, Cytoscape, and modern web technologies.*
+
+</div>
