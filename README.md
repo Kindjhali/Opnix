@@ -15,7 +15,7 @@
 Opnix delivers a visual command center for auditing, explaining, and visualising software projects end-to-end. It combines a Vue 3 single-page interface with an Express backend, filesystem-backed data, and automation that keeps every artefact grounded in the real repository—no mock payloads, no placeholders.
 
 ## Feature Highlights
-- **One-Step Installation** — `pnpm install opnix@latest` automatically handles dependency setup, builds the production bundle, runs the setup wizard, and prepares your environment.
+- **Automated Installation** — `pnpm install` automatically handles dependency setup, builds the production bundle, runs the setup wizard, and prepares your environment via postinstall hook.
 - **New vs Existing Project Decision Tree** — automatically routes greenfield repos to discovery interviews or established codebases to the full audit (`scripts/setupWizard.js`).
 - **Automated Audits** — `claude$ setup` or the wizard runs module detection, ticket/feature analysis, spec-kit generation, canvas snapshots, and Markdown docs; artefacts land in `spec/`.
 - **Cytoscape Module Canvas** — renders live module graphs, merges manual links (`data/module-links.json`), supports drag-and-drop dependencies, and exports PNG/JSON payloads.
@@ -67,44 +67,52 @@ Opnix delivers a visual command center for auditing, explaining, and visualising
 
 ## Getting Started
 
-### Quick Install (Recommended)
+### Automated Installation (Recommended)
 
-Install Opnix with a single command:
+Clone the repository and install in one go:
 
 ```bash
-pnpm install opnix@latest
+# Clone and navigate
+git clone https://github.com/Kindjhali/Opnix.git
+cd opnix
+
+# Install (automatically runs setup, build, and wizard)
+pnpm install
+
+# Start the server
+pnpm start
 ```
 
-This automatically:
+The `pnpm install` command automatically:
 - Installs all dependencies
 - Sets up project structure (data/, spec/, .opnix/)
 - Builds the production bundle
 - Runs the interactive setup wizard
 
-Then start the server:
-
-```bash
-pnpm start
-```
-
 Open http://localhost:7337 in your browser
 
 ### Manual Installation
 
-If you prefer manual setup or are developing locally:
+For development or step-by-step control:
 
 ```bash
 # 1. Clone and navigate
-git clone <your-fork-or-repo-url>
+git clone https://github.com/Kindjhali/Opnix.git
 cd opnix
 
-# 2. Install dependencies (runs postinstall automatically)
-pnpm install
+# 2. Install dependencies only (skip automation)
+pnpm install --ignore-scripts
 
-# 3. Start the server
+# 3. Run setup manually
+pnpm run setup:install
+
+# 4. Build production bundle
+pnpm build
+
+# 5. Start the server
 pnpm start
 
-# 4. (Optional) Re-run setup wizard manually
+# 6. (Optional) Re-run setup wizard
 pnpm run setup:wizard
 ```
 
