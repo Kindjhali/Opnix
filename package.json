@@ -4,7 +4,7 @@
   "description": "Visual command center for understanding, managing, and documenting software projects",
   "main": "server.js",
   "bin": {
-    "opnix": "./bin/opnix.js"
+    "opnix": "bin/opnix.js"
   },
   "keywords": [
     "project-management",
@@ -22,7 +22,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kindjhali/Opnix.git"
+    "url": "git+https://github.com/Kindjhali/Opnix.git"
   },
   "bugs": {
     "url": "https://github.com/Kindjhali/Opnix/issues"
