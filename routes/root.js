@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 function createRootRoutes({ rootDir, port }) {
     if (!rootDir) {
@@ -7,7 +8,12 @@ function createRootRoutes({ rootDir, port }) {
     }
 
     const router = express.Router();
-    const indexHtmlPath = path.join(rootDir, 'public', 'index.html');
+    const indexHtmlPath = path.resolve(rootDir, 'public', 'index.html');
+
+    // Verify the file exists at startup
+    if (!fs.existsSync(indexHtmlPath)) {
+        console.warn(`Warning: index.html not found at ${indexHtmlPath}`);
+    }
 
     router.get('/', (req, res) => {
         const userAgent = req.headers['user-agent'] || '';
@@ -33,7 +39,14 @@ Claude CLI:
   claude "Read data/tickets.json and fix all BUG tagged issues"
             `);
         } else {
-            res.sendFile(indexHtmlPath);
+            res.sendFile(indexHtmlPath, (err) => {
+                if (err) {
+                    console.error('Error serving index.html:', err);
+                    console.error('Attempted path:', indexHtmlPath);
+                    console.error('Root dir:', rootDir);
+                    res.status(500).send('Error loading application');
+                }
+            });
         }
     });
 
