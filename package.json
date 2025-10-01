@@ -1,8 +1,50 @@
 {
   "name": "opnix",
   "version": "1.0.0",
-  "description": "Opnix - Operational Toolkit",
+  "description": "Visual command center for understanding, managing, and documenting software projects",
   "main": "server.js",
+  "bin": {
+    "opnix": "./bin/opnix.js"
+  },
+  "keywords": [
+    "project-management",
+    "documentation",
+    "visualization",
+    "module-detection",
+    "architecture",
+    "diagrams",
+    "audit",
+    "roadmap",
+    "cli",
+    "canvas"
+  ],
+  "author": "Kindjhali",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kindjhali/Opnix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kindjhali/Opnix/issues"
+  },
+  "homepage": "https://github.com/Kindjhali/Opnix#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "files": [
+    "bin/",
+    "routes/",
+    "scripts/",
+    "services/",
+    "src/",
+    "public/",
+    "middleware/",
+    "agents/",
+    "server.js",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
     "start": "node server.js",

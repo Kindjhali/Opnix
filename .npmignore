@@ -1,0 +1,48 @@
+# Development files
+.git
+.github
+.husky
+.claude
+node_modules
+*.log
+
+# Test and build artifacts
+test-results
+playwright-report
+test-output
+*.test.mjs
+*.test.js
+tests/
+coverage/
+
+# Development configs
+.eslintrc*
+.prettierrc*
+.editorconfig
+nodemon.json
+vite.config.mjs
+playwright.config.js
+
+# Data directories (users will generate their own)
+data/
+spec/
+exports/
+.opnix/
+
+# Documentation (not needed in npm package)
+docs/
+E2E-TEST-COMPLETION-REPORT.md
+BRANDING-UPDATE-REPORT.md
+INSTALLER-IMPROVEMENTS-REPORT.md
+
+# Development scripts
+run-modules-tests.js
+final-test-output.log
+test-*.log
+
+# Temporary files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
