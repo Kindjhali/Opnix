@@ -2130,6 +2130,10 @@ async function start() {
     try {
         startRoadmapSyncWatchers();
         console.log('🛰️  Roadmap sync watchers active');
+        // Force flush stdout to ensure output appears immediately in npx
+        if (process.stdout.write && typeof process.stdout.write === 'function') {
+            process.stdout.write('');
+        }
     } catch (error) {
         console.error('⚠️  Failed to start roadmap sync watchers:', error);
     }
@@ -2270,6 +2274,11 @@ Real Functionality:
   ✓ Canvas export
   ✓ Terminal status bar active (PID: ${process.pid})
         `);
+
+        // Force flush stdout to ensure banner appears immediately in npx
+        if (process.stdout.write && typeof process.stdout.write === 'function') {
+            process.stdout.write('');
+        }
 
         // Auto-run progressive analysis on server startup
         setTimeout(() => {
