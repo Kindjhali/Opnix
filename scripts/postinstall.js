@@ -58,13 +58,27 @@ async function main() {
             }
         });
 
-        // Step 2: Build the production bundle
-        console.log('\n[Opnix] Step 2/3: Building production bundle...');
+        // Step 2: Rebuild node-pty native module using node-gyp
+        console.log('\n[Opnix] Step 2/4: Rebuilding node-pty native module...');
+        try {
+            const nodePtyPath = path.join(ROOT, 'node_modules', '.pnpm', 'node-pty@1.0.0', 'node_modules', 'node-pty');
+            if (fs.existsSync(nodePtyPath)) {
+                await runCommand('npx', ['node-gyp', 'rebuild'], { cwd: nodePtyPath });
+                console.log('[Opnix] node-pty native module rebuilt successfully');
+            } else {
+                console.log('[Opnix] node-pty not found, skipping rebuild');
+            }
+        } catch (error) {
+            console.warn('[Opnix] Warning: node-pty rebuild failed (terminal may not work):', error.message);
+        }
+
+        // Step 3: Build the production bundle
+        console.log('\n[Opnix] Step 3/4: Building production bundle...');
         await runCommand('pnpm', ['build']);
 
-        // Step 3: Run setup wizard if interactive
+        // Step 4: Run setup wizard if interactive
         if (process.stdin.isTTY && !process.env.CI) {
-            console.log('\n[Opnix] Step 3/3: Running setup wizard...');
+            console.log('\n[Opnix] Step 4/4: Running setup wizard...');
             await runCommand('node', ['scripts/setupWizard.js'], {
                 env: {
                     ...process.env,
@@ -72,7 +86,7 @@ async function main() {
                 }
             });
         } else {
-            console.log('\n[Opnix] Step 3/3: Skipping wizard (non-interactive environment)');
+            console.log('\n[Opnix] Step 4/4: Skipping wizard (non-interactive environment)');
             await runCommand('node', ['scripts/setupWizard.js'], {
                 env: {
                     ...process.env,
