@@ -1,6 +1,6 @@
 {
   "name": "opnix",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Visual command center for understanding, managing, and documenting software projects",
   "main": "server.js",
   "bin": {

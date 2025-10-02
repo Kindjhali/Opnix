@@ -39,12 +39,15 @@ Claude CLI:
   claude "Read data/tickets.json and fix all BUG tagged issues"
             `);
         } else {
-            res.sendFile(indexHtmlPath, (err) => {
+            // Read and send the file manually due to Express 5.x sendFile bug
+            fs.readFile(indexHtmlPath, 'utf8', (err, data) => {
                 if (err) {
-                    console.error('Error serving index.html:', err);
+                    console.error('Error reading index.html:', err);
                     console.error('Attempted path:', indexHtmlPath);
                     console.error('Root dir:', rootDir);
                     res.status(500).send('Error loading application');
+                } else {
+                    res.type('html').send(data);
                 }
             });
         }
