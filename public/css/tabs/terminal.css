@@ -1,0 +1,555 @@
+/* Extracted from base.css (Phase 3) */
+.terminal-footer {
+    margin-top: 2.5rem;
+    background: var(--bg-dark);
+    border: 2px solid var(--accent-2);
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 0 20px rgba(37,198,191,0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer-terminal-title {
+    font-size: 0.85rem;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.footer-terminal-body {
+    background: var(--bg-darkest);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.footer-terminal-output {
+    margin-top: 0.5rem;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: 2px solid var(--text-primary);
+    color: var(--text-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background: var(--text-primary);
+    color: var(--bg-darkest);
+    box-shadow: 0 0 15px var(--text-primary);
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.form-success {
+    color: var(--success);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.cli-sessions-panel {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-secondary);
+}
+
+.cli-sessions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.cli-sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cli-session-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-tertiary);
+}
+
+.cli-session-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.cli-session-status {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.cli-session-status.complete {
+    color: var(--accent-1);
+}
+
+.cli-session-detail {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-tertiary);
+}
+
+.cli-session-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.cli-session-section {
+    margin-top: 1rem;
+}
+
+.cli-session-response,
+.cli-session-artifact {
+    margin-bottom: 0.75rem;
+}
+
+.cli-session-artifact code {
+    display: block;
+    margin-top: 0.25rem;
+    word-break: break-all;
+}
+
+.cli-gate-log {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border-muted);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.cli-gate-log h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--accent-1);
+}
+
+.cli-gate-log .gate-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cli-gate-log .gate-meta {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cli-gate-log .gate-reasons span {
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.2);
+  color: var(--text-primary);
+}
+
+.cli-gate-log .gate-diagnostics {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+
+
+.runbook-card {
+    margin-top: 1.5rem;
+    background: var(--bg-secondary);
+}
+
+
+.runbook-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+}
+
+
+.runbook-filename {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+
+.runbook-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.runbook-messages {
+    margin-bottom: 1rem;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.runbook-messages h4 {
+    margin: 0 0 0.5rem;
+    color: var(--accent-orange);
+}
+
+.runbook-messages ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.85rem;
+}
+
+.runbook-preview {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    max-height: 320px;
+    overflow: auto;
+    white-space: pre-wrap;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.4;
+}
+
+.runbook-modal {
+    max-width: 640px;
+}
+
+.runbook-modal input,
+.runbook-modal textarea,
+.runbook-modal select {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    padding: 0.65rem;
+}
+
+.runbook-modal textarea {
+    resize: vertical;
+}
+
+.runbook-modal .modal-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.runbook-history {
+    max-height: 180px;
+    overflow: auto;
+    background: rgba(15, 23, 42, 0.35);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.runbook-history h4 {
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+    color: var(--accent-orange);
+}
+
+.runbook-history ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.85rem;
+}
+
+.runbook-history li {
+    margin-bottom: 0.35rem;
+}
+
+.runbook-question h3 {
+    margin: 0 0 0.5rem;
+    color: var(--accent-cyan);
+}
+
+.runbook-question .question-help {
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.controls select,
+.controls input,
+.controls textarea {
+    background: var(--bg-darkest);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-light);
+    padding: 0.45rem 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+}
+
+.controls select:focus,
+.controls input:focus,
+.controls textarea:focus {
+    outline: none;
+    border-color: var(--accent-2);
+    box-shadow: 0 0 12px rgba(37, 198, 191, 0.35);
+}
+
+.command-center {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--bg-dark);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+}
+
+.command-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.command-title {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.command-title h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-light);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.command-subtitle {
+    margin: 0.25rem 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.command-icon {
+    font-size: 1.4rem;
+}
+
+.command-shortcuts {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    color: var(--text-muted);
+}
+
+.command-shortcuts code {
+    background: var(--bg-darkest);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+}
+
+.command-input-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    background: var(--bg-darkest);
+    border: 1px solid var(--info);
+    border-left: 4px solid var(--info);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+}
+
+.command-input-label {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-2);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.command-input {
+    border: none;
+    background: transparent;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-light);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.command-execute {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid var(--accent-1);
+    background: var(--accent-1);
+    color: var(--bg-darkest);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.command-execute:hover {
+    box-shadow: 0 0 18px rgba(255, 140, 59, 0.4);
+    transform: translateY(-1px);
+}
+
+.task-queue {
+    background: rgba(8, 17, 28, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.25);
+}
+
+.task-queue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.task-queue-header h3 {
+    margin: 0;
+    color: var(--accent-1);
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.task-clear {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.25rem;
+}
+
+.task-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.task-item {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 0.6rem;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.task-agent {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.task-description {
+    color: var(--text-light);
+}
+
+.task-status {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.task-status.pending {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: var(--warning);
+}
+
+.task-status.processing {
+    background: rgba(31, 182, 255, 0.1);
+    border: 1px solid rgba(31, 182, 255, 0.35);
+    color: var(--accent-2);
+}
+
+.task-status.complete {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    color: var(--success);
+}
+
+@media (max-width: 860px) {
+    .command-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .command-input-row {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+
+    .command-input-label {
+        display: none;
+    }
+
+    .task-item {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+    }
+}

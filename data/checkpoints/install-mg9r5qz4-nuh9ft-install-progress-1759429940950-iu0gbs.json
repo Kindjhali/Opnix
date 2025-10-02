@@ -1,0 +1,18 @@
+{
+  "id": "install-mg9r5qz4-nuh9ft-install-progress-1759429940950-iu0gbs",
+  "sessionId": "install-mg9r5qz4-nuh9ft",
+  "type": "install-progress",
+  "description": "Package.json validated",
+  "critical": false,
+  "timestamp": "2025-10-02T18:32:20.950Z",
+  "context": {
+    "phase": "package-validated",
+    "priorInstall": true
+  },
+  "data": {
+    "phase": "package-validated",
+    "priorInstall": true,
+    "timestamp": "2025-10-02T18:32:20.950Z"
+  },
+  "version": "1.0.0"
+}

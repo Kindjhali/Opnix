@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9qjf9y-a1fjkh-install-progress-1759428899357-ukrm15",
+  "sessionId": "install-mg9qjf9y-a1fjkh",
+  "type": "install-progress",
+  "description": "Directories and runtime bundle setup complete",
+  "critical": false,
+  "timestamp": "2025-10-02T18:14:59.357Z",
+  "context": {
+    "phase": "directories-setup"
+  },
+  "data": {
+    "phase": "directories-setup",
+    "timestamp": "2025-10-02T18:14:59.357Z"
+  },
+  "version": "1.0.0"
+}

@@ -40,6 +40,8 @@ function createStaticRoutes({ rootDir, mountPath = '/', sourceDir = 'public', ma
     const resolvedMaxAge = normaliseMaxAge(maxAge);
     const staticRoot = path.join(rootDir, sourceDir);
 
+    console.log(`🗂️  Static route: ${mountPath} -> ${staticRoot}`);
+
     const staticOptions = {
         fallthrough: true,
         maxAge: resolvedMaxAge,

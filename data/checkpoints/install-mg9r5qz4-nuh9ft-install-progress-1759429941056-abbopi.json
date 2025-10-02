@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9r5qz4-nuh9ft-install-progress-1759429941056-abbopi",
+  "sessionId": "install-mg9r5qz4-nuh9ft",
+  "type": "install-progress",
+  "description": "Core installation complete, launching wizard",
+  "critical": false,
+  "timestamp": "2025-10-02T18:32:21.056Z",
+  "context": {
+    "phase": "pre-wizard"
+  },
+  "data": {
+    "phase": "pre-wizard",
+    "timestamp": "2025-10-02T18:32:21.056Z"
+  },
+  "version": "1.0.0"
+}

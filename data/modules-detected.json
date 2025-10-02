@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-10-01T08:51:59.330Z",
+  "generatedAt": "2025-10-02T19:05:49.219Z",
   "modules": [
     {
       "id": "backend",
@@ -20,7 +20,7 @@
         "ws"
       ],
       "fileCount": 1,
-      "lineCount": 2344,
+      "lineCount": 2367,
       "todoCount": 0,
       "coverage": 0,
       "health": 69,
@@ -49,6 +49,24 @@
       "manual": false
     },
     {
+      "id": "bin",
+      "name": "Bin",
+      "type": "code",
+      "pathHints": [
+        "bin"
+      ],
+      "dependencies": [],
+      "externalDependencies": [],
+      "fileCount": 1,
+      "lineCount": 153,
+      "todoCount": 0,
+      "coverage": 0,
+      "health": 75,
+      "frameworks": [],
+      "source": "directory",
+      "manual": false
+    },
+    {
       "id": "data",
       "name": "Workspace Data",
       "type": "storage",
@@ -57,9 +75,9 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 28,
-      "lineCount": 3676,
-      "todoCount": 15,
+      "fileCount": 87,
+      "lineCount": 8953,
+      "todoCount": 112,
       "coverage": 0,
       "health": 20,
       "frameworks": [],
@@ -93,9 +111,9 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 28,
-      "lineCount": 8188,
-      "todoCount": 64,
+      "fileCount": 56,
+      "lineCount": 16812,
+      "todoCount": 134,
       "coverage": 0,
       "health": 20,
       "frameworks": [],
@@ -177,7 +195,7 @@
         "glob"
       ],
       "fileCount": 28,
-      "lineCount": 6628,
+      "lineCount": 6646,
       "todoCount": 0,
       "coverage": 4,
       "health": 74,
@@ -202,11 +220,11 @@
         "${consoleImport}",
         "${specArchiveImport}"
       ],
-      "fileCount": 8,
-      "lineCount": 2887,
+      "fileCount": 9,
+      "lineCount": 3075,
       "todoCount": 3,
-      "coverage": 13,
-      "health": 61,
+      "coverage": 11,
+      "health": 60,
       "frameworks": [],
       "source": "directory",
       "manual": false
@@ -228,7 +246,7 @@
         "node-pty"
       ],
       "fileCount": 45,
-      "lineCount": 18817,
+      "lineCount": 18856,
       "todoCount": 57,
       "coverage": 4,
       "health": 20,
@@ -288,11 +306,11 @@
       ],
       "dependencies": [],
       "externalDependencies": [],
-      "fileCount": 146,
-      "lineCount": 1540,
-      "todoCount": 377,
+      "fileCount": 1,
+      "lineCount": 6,
+      "todoCount": 0,
       "coverage": 100,
-      "health": 20,
+      "health": 100,
       "frameworks": [],
       "source": "directory",
       "manual": false
@@ -325,8 +343,8 @@
         "node:url",
         "@vue"
       ],
-      "fileCount": 49,
-      "lineCount": 6351,
+      "fileCount": 53,
+      "lineCount": 7452,
       "todoCount": 4,
       "coverage": 100,
       "health": 61,
@@ -404,9 +422,9 @@
     }
   ],
   "summary": {
-    "moduleCount": 15,
+    "moduleCount": 16,
     "dependencyCount": 11,
     "externalDependencyCount": 36,
-    "totalLines": 69837
+    "totalLines": 83726
   }
 }

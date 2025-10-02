@@ -1,0 +1,237 @@
+{
+  "project": {
+    "name": "Untitled Project",
+    "type": "Unknown",
+    "patterns": [
+      "api-service",
+      "backend-heavy",
+      "web-application",
+      "frontend-heavy",
+      "vue-project",
+      "npm-project",
+      "documented-project",
+      "comprehensive-docs"
+    ],
+    "moduleCount": 16,
+    "totalLines": 77575,
+    "frameworks": [
+      "express",
+      "vue"
+    ]
+  },
+  "mermaid": "graph TD\n    backend[[\"Backend API\"]\n    agents[[\"Agent Library\"]\n    bin[[\"Bin\"]\n    data[[\"Workspace Data\"]\n    docs{[\"Documentation\"]\n    legacy_exports[[\"Legacy Exports\"]\n    middleware[[\"Middleware\"]\n    playwright_report[[\"Playwright Report\"]\n    frontend([\"Frontend Interface\"]\n    routes[[\"Routes\"]\n    scripts[[[\"Automation Scripts\"]\n    services[[\"Services\"]\n    spec[[\"Spec Archive\"]\n    src[[\"Application Source\"]\n    test_results[[\"Test Results\"]\n    tests[[\"Tests\"]\n    backend --> services\n    backend --> routes\n    backend --> middleware\n    middleware --> services\n    routes --> services\n    scripts --> services\n    scripts --> backend\n    tests --> services\n    tests --> src\n    tests --> backend\n    tests --> routes\n    classDef frontend fill:#e1f5fe\n    classDef backend fill:#f3e5f5\n    classDef database fill:#e8f5e8\n    class backend backend\n    class agents knowledge\n    class bin code\n    class data storage\n    class docs documentation\n    class legacy_exports artifacts\n    class middleware code\n    class playwright_report code\n    class frontend frontend\n    class routes code\n    class scripts automation\n    class services workspace\n    class spec artifacts\n    class src code\n    class test_results code\n    class tests code",
+  "d3": {
+    "nodes": [
+      {
+        "id": "backend",
+        "name": "Backend API",
+        "type": "backend",
+        "size": 77.69800996003896,
+        "health": 69,
+        "color": "#ab47bc",
+        "frameworks": [
+          "express"
+        ]
+      },
+      {
+        "id": "agents",
+        "name": "Agent Library",
+        "type": "knowledge",
+        "size": 0,
+        "health": 75,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "bin",
+        "name": "Bin",
+        "type": "code",
+        "size": 50.36952602413629,
+        "health": 75,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "data",
+        "name": "Workspace Data",
+        "type": "storage",
+        "size": 89.55319081763949,
+        "health": 20,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "docs",
+        "name": "Documentation",
+        "type": "documentation",
+        "size": 0,
+        "health": 75,
+        "color": "#ffa726",
+        "frameworks": []
+      },
+      {
+        "id": "legacy-exports",
+        "name": "Legacy Exports",
+        "type": "artifacts",
+        "size": 93.83032379794294,
+        "health": 20,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "middleware",
+        "name": "Middleware",
+        "type": "code",
+        "size": 56.73323267171493,
+        "health": 74,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "playwright-report",
+        "name": "Playwright Report",
+        "type": "code",
+        "size": 0,
+        "health": 75,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "frontend",
+        "name": "Frontend Interface",
+        "type": "frontend",
+        "size": 82.9254851397576,
+        "health": 35,
+        "color": "#42a5f5",
+        "frameworks": [
+          "vue"
+        ]
+      },
+      {
+        "id": "routes",
+        "name": "Routes",
+        "type": "code",
+        "size": 88.01920904041582,
+        "health": 74,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "scripts",
+        "name": "Automation Scripts",
+        "type": "automation",
+        "size": 80.31385330625534,
+        "health": 60,
+        "color": "#ef5350",
+        "frameworks": []
+      },
+      {
+        "id": "services",
+        "name": "Services",
+        "type": "workspace",
+        "size": 98.43684468165375,
+        "health": 20,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "spec",
+        "name": "Spec Archive",
+        "type": "artifacts",
+        "size": 0,
+        "health": 75,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "src",
+        "name": "Application Source",
+        "type": "code",
+        "size": 96.24038165010823,
+        "health": 69,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "test-results",
+        "name": "Test Results",
+        "type": "code",
+        "size": 19.45910149055313,
+        "health": 100,
+        "color": "#78909c",
+        "frameworks": []
+      },
+      {
+        "id": "tests",
+        "name": "Tests",
+        "type": "code",
+        "size": 89.16371914881694,
+        "health": 61,
+        "color": "#78909c",
+        "frameworks": []
+      }
+    ],
+    "links": [
+      {
+        "source": "backend",
+        "target": "services",
+        "type": "internal"
+      },
+      {
+        "source": "backend",
+        "target": "routes",
+        "type": "internal"
+      },
+      {
+        "source": "backend",
+        "target": "middleware",
+        "type": "internal"
+      },
+      {
+        "source": "middleware",
+        "target": "services",
+        "type": "internal"
+      },
+      {
+        "source": "routes",
+        "target": "services",
+        "type": "internal"
+      },
+      {
+        "source": "scripts",
+        "target": "services",
+        "type": "internal"
+      },
+      {
+        "source": "scripts",
+        "target": "backend",
+        "type": "internal"
+      },
+      {
+        "source": "tests",
+        "target": "services",
+        "type": "internal"
+      },
+      {
+        "source": "tests",
+        "target": "src",
+        "type": "internal"
+      },
+      {
+        "source": "tests",
+        "target": "backend",
+        "type": "internal"
+      },
+      {
+        "source": "tests",
+        "target": "routes",
+        "type": "internal"
+      }
+    ]
+  },
+  "metadata": {
+    "generated": "2025-10-02T18:15:15.713Z",
+    "totalNodes": 16,
+    "totalEdges": 11
+  }
+}

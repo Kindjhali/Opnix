@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9qjf9y-a1fjkh-install-progress-1759428899459-8gshwx",
+  "sessionId": "install-mg9qjf9y-a1fjkh",
+  "type": "install-progress",
+  "description": "Core installation complete, launching wizard",
+  "critical": false,
+  "timestamp": "2025-10-02T18:14:59.459Z",
+  "context": {
+    "phase": "pre-wizard"
+  },
+  "data": {
+    "phase": "pre-wizard",
+    "timestamp": "2025-10-02T18:14:59.459Z"
+  },
+  "version": "1.0.0"
+}

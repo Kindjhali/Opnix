@@ -1,0 +1,18 @@
+{
+  "id": "install-mg9q7sov-rzdpfy-install-progress-1759428356868-reu218",
+  "sessionId": "install-mg9q7sov-rzdpfy",
+  "type": "install-progress",
+  "description": "Package.json validated",
+  "critical": false,
+  "timestamp": "2025-10-02T18:05:56.868Z",
+  "context": {
+    "phase": "package-validated",
+    "priorInstall": true
+  },
+  "data": {
+    "phase": "package-validated",
+    "priorInstall": true,
+    "timestamp": "2025-10-02T18:05:56.868Z"
+  },
+  "version": "1.0.0"
+}

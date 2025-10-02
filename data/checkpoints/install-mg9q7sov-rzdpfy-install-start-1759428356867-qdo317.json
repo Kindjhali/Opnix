@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9q7sov-rzdpfy-install-start-1759428356867-qdo317",
+  "sessionId": "install-mg9q7sov-rzdpfy",
+  "type": "install-start",
+  "description": "Installation process started",
+  "critical": true,
+  "timestamp": "2025-10-02T18:05:56.867Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-02T18:05:56.867Z"
+  },
+  "version": "1.0.0"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "prompt-install-mg8k45ua-fsk34l-mg8k45uf-ifznal",
+  "sessionId": "install-mg8k45ua-fsk34l",
+  "createdAt": "2025-10-01T22:27:23.415Z",
+  "failureData": {
+    "failureId": "install-mg8k45ua-fsk34l-mg8k45uf-enmjj3",
+    "error": {},
+    "context": {
+      "sessionType": "installation",
+      "phase": "main",
+      "operation": "opnix-install"
+    },
+    "checkpointId": null,
+    "recoveryStrategy": "manual-intervention",
+    "options": [
+      {
+        "action": "retry-operation",
+        "label": "Retry operation",
+        "description": "Attempt the failed operation again",
+        "recommended": true
+      },
+      {
+        "action": "restart-session",
+        "label": "Start new session",
+        "description": "Begin a fresh session (may lose current progress)",
+        "recommended": false
+      },
+      {
+        "action": "create-checkpoint-and-exit",
+        "label": "Save and exit",
+        "description": "Create a checkpoint with current state and exit safely",
+        "recommended": false
+      },
+      {
+        "action": "ignore-and-continue",
+        "label": "Continue anyway",
+        "description": "Ignore the error and continue (may cause issues)",
+        "recommended": false
+      }
+    ]
+  },
+  "status": "pending",
+  "userResponse": null,
+  "resolvedAt": null
+}

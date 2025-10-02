@@ -1,0 +1,16 @@
+{
+  "id": "setup-mg9q84sq-hsdsp6-setup-start-1759428372554-mhi58w",
+  "sessionId": "setup-mg9q84sq-hsdsp6",
+  "type": "setup-start",
+  "description": "Setup wizard initialization",
+  "critical": true,
+  "timestamp": "2025-10-02T18:06:12.554Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-02T18:06:12.554Z"
+  },
+  "version": "1.0.0"
+}

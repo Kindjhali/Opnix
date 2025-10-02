@@ -1,0 +1,18 @@
+{
+  "id": "setup-mg9qjrmi-2iaxgb-setup-complete-1759428915801-myopej",
+  "sessionId": "setup-mg9qjrmi-2iaxgb",
+  "type": "setup-complete",
+  "description": "Setup wizard completed successfully",
+  "critical": true,
+  "timestamp": "2025-10-02T18:15:15.801Z",
+  "context": {
+    "phase": "completed",
+    "mode": "new"
+  },
+  "data": {
+    "phase": "completed",
+    "mode": "new",
+    "completedAt": "2025-10-02T18:15:15.801Z"
+  },
+  "version": "1.0.0"
+}

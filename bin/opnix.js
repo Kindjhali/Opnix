@@ -9,8 +9,17 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-// ASCII Logo
-const logo = `
+// MOLE Theme Colors
+const MOLE = {
+  pink: '\u001b[38;2;233;69;96m',      // #E94560
+  cyan: '\u001b[38;2;6;182;212m',      // #06B6D4
+  blue: '\u001b[38;2;31;182;255m',     // #1FB6FF
+  orange: '\u001b[38;2;255;140;59m',   // #FF8C3B
+  reset: '\u001b[0m'
+};
+
+// ASCII Logo with MOLE colors
+const logo = `${MOLE.pink}
    ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄    ▄ ▄▄▄ ▄▄   ▄▄
   █       █       █  █  █ █   █  █ █  █
   █   ▄   █    ▄  █   █▄█ █   █  █▄█  █
@@ -18,8 +27,8 @@ const logo = `
   █  █▄█  █    ▄▄▄█  ▄    █   █       █
   █       █   █   █ █ █   █   █ ██▄██ █
   █▄▄▄▄▄▄▄█▄▄▄█   █▄█  █▄▄█▄▄▄█▄█   █▄█
-
-  Operational Toolkit · Visual Canvas · Audit Engine
+${MOLE.reset}
+  ${MOLE.cyan}Operational Toolkit${MOLE.reset} · ${MOLE.blue}Visual Canvas${MOLE.reset} · ${MOLE.orange}Audit Engine${MOLE.reset}
 `;
 
 console.log(logo);
@@ -115,11 +124,12 @@ console.log(`🌐 Server will run on: http://localhost:${port}\n`);
 // Start the server
 const child = spawn('node', [scriptPath, ...scriptArgs], {
   stdio: 'inherit',
-  cwd: opnixRoot,
+  cwd: projectPath,  // Run in project directory so process.cwd() works correctly
   env: {
     ...process.env,
     PORT: port,
-    PROJECT_PATH: projectPath
+    PROJECT_PATH: projectPath,
+    OPNIX_ROOT: opnixRoot  // Pass opnix installation directory via env
   }
 });
 

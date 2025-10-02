@@ -1,0 +1,45 @@
+{
+  "id": "setup-mg9qjrmi-2iaxgb-setup-progress-1759428915356-jxoldj",
+  "sessionId": "setup-mg9qjrmi-2iaxgb",
+  "type": "setup-progress",
+  "description": "Setup state loaded",
+  "critical": false,
+  "timestamp": "2025-10-02T18:15:15.356Z",
+  "context": {
+    "phase": "state-loaded"
+  },
+  "data": {
+    "phase": "state-loaded",
+    "state": {
+      "lastSelectedMode": "new",
+      "history": [
+        {
+          "mode": "new",
+          "timestamp": "2025-10-02T18:06:13.027Z",
+          "output": "spec/revision/opnix-new-project-scope-2025-10-02T18-06-12-654Z.md"
+        },
+        {
+          "mode": "new",
+          "timestamp": "2025-10-01T11:08:39.312Z",
+          "output": "spec/revision/opnix-new-project-scope-2025-10-01T11-08-39-292Z.md"
+        },
+        {
+          "mode": "new",
+          "timestamp": "2025-10-01T11:08:39.052Z",
+          "output": "spec/revision/opnix-new-project-scope-2025-10-01T11-08-39-031Z.md"
+        },
+        {
+          "mode": "new",
+          "timestamp": "2025-10-01T11:08:38.791Z",
+          "output": "spec/revision/opnix-new-project-scope-2025-10-01T11-08-38-769Z.md"
+        }
+      ]
+    },
+    "cliOptions": {
+      "mode": null,
+      "nonInteractive": false
+    },
+    "timestamp": "2025-10-02T18:15:15.356Z"
+  },
+  "version": "1.0.0"
+}

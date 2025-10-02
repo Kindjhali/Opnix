@@ -1,0 +1,16 @@
+{
+  "id": "setup-mg9r634a-qqsu9l-setup-start-1759429956683-wyz9w0",
+  "sessionId": "setup-mg9r634a-qqsu9l",
+  "type": "setup-start",
+  "description": "Setup wizard initialization",
+  "critical": true,
+  "timestamp": "2025-10-02T18:32:36.683Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-02T18:32:36.682Z"
+  },
+  "version": "1.0.0"
+}

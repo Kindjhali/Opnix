@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9qjf9y-a1fjkh-install-progress-1759428899358-ttj4ag",
+  "sessionId": "install-mg9qjf9y-a1fjkh",
+  "type": "install-progress",
+  "description": "Dependencies installed",
+  "critical": false,
+  "timestamp": "2025-10-02T18:14:59.358Z",
+  "context": {
+    "phase": "dependencies-installed"
+  },
+  "data": {
+    "phase": "dependencies-installed",
+    "timestamp": "2025-10-02T18:14:59.358Z"
+  },
+  "version": "1.0.0"
+}

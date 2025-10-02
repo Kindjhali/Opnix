@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9q7sov-rzdpfy-install-progress-1759428356870-n1yin7",
+  "sessionId": "install-mg9q7sov-rzdpfy",
+  "type": "install-progress",
+  "description": "Dependencies installed",
+  "critical": false,
+  "timestamp": "2025-10-02T18:05:56.870Z",
+  "context": {
+    "phase": "dependencies-installed"
+  },
+  "data": {
+    "phase": "dependencies-installed",
+    "timestamp": "2025-10-02T18:05:56.870Z"
+  },
+  "version": "1.0.0"
+}

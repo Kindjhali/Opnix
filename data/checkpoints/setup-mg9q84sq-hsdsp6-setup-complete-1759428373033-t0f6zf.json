@@ -1,0 +1,18 @@
+{
+  "id": "setup-mg9q84sq-hsdsp6-setup-complete-1759428373033-t0f6zf",
+  "sessionId": "setup-mg9q84sq-hsdsp6",
+  "type": "setup-complete",
+  "description": "Setup wizard completed successfully",
+  "critical": true,
+  "timestamp": "2025-10-02T18:06:13.033Z",
+  "context": {
+    "phase": "completed",
+    "mode": "new"
+  },
+  "data": {
+    "phase": "completed",
+    "mode": "new",
+    "completedAt": "2025-10-02T18:06:13.033Z"
+  },
+  "version": "1.0.0"
+}

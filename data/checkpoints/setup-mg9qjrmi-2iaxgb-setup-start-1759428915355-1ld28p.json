@@ -1,0 +1,16 @@
+{
+  "id": "setup-mg9qjrmi-2iaxgb-setup-start-1759428915355-1ld28p",
+  "sessionId": "setup-mg9qjrmi-2iaxgb",
+  "type": "setup-start",
+  "description": "Setup wizard initialization",
+  "critical": true,
+  "timestamp": "2025-10-02T18:15:15.355Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-02T18:15:15.354Z"
+  },
+  "version": "1.0.0"
+}

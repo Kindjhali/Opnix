@@ -2,11 +2,12 @@ const fs = require('fs').promises;
 const path = require('path');
 const taskLogger = require('./taskLogger');
 
-const COMPACTION_CONFIG_FILE = path.join(__dirname, '..', 'data', 'compaction-config.json');
-const ALERT_LOG_FILE = path.join(__dirname, '..', 'data', 'compaction-alerts.log');
-
 class CompactionAlerter {
-  constructor() {
+  constructor(rootDir = null) {
+    // Don't initialize rootDir in constructor - it will be set in initialize()
+    this.rootDir = rootDir;
+    this.compactionConfigFile = null;
+    this.alertLogFile = null;
     this.config = {
       logSizeThreshold: 50000, // 50KB
       fileCountThreshold: 1000,
@@ -18,16 +19,25 @@ class CompactionAlerter {
     this.lastChecks = new Map();
     this.checkTimer = null;
     this.initialCheckTimer = null;
+    this.initialized = false;
   }
 
-  async initialize() {
+  async initialize(rootDir = null) {
+    if (this.initialized) return;
+
+    // Set rootDir from parameter, or environment, or process.cwd()
+    this.rootDir = rootDir || process.env.PROJECT_PATH || process.cwd();
+    this.compactionConfigFile = path.join(this.rootDir, 'data', 'compaction-config.json');
+    this.alertLogFile = path.join(this.rootDir, 'data', 'compaction-alerts.log');
+
     await this.loadConfig();
     await this.startPeriodicChecks();
+    this.initialized = true;
   }
 
   async loadConfig() {
     try {
-      const data = await fs.readFile(COMPACTION_CONFIG_FILE, 'utf8');
+      const data = await fs.readFile(this.compactionConfigFile, 'utf8');
       this.config = { ...this.config, ...JSON.parse(data) };
     } catch (error) {
       if (error.code === 'ENOENT') {
@@ -39,7 +49,10 @@ class CompactionAlerter {
   }
 
   async saveConfig() {
-    await fs.writeFile(COMPACTION_CONFIG_FILE, JSON.stringify(this.config, null, 2));
+    // Ensure data directory exists
+    const dataDir = path.dirname(this.compactionConfigFile);
+    await fs.mkdir(dataDir, { recursive: true });
+    await fs.writeFile(this.compactionConfigFile, JSON.stringify(this.config, null, 2));
   }
 
   async updateConfig(updates) {
@@ -92,7 +105,7 @@ class CompactionAlerter {
   }
 
   async checkTaskLogsSize() {
-    const taskLogsDir = path.join(__dirname, '..', 'data', 'task-logs');
+    const taskLogsDir = path.join(this.rootDir, 'data', 'task-logs');
 
     try {
       const files = await fs.readdir(taskLogsDir);
@@ -143,7 +156,7 @@ class CompactionAlerter {
   }
 
   async checkTaskLogCount() {
-    const taskLogsDir = path.join(__dirname, '..', 'data', 'task-logs');
+    const taskLogsDir = path.join(this.rootDir, 'data', 'task-logs');
 
     try {
       const files = await fs.readdir(taskLogsDir);
@@ -176,7 +189,7 @@ class CompactionAlerter {
   }
 
   async checkNarrativeSize() {
-    const narrativeFile = path.join(__dirname, '..', 'docs', 'narrative.md');
+    const narrativeFile = path.join(this.rootDir, 'docs', 'narrative.md');
 
     try {
       const stats = await fs.stat(narrativeFile);
@@ -210,7 +223,7 @@ class CompactionAlerter {
   }
 
   async checkOldLogs() {
-    const taskLogsDir = path.join(__dirname, '..', 'data', 'task-logs');
+    const taskLogsDir = path.join(this.rootDir, 'data', 'task-logs');
     const cutoffDate = new Date(Date.now() - (this.config.autoArchiveDays * 24 * 60 * 60 * 1000));
 
     try {
@@ -299,7 +312,7 @@ class CompactionAlerter {
     const logEntry = `[${alert.createdAt}] ${alert.severity.toUpperCase()}: ${alert.message}\n`;
 
     try {
-      await fs.appendFile(ALERT_LOG_FILE, logEntry);
+      await fs.appendFile(this.alertLogFile, logEntry);
     } catch (error) {
       console.error('Failed to log compaction alert:', error.message);
     }
@@ -307,7 +320,7 @@ class CompactionAlerter {
 
   async getRecentAlerts(limit = 10) {
     try {
-      const logContent = await fs.readFile(ALERT_LOG_FILE, 'utf8');
+      const logContent = await fs.readFile(this.alertLogFile, 'utf8');
       const lines = logContent.trim().split('\n');
 
       return lines
@@ -333,8 +346,8 @@ class CompactionAlerter {
   }
 
   async getCompactionStatus() {
-    const taskLogsDir = path.join(__dirname, '..', 'data', 'task-logs');
-    const narrativeFile = path.join(__dirname, '..', 'docs', 'narrative.md');
+    const taskLogsDir = path.join(this.rootDir, 'data', 'task-logs');
+    const narrativeFile = path.join(this.rootDir, 'docs', 'narrative.md');
 
     try {
       const [logFiles, narrativeStats, recentAlerts] = await Promise.allSettled([

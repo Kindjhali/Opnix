@@ -5,6 +5,7 @@ const compression = require('compression');
 const fs = require('fs');
 const fsPromises = fs.promises;
 const path = require('path');
+const os = require('os');
 const { exec } = require('child_process');
 const util = require('util');
 const WebSocket = require('ws');
@@ -34,6 +35,8 @@ const agentHandoffManager = require('./services/agentHandoffManager');
 const { ensureRoadmapStateFile, readRoadmapState, writeRoadmapState, syncRoadmapState, listRoadmapVersions, rollbackRoadmapState, updateRoadmapMilestone } = require('./services/roadmapState');
 const { startRoadmapSyncWatchers, stopRoadmapSyncWatchers } = require('./services/roadmapSyncWatcher');
 require('./services/roadmapEventAggregator');
+const taskLogger = require('./services/taskLogger');
+const compactionAlerter = require('./services/compactionAlerter');
 const { createTicketUtils } = require('./services/ticketUtils');
 const { createFeatureUtils } = require('./services/featureUtils');
 const { createChecklistUtils } = require('./services/checklistUtils');
@@ -86,9 +89,23 @@ const {
 } = require('./routes/exports');
 
 const app = express();
+// Disable Express 5 security defaults that break static file serving
+app.disable('x-powered-by');
+app.set('trust proxy', false);
+
 const PORT = 7337;
-const ROOT_DIR = __dirname;
-const DATA_DIR = path.join(__dirname, 'data');
+// Project root directory (where user's project is, NOT where opnix is installed)
+const ROOT_DIR = process.cwd();
+// Opnix installation directory (for static assets, routes, etc)
+// Use OPNIX_ROOT env var if set by bin/opnix.js, otherwise fallback to __dirname for direct node server.js
+const OPNIX_DIR = process.env.OPNIX_ROOT || __dirname;
+
+console.log(`📂 ROOT_DIR: ${ROOT_DIR}`);
+console.log(`📦 OPNIX_DIR: ${OPNIX_DIR}`);
+console.log(`🎨 PUBLIC_DIR: ${path.join(OPNIX_DIR, 'public')}`);
+
+// Data directory in the user's project
+const DATA_DIR = path.join(ROOT_DIR, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'tickets.json');
 const LEGACY_TICKETS_FILE = path.join(__dirname, 'tickets.json');
 const LEGACY_IMPORT_DIR = path.join(DATA_DIR, 'legacy-imports');
@@ -1313,6 +1330,15 @@ async function generateCliCategoryArtifacts(session) {
     return { artifacts, messages };
 }
 
+// Serve static files FIRST before any middleware
+const PUBLIC_DIR = path.join(OPNIX_DIR, 'public');
+console.log(`📁 Serving static files from: ${PUBLIC_DIR}`);
+app.use(express.static(PUBLIC_DIR, {
+    maxAge: '1h',
+    fallthrough: true,
+    index: false  // Don't serve index.html from static, let createRootRoutes handle it
+}));
+
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -1337,19 +1363,10 @@ app.use((req, res, next) => {
     };
     next();
 });
+
 app.use(createRootRoutes({
-    rootDir: ROOT_DIR,
+    rootDir: OPNIX_DIR,  // Serve index.html from opnix installation
     port: PORT
-}));
-app.use(createStaticRoutes({
-    rootDir: ROOT_DIR,
-    maxAge: '1h'
-}));
-app.use(createStaticRoutes({
-    rootDir: ROOT_DIR,
-    sourceDir: 'public/css',
-    mountPath: '/css',
-    maxAge: '1h'
 }));
 const {
     router: contextRouter,
@@ -1664,7 +1681,24 @@ async function ensureDirectory(dirPath) {
         await fsPromises.access(dirPath);
     } catch (error) {
         if (error.code === 'ENOENT') {
-            await fsPromises.mkdir(dirPath, { recursive: true });
+            try {
+                await fsPromises.mkdir(dirPath, { recursive: true });
+            } catch (mkdirError) {
+                if (mkdirError.code === 'EACCES') {
+                    const parentDir = path.dirname(dirPath);
+                    console.error(`\n❌ Permission Error: Cannot create directory`);
+                    console.error(`   Directory: ${dirPath}`);
+                    console.error(`   \n   The parent directory exists but you don't have write permission.`);
+                    console.error(`   Fix with: sudo chown -R $USER:$USER ${parentDir}\n`);
+                }
+                throw mkdirError;
+            }
+        } else if (error.code === 'EACCES') {
+            console.error(`\n❌ Permission Error: Cannot write to existing directory`);
+            console.error(`   Directory: ${dirPath}`);
+            console.error(`   \n   This directory exists but is owned by another user (likely root).`);
+            console.error(`   Fix with: sudo chown -R $USER:$USER ${dirPath}\n`);
+            throw error;
         } else {
             throw error;
         }
@@ -2100,15 +2134,23 @@ async function start() {
         console.error('⚠️  Failed to start roadmap sync watchers:', error);
     }
 
-    // Create PID file for terminal status bar detection
-    const pidFile = path.join(__dirname, '.opnix', 'server.pid');
-
-    // Ensure .opnix directory exists
+    // Initialize task logger and compaction alerter with correct ROOT_DIR
     try {
-        await fsPromises.access(path.join(__dirname, '.opnix'));
+        await taskLogger.initialize();
+        await compactionAlerter.initialize(ROOT_DIR);
+    } catch (error) {
+        console.error('⚠️  Failed to initialize task logger/compaction alerter:', error);
+    }
+
+    // Create PID file for terminal status bar detection (in project directory)
+    const pidFile = path.join(ROOT_DIR, '.opnix', 'server.pid');
+
+    // Ensure .opnix directory exists in project directory
+    try {
+        await fsPromises.access(path.join(ROOT_DIR, '.opnix'));
     } catch (error) {
         if (error.code === 'ENOENT') {
-            fs.mkdirSync(path.join(__dirname, '.opnix'), { recursive: true });
+            fs.mkdirSync(path.join(ROOT_DIR, '.opnix'), { recursive: true });
         } else {
             throw error;
         }
@@ -2125,28 +2167,6 @@ async function start() {
             // Ignore errors silently
         }
         stopRoadmapSyncWatchers().catch(() => {});
-    });
-
-    process.on('SIGINT', () => {
-        console.log('\n🔻 Shutting down Opnix server...');
-        try {
-            fs.unlinkSync(pidFile);
-        } catch {
-            // Ignore errors silently
-        }
-        stopRoadmapSyncWatchers().catch(() => {});
-        process.exit(0);
-    });
-
-    process.on('SIGTERM', () => {
-        try {
-            fs.unlinkSync(pidFile);
-            questionFileWatcher.stop();
-        } catch {
-            // Ignore errors silently
-        }
-        stopRoadmapSyncWatchers().catch(() => {});
-        process.exit(0);
     });
 
     const server = http.createServer(app);
@@ -2288,7 +2308,10 @@ Real Functionality:
 }
 
 if (require.main === module) {
-    start();
+    start().catch((error) => {
+        console.error('Fatal error starting server:', error);
+        process.exit(1);
+    });
 }
 
 module.exports = {

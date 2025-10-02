@@ -1,13 +1,15 @@
 const path = require('path');
 const fs = require('fs').promises;
 
-const TASK_LOGS_DIR = path.join(__dirname, '..', 'data', 'task-logs');
-const NARRATIVE_FILE = path.join(__dirname, '..', 'docs', 'narrative.md');
 const MAX_LOG_ENTRIES_PER_FILE = 1000;
 const LOG_COMPACTION_THRESHOLD = 50000; // characters
 
 class TaskLogger {
-  constructor() {
+  constructor(rootDir = null) {
+    // Use provided rootDir or fall back to current working directory
+    this.rootDir = rootDir || process.cwd();
+    this.taskLogsDir = path.join(this.rootDir, 'data', 'task-logs');
+    this.narrativeFile = path.join(this.rootDir, 'docs', 'narrative.md');
     this.activeTasks = new Map();
     this.logBuffer = new Map();
     this.compactionAlerts = [];
@@ -20,10 +22,10 @@ class TaskLogger {
 
   async ensureTaskLogsDirectory() {
     try {
-      await fs.access(TASK_LOGS_DIR);
+      await fs.access(this.taskLogsDir);
     } catch (error) {
       if (error.code === 'ENOENT') {
-        await fs.mkdir(TASK_LOGS_DIR, { recursive: true });
+        await fs.mkdir(this.taskLogsDir, { recursive: true });
       } else {
         throw error;
       }
@@ -32,7 +34,11 @@ class TaskLogger {
 
   async ensureNarrativeFile() {
     try {
-      await fs.access(NARRATIVE_FILE);
+      // Ensure docs directory exists
+      const docsDir = path.dirname(this.narrativeFile);
+      await fs.mkdir(docsDir, { recursive: true });
+
+      await fs.access(this.narrativeFile);
     } catch (error) {
       if (error.code === 'ENOENT') {
         const initialNarrative = `# Project Narrative
@@ -47,7 +53,25 @@ This document maintains an ongoing narrative of the project's development journe
 ---
 *Last Updated: ${new Date().toISOString()}*
 `;
-        await fs.writeFile(NARRATIVE_FILE, initialNarrative);
+        try {
+          await fs.writeFile(this.narrativeFile, initialNarrative);
+        } catch (writeError) {
+          // If we can't write to OPNIX_DIR (npm package - read-only), write to project directory instead
+          if (writeError.code === 'EACCES' || writeError.code === 'EROFS' || writeError.code === 'ENOENT') {
+            const projectNarrativeFile = path.join(process.cwd(), 'docs', 'narrative.md');
+            const projectDocsDir = path.dirname(projectNarrativeFile);
+            await fs.mkdir(projectDocsDir, { recursive: true });
+            await fs.writeFile(projectNarrativeFile, initialNarrative);
+            this.narrativeFile = projectNarrativeFile;
+            console.log(`ℹ️  Using project narrative file: ${projectNarrativeFile}`);
+          } else {
+            // Unexpected error - log but don't crash
+            console.warn(`⚠️  Could not create narrative file: ${writeError.message}`);
+          }
+        }
+      } else {
+        // Other access error - log but don't crash
+        console.warn(`⚠️  Could not ensure narrative file: ${error.message}`);
       }
     }
   }
@@ -234,7 +258,7 @@ This document maintains an ongoing narrative of the project's development journe
     }
 
     const filename = `${taskId}.json`;
-    const filepath = path.join(TASK_LOGS_DIR, filename);
+    const filepath = path.join(this.taskLogsDir, filename);
 
     const bufferedLogs = this.logBuffer.get(taskId) || task.logs || [];
     const normalisedLogs = Array.isArray(bufferedLogs) ? bufferedLogs : [];
@@ -269,7 +293,7 @@ This document maintains an ongoing narrative of the project's development journe
 
     // Then check file system
     const filename = `${taskId}.json`;
-    const filepath = path.join(TASK_LOGS_DIR, filename);
+    const filepath = path.join(this.taskLogsDir, filename);
 
     try {
       const data = await fs.readFile(filepath, 'utf8');
@@ -284,7 +308,7 @@ This document maintains an ongoing narrative of the project's development journe
 
   async updateNarrative(task, recap) {
     try {
-      let narrative = await fs.readFile(NARRATIVE_FILE, 'utf8');
+      let narrative = await fs.readFile(this.narrativeFile, 'utf8');
 
       const entry = `
 ### ${task.name} - ${new Date(task.startTime).toLocaleDateString()}
@@ -310,7 +334,7 @@ ${recap.filesModified.length > 0 ? `**Files Modified:** ${recap.filesModified.le
         narrative += entry;
       }
 
-      await fs.writeFile(NARRATIVE_FILE, narrative);
+      await fs.writeFile(this.narrativeFile, narrative);
 
     } catch (error) {
       console.warn('Failed to update narrative:', error.message);
@@ -348,7 +372,7 @@ ${recap.filesModified.length > 0 ? `**Files Modified:** ${recap.filesModified.le
   }
 
   async getTaskRecaps(limit = 10, author = null) {
-    const files = await fs.readdir(TASK_LOGS_DIR);
+    const files = await fs.readdir(this.taskLogsDir);
     const recaps = [];
 
     for (const file of files.slice(-limit)) {
@@ -390,18 +414,18 @@ ${recap.filesModified.length > 0 ? `**Files Modified:** ${recap.filesModified.le
   }
 
   async archiveOldLogs(daysOld = 30) {
-    const files = await fs.readdir(TASK_LOGS_DIR);
+    const files = await fs.readdir(this.taskLogsDir);
     const cutoffTime = Date.now() - (daysOld * 24 * 60 * 60 * 1000);
     const archived = [];
 
     for (const file of files) {
       if (!file.endsWith('.json')) continue;
 
-      const filepath = path.join(TASK_LOGS_DIR, file);
+      const filepath = path.join(this.taskLogsDir, file);
       const stats = await fs.stat(filepath);
 
       if (stats.mtime.getTime() < cutoffTime) {
-        const archiveDir = path.join(TASK_LOGS_DIR, 'archive');
+        const archiveDir = path.join(this.taskLogsDir, 'archive');
         await fs.mkdir(archiveDir, { recursive: true });
 
         const archivePath = path.join(archiveDir, file);
@@ -415,10 +439,10 @@ ${recap.filesModified.length > 0 ? `**Files Modified:** ${recap.filesModified.le
 
   async getNarrativeSummary() {
     try {
-      const narrative = await fs.readFile(NARRATIVE_FILE, 'utf8');
+      const narrative = await fs.readFile(this.narrativeFile, 'utf8');
       return {
         content: narrative,
-        lastUpdated: (await fs.stat(NARRATIVE_FILE)).mtime,
+        lastUpdated: (await fs.stat(this.narrativeFile)).mtime,
         size: narrative.length
       };
     } catch (error) {

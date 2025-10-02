@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9q7sov-rzdpfy-install-progress-1759428356976-9u5mjl",
+  "sessionId": "install-mg9q7sov-rzdpfy",
+  "type": "install-progress",
+  "description": "Core installation complete, launching wizard",
+  "critical": false,
+  "timestamp": "2025-10-02T18:05:56.976Z",
+  "context": {
+    "phase": "pre-wizard"
+  },
+  "data": {
+    "phase": "pre-wizard",
+    "timestamp": "2025-10-02T18:05:56.976Z"
+  },
+  "version": "1.0.0"
+}

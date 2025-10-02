@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9qjf9y-a1fjkh-install-start-1759428899355-qssz85",
+  "sessionId": "install-mg9qjf9y-a1fjkh",
+  "type": "install-start",
+  "description": "Installation process started",
+  "critical": true,
+  "timestamp": "2025-10-02T18:14:59.355Z",
+  "context": {
+    "phase": "init"
+  },
+  "data": {
+    "phase": "initialization",
+    "timestamp": "2025-10-02T18:14:59.354Z"
+  },
+  "version": "1.0.0"
+}

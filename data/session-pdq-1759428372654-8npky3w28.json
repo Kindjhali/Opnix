@@ -1,0 +1,75 @@
+{
+  "initialized": "2025-10-02T18:06:12.948Z",
+  "progressiveFlow": {
+    "detectedPatterns": [
+      "api-service",
+      "backend-heavy",
+      "web-application",
+      "frontend-heavy",
+      "vue-project",
+      "npm-project",
+      "documented-project",
+      "comprehensive-docs"
+    ],
+    "queuedArtifacts": [
+      "project-analysis",
+      "module-diagram",
+      "frontend-checklist",
+      "ui-component-map",
+      "api-documentation",
+      "endpoint-catalog",
+      "technical-specification",
+      "architecture-diagram"
+    ],
+    "projectSummary": {
+      "name": "Untitled Project",
+      "type": "Unknown",
+      "patterns": [
+        "api-service",
+        "backend-heavy",
+        "web-application",
+        "frontend-heavy",
+        "vue-project",
+        "npm-project",
+        "documented-project",
+        "comprehensive-docs"
+      ],
+      "moduleCount": 16,
+      "totalLines": 75397,
+      "frameworks": [
+        "express",
+        "vue"
+      ]
+    },
+    "nextPhase": "detection",
+    "recommendedPath": [
+      "detection",
+      "foundation",
+      "technical",
+      "generation"
+    ]
+  },
+  "generatedArtifacts": [
+    {
+      "type": "project-analysis",
+      "files": [
+        "/home/aaron/opnix/exports/project-analysis-2025-10-02T18-06-12-931Z.json",
+        "/home/aaron/opnix/exports/project-analysis-2025-10-02T18-06-12-931Z.md"
+      ]
+    },
+    {
+      "type": "module-diagram",
+      "files": [
+        "/home/aaron/opnix/exports/module-diagram-2025-10-02T18-06-12-946Z.json"
+      ]
+    },
+    {
+      "type": "frontend-checklist",
+      "files": [
+        "/home/aaron/opnix/exports/frontend-checklist-2025-10-02T18-06-12-947Z.md"
+      ]
+    }
+  ],
+  "phase": "initial-analysis-complete",
+  "lastUpdated": "2025-10-02T18:06:12.948Z"
+}

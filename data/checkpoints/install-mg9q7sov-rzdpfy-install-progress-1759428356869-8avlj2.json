@@ -1,0 +1,16 @@
+{
+  "id": "install-mg9q7sov-rzdpfy-install-progress-1759428356869-8avlj2",
+  "sessionId": "install-mg9q7sov-rzdpfy",
+  "type": "install-progress",
+  "description": "Directories and runtime bundle setup complete",
+  "critical": false,
+  "timestamp": "2025-10-02T18:05:56.869Z",
+  "context": {
+    "phase": "directories-setup"
+  },
+  "data": {
+    "phase": "directories-setup",
+    "timestamp": "2025-10-02T18:05:56.869Z"
+  },
+  "version": "1.0.0"
+}

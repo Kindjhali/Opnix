@@ -4,9 +4,8 @@ const compactionAlerter = require('../services/compactionAlerter');
 
 const router = express.Router();
 
-// Initialize task logger and compaction alerter
-taskLogger.initialize().catch(console.error);
-compactionAlerter.initialize().catch(console.error);
+// Note: task logger and compaction alerter are initialized in server.js start() function
+// to ensure process.env.PROJECT_PATH is set correctly before initialization
 
 // Start a new task
 router.post('/tasks', async (req, res) => {
