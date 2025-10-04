@@ -1,6 +1,6 @@
 {
   "name": "opnix",
-  "version": "1.1.21",
+  "version": "1.1.28",
   "description": "Visual command center for understanding, managing, and documenting software projects",
   "main": "server.js",
   "bin": {
@@ -44,7 +44,8 @@
     "docs/",
     "server.js",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    ".npmrc"
   ],
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
@@ -94,6 +95,7 @@
     "cytoscape": "^3.28.1",
     "cytoscape-edgehandles": "^4.0.1",
     "express": "^5.1.0",
+    "glob": "^11.0.0",
     "marked": "^12.0.2",
     "mermaid": "^10.6.1",
     "node-pty": "^1.0.0",
@@ -129,6 +131,11 @@
     "*.{js,vue,mjs}": [
       "eslint --fix",
       "git add"
+    ]
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "node-pty"
     ]
   }
 }

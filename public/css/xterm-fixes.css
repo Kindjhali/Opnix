@@ -1,0 +1,45 @@
+/* XTerm.js Override Fixes - Must load after all other CSS */
+
+/* This file contains critical fixes for xterm.js UI issues */
+
+/* Fix 1: Hide the helper textarea that creates draggable cursor box */
+.xterm .xterm-helpers,
+.xterm .xterm-helper-textarea {
+    position: absolute !important;
+    opacity: 0 !important;
+    left: -9999em !important;
+    top: -9999em !important;
+    width: 0 !important;
+    height: 0 !important;
+    z-index: -10 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    resize: none !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    outline: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
+
+/* Fix 2: Prevent text selection artifacts after scrolling */
+.xterm .xterm-selection {
+    overflow: hidden !important;
+}
+
+/* Fix 3: Ensure proper viewport scrolling */
+.xterm .xterm-viewport {
+    overflow-y: auto !important;
+    scrollbar-width: thin;
+}
+
+/* Fix 4: Prevent viewport from rendering outside container */
+.xterm-wrapper .xterm {
+    height: 100% !important;
+    padding: 0 !important;
+}
+
+.xterm-wrapper .xterm-screen {
+    height: 100% !important;
+}

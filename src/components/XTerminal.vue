@@ -53,6 +53,7 @@ export default {
 
       this.terminal = new Terminal({
         cursorBlink: true,
+        cursorStyle: 'block',
         fontSize: 14,
         fontFamily: '"JetBrains Mono", "Courier New", monospace',
         theme: {
@@ -80,7 +81,16 @@ export default {
           brightWhite: textPrimary
         },
         scrollback: 10000,
-        allowProposedApi: true
+        allowProposedApi: true,
+        convertEol: true,
+        disableStdin: false,
+        screenReaderMode: false,
+        // Additional options to prevent extra UI elements
+        windowsMode: false,
+        macOptionIsMeta: true,
+        rightClickSelectsWord: false,
+        // Disable IME composition view completely
+        allowTransparency: false
       });
 
       this.fitAddon = new FitAddon();
@@ -88,7 +98,15 @@ export default {
       this.terminal.loadAddon(new WebLinksAddon());
 
       this.terminal.open(this.$refs.terminalRef);
-      this.fitAddon.fit();
+
+      // Delay fit to ensure DOM is fully rendered
+      this.$nextTick(() => {
+        setTimeout(() => {
+          if (this.fitAddon) {
+            this.fitAddon.fit();
+          }
+        }, 100);
+      });
 
       this.connectWebSocket();
     },
